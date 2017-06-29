@@ -8,9 +8,11 @@ import org.junit.Test
 @Ignore
 class TeamCityRealApiTest {
 
+    private val CREDENTIALS = "Basic dXNlcjpwYXNz"
+
     @Test
     fun `Get builds after call to real TeamCity API`() {
-        TeamCityApiImpl.getBuilds("Basic dXNlcjpwYXNz")
+        TeamCityApiImpl.getBuilds(CREDENTIALS)
                 .subscribe({
                     println(it.joinToString { "\n$it" })
                 }, {
@@ -20,7 +22,7 @@ class TeamCityRealApiTest {
 
     @Test
     fun `Get single build after call to real TeamCity API`() {
-        TeamCityApiImpl.getBuild("Basic dXNlcjpwYXNz", 1)
+        TeamCityApiImpl.getBuild(CREDENTIALS, id = 1)
                 .subscribe({
                     println(it)
                 }, {
@@ -30,7 +32,7 @@ class TeamCityRealApiTest {
 
     @Test
     fun `Get all tests per build after call to real TeamCity API`() {
-        TeamCityApiImpl.getTests("Basic dXNlcjpwYXNz", 668)
+        TeamCityApiImpl.getTests(CREDENTIALS, buildId = 668)
                 .subscribe({
                     println(it)
                 }, {
