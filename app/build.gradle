@@ -37,6 +37,8 @@ dependencies {
     implementation group: 'io.reactivex.rxjava2', name: 'rxjava', version: rxjava2_version
     implementation "com.squareup.moshi:moshi-kotlin:$moshi_version"
     implementation "com.squareup.moshi:moshi-adapters:$moshi_version"
+    implementation "com.elpassion.android.commons:recycler:$android_commons_version"
+    implementation "com.elpassion.android.commons:shared-preferences:$android_commons_version"
     annotationProcessor "android.arch.lifecycle:compiler:$android_arch_version"
     testImplementation "junit:junit:$junit_version"
     testImplementation(group: 'com.nhaarman', name: 'mockito-kotlin-kt1.1', version: mockito_kotlin_version)
