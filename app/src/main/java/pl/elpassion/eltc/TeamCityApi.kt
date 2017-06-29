@@ -13,12 +13,12 @@ import retrofit2.http.Headers
 import retrofit2.http.Path
 import java.util.*
 
-interface TCApi {
+interface TeamCityApi {
     fun getBuilds(credentials: String): Single<List<Build>>
     fun getBuild(credentials: String, id: Int): Single<Build>
 }
 
-object TCApiImpl : TCApi {
+object TeamCityApiImpl : TeamCityApi {
 
     private val URL = "http://192.168.1.155:8111"
     private val moshi = Moshi.Builder()

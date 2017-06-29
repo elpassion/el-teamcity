@@ -4,16 +4,16 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable
 import pl.elpassion.eltc.AppState
-import pl.elpassion.eltc.TCApiImpl
-import pl.elpassion.eltc.TCModel
+import pl.elpassion.eltc.TeamCityApiImpl
+import pl.elpassion.eltc.TeamCityModel
 import pl.elpassion.eltc.UserAction
 
 
 class MainModel : ViewModel() {
 
-    private val tcmodel = TCModel(TCApiImpl)
+    private val model = TeamCityModel(TeamCityApiImpl)
 
-    fun perform(action: UserAction) = tcmodel.perform(action)
+    fun perform(action: UserAction) = model.perform(action)
 
     val state: LiveData<AppState> = object : LiveData<AppState>() {
 
@@ -22,7 +22,7 @@ class MainModel : ViewModel() {
         override fun onActive() {
             val onNext = { state: AppState -> postValue(state) }
             val onError = { exception: Throwable -> throw exception }
-            disposable.add(tcmodel.state.subscribe(onNext, onError))
+            disposable.add(model.state.subscribe(onNext, onError))
         }
 
         override fun onInactive() {

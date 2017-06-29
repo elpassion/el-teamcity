@@ -5,12 +5,12 @@ package pl.elpassion.eltc
 import org.junit.Ignore
 import org.junit.Test
 
-class TCRealApiTest {
+class TeamCityRealApiTest {
 
     @Ignore
     @Test
     fun `Get builds call to real TeamCity API`() {
-        TCApiImpl.getBuilds("Basic dXNlcjpwYXNz")
+        TeamCityApiImpl.getBuilds("Basic dXNlcjpwYXNz")
                 .subscribe({
                     println(it.joinToString { "\n$it" })
                 }, {
@@ -21,7 +21,7 @@ class TCRealApiTest {
     @Ignore
     @Test
     fun `Get single build call to real TeamCity API`() {
-        TCApiImpl.getBuild("Basic dXNlcjpwYXNz", 1)
+        TeamCityApiImpl.getBuild("Basic dXNlcjpwYXNz", 1)
                 .subscribe({
                     println(it)
                 }, {

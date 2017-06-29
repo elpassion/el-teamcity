@@ -9,7 +9,7 @@ data class Builds(val list: List<Build>) : AppState()
 sealed class UserAction
 data class SubmitCredentials(val address: String, val user: String, val password: String): UserAction()
 
-sealed class TCApiException: RuntimeException()
-object UnknownHostException: TCApiException()
-object InvalidCredentialsException: TCApiException()
+sealed class TeamCityApiException : RuntimeException()
+object UnknownHostException: TeamCityApiException()
+object InvalidCredentialsException: TeamCityApiException()
 

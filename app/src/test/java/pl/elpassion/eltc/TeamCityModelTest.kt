@@ -11,10 +11,10 @@ import org.junit.Before
 import org.junit.Test
 import java.util.*
 
-class TCModelTest {
+class TeamCityModelTest {
 
-    val api = mock<TCApi>()
-    val model = TCModel(api)
+    val api = mock<TeamCityApi>()
+    val model = TeamCityModel(api)
     val observer = TestObserver<AppState>()
 
     @Before

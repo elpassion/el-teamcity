@@ -3,7 +3,7 @@ package pl.elpassion.eltc
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 
-class TCModel(private val api: TCApi) {
+class TeamCityModel(private val api: TeamCityApi) {
 
     private val stateSubject = BehaviorSubject.createDefault<AppState>(NoCredentials)
     val state: Observable<AppState> = stateSubject
@@ -13,7 +13,7 @@ class TCModel(private val api: TCApi) {
             stateSubject.onNext(Builds(it))
         }
         val onError: (Throwable) -> Unit = { error ->
-            if (error is TCApiException) {
+            if (error is TeamCityApiException) {
                 stateSubject.onNext(error.toState())
             } else {
                 stateSubject.onError(error)
@@ -22,7 +22,7 @@ class TCModel(private val api: TCApi) {
         api.getBuilds("Basic dXNlcjpwYXNz").subscribe(onNext, onError)
     }
 
-    private fun TCApiException.toState() = when (this) {
+    private fun TeamCityApiException.toState() = when (this) {
         is UnknownHostException -> UnknownHost
         is InvalidCredentialsException -> InvalidCredentials
     }
