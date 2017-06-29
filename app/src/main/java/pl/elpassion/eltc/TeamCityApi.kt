@@ -8,15 +8,13 @@ import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.Headers
-import retrofit2.http.Path
+import retrofit2.http.*
 import java.util.*
 
 interface TeamCityApi {
     fun getBuilds(credentials: String): Single<List<Build>>
     fun getBuild(credentials: String, id: Int): Single<Build>
+    fun getTests(credentials: String, buildId: Int): Single<List<Test>>
 }
 
 object TeamCityApiImpl : TeamCityApi {
@@ -38,6 +36,9 @@ object TeamCityApiImpl : TeamCityApi {
     override fun getBuild(credentials: String, id: Int): Single<Build> =
             service.getBuild("Basic $credentials", id).mapApiErrors()
 
+    override fun getTests(credentials: String, buildId: Int): Single<List<Test>> =
+            service.getTests("Basic $credentials", "build:(id:$buildId)").mapApiErrors()
+
     private fun <T> Single<T>.mapApiErrors() = onErrorResumeNext {
         println("12345 666 $it") // TODO: remove this logging
         Single.error(when {
@@ -56,6 +57,10 @@ object TeamCityApiImpl : TeamCityApi {
         @Headers("Accept: application/json")
         @GET("httpAuth/app/rest/builds/id:{id}?fields=id,number,status,state,branchName,webUrl,statusText,queuedDate,startDate,finishDate")
         fun getBuild(@Header("Authorization") credentials: String, @Path("id") id: Int): Single<Build>
+
+        @Headers("Accept: application/json")
+        @GET("httpAuth/app/rest/testOccurrences")
+        fun getTests(@Header("Authorization") credentials: String, @Query("locator") locator: String): Single<List<Test>>
     }
 }
 
@@ -72,4 +77,12 @@ data class Build(
         val queuedDate: Date,
         val startDate: Date,
         val finishDate: Date
+)
+
+data class Test(
+        val id: String,
+        val name: String,
+        val status: String,
+        val duration: Int,
+        val href: String
 )

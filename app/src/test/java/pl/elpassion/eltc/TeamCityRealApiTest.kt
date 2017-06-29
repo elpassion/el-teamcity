@@ -9,7 +9,7 @@ class TeamCityRealApiTest {
 
     @Ignore
     @Test
-    fun `Get builds call to real TeamCity API`() {
+    fun `Get builds after call to real TeamCity API`() {
         TeamCityApiImpl.getBuilds("Basic dXNlcjpwYXNz")
                 .subscribe({
                     println(it.joinToString { "\n$it" })
@@ -20,8 +20,19 @@ class TeamCityRealApiTest {
 
     @Ignore
     @Test
-    fun `Get single build call to real TeamCity API`() {
+    fun `Get single build after call to real TeamCity API`() {
         TeamCityApiImpl.getBuild("Basic dXNlcjpwYXNz", 1)
+                .subscribe({
+                    println(it)
+                }, {
+                    println(it.message)
+                })
+    }
+
+    @Ignore
+    @Test
+    fun `Get all tests per build after call to real TeamCity API`() {
+        TeamCityApiImpl.getTests("Basic dXNlcjpwYXNz", 668)
                 .subscribe({
                     println(it)
                 }, {
