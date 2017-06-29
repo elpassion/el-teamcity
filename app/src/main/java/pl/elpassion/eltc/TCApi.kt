@@ -26,7 +26,7 @@ object TCApiImpl : TCApi {
             .add(Date::class.java, Rfc3339DateJsonAdapter().nullSafe())
             .build()
     private val retrofit = Retrofit.Builder().baseUrl(URL)
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.createAsync())
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
     private val service = retrofit.create(Service::class.java)

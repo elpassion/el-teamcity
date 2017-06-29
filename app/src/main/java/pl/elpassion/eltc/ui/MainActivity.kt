@@ -4,13 +4,11 @@ import android.arch.lifecycle.LifecycleActivity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import kotlinx.android.synthetic.main.build_list.*
 import kotlinx.android.synthetic.main.credentials.*
-import pl.elpassion.eltc.AppState
-import pl.elpassion.eltc.Builds
-import pl.elpassion.eltc.NoCredentials
-import pl.elpassion.eltc.R
+import pl.elpassion.eltc.*
 
 
 class MainActivity: LifecycleActivity() {
@@ -20,6 +18,9 @@ class MainActivity: LifecycleActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        save.setOnClickListener {
+            model.perform(SubmitCredentials(address.text.toString(), user.text.toString(), password.text.toString()))
+        }
         initModel()
     }
 
@@ -32,7 +33,7 @@ class MainActivity: LifecycleActivity() {
         when(state) {
             null -> { credentials.visibility = View.GONE; buildList.visibility = View.GONE }
             NoCredentials -> { credentials.visibility = View.VISIBLE; buildList.visibility = View.GONE }
-            is Builds -> { credentials.visibility = View.GONE; buildList.visibility = View.VISIBLE }
+            is Builds -> { credentials.visibility = View.GONE; buildList.visibility = View.VISIBLE; Log.w("12345", state.list.toString()) }
         }
     }
 }
