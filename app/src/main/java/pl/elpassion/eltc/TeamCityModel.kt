@@ -3,7 +3,8 @@ package pl.elpassion.eltc
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 
-class TeamCityModel(private val api: TeamCityApi) {
+class TeamCityModel(private val api: TeamCityApi,
+                    private val repository: Repository) {
 
     private val stateSubject = BehaviorSubject.createDefault<AppState>(NoCredentials)
     val state: Observable<AppState> = stateSubject
@@ -25,7 +26,11 @@ class TeamCityModel(private val api: TeamCityApi) {
                 stateSubject.onError(error)
             }
         }
-        api.getBuilds(action.credentials).subscribe(onNext, onError)
+        with(action) {
+            api.getBuilds(credentials).subscribe(onNext, onError)
+            repository.address = address
+            repository.credentials = credentials
+        }
     }
 
     private fun TeamCityApiException.toState() = when (this) {

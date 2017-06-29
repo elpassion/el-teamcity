@@ -14,8 +14,9 @@ import java.util.*
 
 class TeamCityModelTest {
 
+    val repository = mock<Repository>()
     val api = mock<TeamCityApi>()
-    val model = TeamCityModel(api)
+    val model = TeamCityModel(api, repository)
     val observer = TestObserver<AppState>()
 
     @Before
@@ -57,6 +58,14 @@ class TeamCityModelTest {
         whenever(api.getBuilds(any())).thenReturn(Single.just(emptyList()))
         model.perform(SubmitCredentials("http://teamcity:8111", "Basic user1:pass1"))
         verify(api).getBuilds(credentials = "Basic user1:pass1")
+    }
+
+    @Test
+    fun `Save credentials in repository`() {
+        whenever(api.getBuilds(any())).thenReturn(Single.just(emptyList()))
+        model.perform(SubmitCredentials("http://teamcity:8111", "Basic user:pass"))
+        verify(repository).address = "http://teamcity:8111"
+        verify(repository).credentials = "Basic user:pass"
     }
 
     private fun createBuild(id: Int) = Build(

@@ -1,17 +1,15 @@
 package pl.elpassion.eltc.ui
 
+import android.app.Application
+import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable
-import pl.elpassion.eltc.AppState
-import pl.elpassion.eltc.TeamCityApiImpl
-import pl.elpassion.eltc.TeamCityModel
-import pl.elpassion.eltc.UserAction
+import pl.elpassion.eltc.*
 
 
-class MainModel : ViewModel() {
+class MainModel(application: Application) : AndroidViewModel(application) {
 
-    private val model = TeamCityModel(TeamCityApiImpl)
+    private val model = TeamCityModel(TeamCityApiImpl, RepositoryImpl(application))
 
     fun perform(action: UserAction) = model.perform(action)
 
