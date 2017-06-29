@@ -4,6 +4,7 @@ import com.squareup.moshi.KotlinJsonAdapterFactory
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Rfc3339DateJsonAdapter
 import io.reactivex.Single
+import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -32,10 +33,19 @@ object TeamCityApiImpl : TeamCityApi {
     private val service = retrofit.create(Service::class.java)
 
     override fun getBuilds(credentials: String): Single<List<Build>> =
-            service.getBuilds("Basic $credentials").map(BuildsResponse::build)
+            service.getBuilds("Basic $credentials").mapApiErrors().map(BuildsResponse::build)
 
     override fun getBuild(credentials: String, id: Int): Single<Build> =
-            service.getBuild("Basic $credentials", id)
+            service.getBuild("Basic $credentials", id).mapApiErrors()
+
+    private fun <T> Single<T>.mapApiErrors() = onErrorResumeNext {
+        println("12345 666 $it") // TODO: remove this logging
+        Single.error(when {
+            it is HttpException && it.code() == 401 -> InvalidCredentialsException // FIXME: this condition is not precise enough
+            // TODO: other cases
+            else -> it
+        })
+    }
 
     private interface Service {
 
