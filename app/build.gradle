@@ -36,6 +36,7 @@ dependencies {
     implementation group: 'io.reactivex.rxjava2', name: 'rxjava', version: rxjava2_version
     annotationProcessor "android.arch.lifecycle:compiler:$android_arch_version"
     testImplementation "junit:junit:$junit_version"
+    testImplementation(group: 'com.nhaarman', name: 'mockito-kotlin-kt1.1', version: mockito_kotlin_version)
     androidTestImplementation("com.android.support.test.espresso:espresso-core:$espresso_version", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
