@@ -41,13 +41,27 @@ class TCModelTest {
         observer.assertLastValue(InvalidCredentials)
     }
 
-//    @Test
-//    fun `Display build list from api`() {
-//        val buildList = listOf("build1", "build2")
-//        whenever(api.getBuilds()).thenReturn(Single.just(buildList))
-//        model.perform(SubmitCredentials("http://teamcity:8111", "user", "pass"))
-//        observer.assertLastValue(Builds(buildList))
-//    }
+    @Test
+    fun `Display build list from api`() {
+        val buildList = listOf(
+                createBuild(id = 668),
+                createBuild(id = 669))
+        whenever(api.getBuilds(any())).thenReturn(Single.just(buildList))
+        model.perform(SubmitCredentials("http://teamcity:8111", "user", "pass"))
+        observer.assertLastValue(Builds(buildList))
+    }
+
+    private fun createBuild(id: Int) = Build(
+            id = id,
+            number = 7,
+            status = "SUCCESS",
+            state = "finished",
+            branchName = "master",
+            webUrl = "webUrl",
+            statusText = "Tests passed: 1",
+            queuedDate = "20170629T104035+0000",
+            startDate = "20170629T104035+0000",
+            finishDate = "20170629T104035+0000")
 }
 
 private fun <T> TestObserver<T>.assertLastValue(value: T) {
