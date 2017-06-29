@@ -10,10 +10,12 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Headers
+import retrofit2.http.Path
 import java.util.*
 
 interface TCApi {
     fun getBuilds(credentials: String): Single<List<Build>>
+    fun getBuild(credentials: String, id: Int): Single<Build>
 }
 
 object TCApiImpl : TCApi {
@@ -32,11 +34,18 @@ object TCApiImpl : TCApi {
     override fun getBuilds(credentials: String): Single<List<Build>> =
             service.getBuilds(credentials).map(BuildsResponse::build)
 
+    override fun getBuild(credentials: String, id: Int): Single<Build> =
+            service.getBuild(credentials, id)
+
     private interface Service {
 
         @Headers("Accept: application/json")
         @GET("httpAuth/app/rest/builds?fields=build(id,number,status,state,branchName,webUrl,statusText,queuedDate,startDate,finishDate)")
         fun getBuilds(@Header("Authorization") credentials: String): Single<BuildsResponse>
+
+        @Headers("Accept: application/json")
+        @GET("httpAuth/app/rest/builds/id:{id}?fields=id,number,status,state,branchName,webUrl,statusText,queuedDate,startDate,finishDate")
+        fun getBuild(@Header("Authorization") credentials: String, @Path("id") id: Int): Single<Build>
     }
 }
 
