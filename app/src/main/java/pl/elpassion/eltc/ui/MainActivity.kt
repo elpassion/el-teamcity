@@ -4,6 +4,7 @@ import android.arch.lifecycle.LifecycleActivity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.util.Base64
 import android.util.Log
 import android.view.View
 import kotlinx.android.synthetic.main.build_list.*
@@ -19,9 +20,15 @@ class MainActivity: LifecycleActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         save.setOnClickListener {
-            model.perform(SubmitCredentials(address.text.toString(), user.text.toString(), password.text.toString()))
+            val credentials = getCredentials(user.text.toString(), password.text.toString())
+            model.perform(SubmitCredentials(address.text.toString(), credentials))
         }
         initModel()
+    }
+
+    private fun getCredentials(user: String, password: String): String {
+        val data = "$user:$password".toByteArray()
+        return "Basic " + Base64.encodeToString(data, Base64.NO_WRAP)
     }
 
     private fun initModel() {
