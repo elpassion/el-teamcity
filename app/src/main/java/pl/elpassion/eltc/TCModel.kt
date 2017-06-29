@@ -9,8 +9,8 @@ class TCModel(private val api: TCApi) {
     val state: Observable<AppState> = stateSubject
 
     fun perform(action: UserAction) {
-        val onNext: (List<String>) -> Unit = { list ->
-            stateSubject.onNext(Builds(list))
+        val onNext: (List<Build>) -> Unit = {
+            stateSubject.onNext(Builds(it))
         }
         val onError: (Throwable) -> Unit = { error ->
             if (error is TCApiException) {
@@ -19,7 +19,7 @@ class TCModel(private val api: TCApi) {
                 stateSubject.onError(error)
             }
         }
-        api.getBuilds().subscribe(onNext, onError)
+        api.getBuilds("Basic dXNlcjpwYXNz").subscribe(onNext, onError)
     }
 
     private fun TCApiException.toState() = when (this) {
