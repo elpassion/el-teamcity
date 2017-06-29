@@ -7,7 +7,6 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.Single
 import io.reactivex.observers.TestObserver
-import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import java.util.*
@@ -63,8 +62,4 @@ class TCModelTest {
             queuedDate = Date(),
             startDate = Date(),
             finishDate = Date())
-}
-
-private fun <T> TestObserver<T>.assertLastValue(value: T) {
-    assertEquals(value, values().last())
 }
