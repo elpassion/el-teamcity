@@ -10,6 +10,7 @@ buildscript {
     ext.junit_version = '4.12'
     ext.espresso_version = '2.2.2'
     ext.mockito_kotlin_version = '1.5.0'
+    ext.moshi_version = '1.5.0'
     repositories {
         google()
         jcenter()

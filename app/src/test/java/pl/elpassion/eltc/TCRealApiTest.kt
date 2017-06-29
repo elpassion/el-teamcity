@@ -10,6 +10,11 @@ class TCRealApiTest {
     @Ignore
     @Test
     fun `Sample call to real TeamCity API`() {
-        TCApiImpl.getBuilds("Basic dXNlcjpwYXNz").subscribe( { println(it) }, { println(it.message) })
+        TCApiImpl.getBuilds("Basic dXNlcjpwYXNz")
+                .subscribe({
+                    println(it.joinToString { "\n$it" })
+                }, {
+                    println(it.message)
+                })
     }
 }

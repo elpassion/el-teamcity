@@ -10,6 +10,7 @@ import io.reactivex.observers.TestObserver
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import java.util.*
 
 class TCModelTest {
 
@@ -59,9 +60,9 @@ class TCModelTest {
             branchName = "master",
             webUrl = "webUrl",
             statusText = "Tests passed: 1",
-            queuedDate = "20170629T104035+0000",
-            startDate = "20170629T104035+0000",
-            finishDate = "20170629T104035+0000")
+            queuedDate = Date(),
+            startDate = Date(),
+            finishDate = Date())
 }
 
 private fun <T> TestObserver<T>.assertLastValue(value: T) {
