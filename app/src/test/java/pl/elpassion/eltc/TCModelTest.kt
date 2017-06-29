@@ -28,16 +28,24 @@ class TCModelTest {
 
     @Test
     fun `Display correct error on submitting unknown host`() {
-        whenever(api.getBuildList()).thenReturn(Single.error(UnknownHostException))
+        whenever(api.getBuilds()).thenReturn(Single.error(UnknownHostException))
         model.perform(SubmitCredentials("invalid", "user", "pass"))
         observer.assertLastValue(UnknownHost)
     }
 
     @Test
     fun `Display invalid credentials error on unauthorized call to teamcity api`() {
-        whenever(api.getBuildList()).thenReturn(Single.error(InvalidCredentialsException))
+        whenever(api.getBuilds()).thenReturn(Single.error(InvalidCredentialsException))
         model.perform(SubmitCredentials("http://teamcity:8111", "user", "wrong_pass"))
         observer.assertLastValue(InvalidCredentials)
+    }
+
+    @Test
+    fun `Display build list from api`() {
+        val buildList = listOf("build1", "build2")
+        whenever(api.getBuilds()).thenReturn(Single.just(buildList))
+        model.perform(SubmitCredentials("http://teamcity:8111", "user", "pass"))
+        observer.assertLastValue(Builds(buildList))
     }
 }
 
