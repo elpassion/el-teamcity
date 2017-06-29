@@ -28,7 +28,7 @@ class MainActivity: LifecycleActivity() {
 
     private fun getCredentials(user: String, password: String): String {
         val data = "$user:$password".toByteArray()
-        return "Basic " + Base64.encodeToString(data, Base64.NO_WRAP)
+        return Base64.encodeToString(data, Base64.NO_WRAP)
     }
 
     private fun initModel() {

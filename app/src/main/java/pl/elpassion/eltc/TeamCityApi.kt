@@ -32,10 +32,10 @@ object TeamCityApiImpl : TeamCityApi {
     private val service = retrofit.create(Service::class.java)
 
     override fun getBuilds(credentials: String): Single<List<Build>> =
-            service.getBuilds(credentials).map(BuildsResponse::build)
+            service.getBuilds("Basic $credentials").map(BuildsResponse::build)
 
     override fun getBuild(credentials: String, id: Int): Single<Build> =
-            service.getBuild(credentials, id)
+            service.getBuild("Basic $credentials", id)
 
     private interface Service {
 
