@@ -9,6 +9,7 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.*
+import java.io.IOException
 import java.util.*
 
 interface TeamCityApi {
@@ -43,6 +44,7 @@ object TeamCityApiImpl : TeamCityApi {
         println("12345 666 $it") // TODO: remove this logging
         Single.error(when {
             it is HttpException && it.code() == 401 -> InvalidCredentialsException // FIXME: this condition is not precise enough
+            it is IOException -> NetworkTimeoutException
             // TODO: other cases
             else -> it
         })

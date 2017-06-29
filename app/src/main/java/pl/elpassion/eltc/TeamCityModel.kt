@@ -36,5 +36,6 @@ class TeamCityModel(private val api: TeamCityApi,
     private fun TeamCityApiException.toState() = when (this) {
         is UnknownHostException -> UnknownHost
         is InvalidCredentialsException -> InvalidCredentials
+        is NetworkTimeoutException -> NetworkProblem
     }
 }
