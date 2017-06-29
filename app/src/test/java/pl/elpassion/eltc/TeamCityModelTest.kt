@@ -4,6 +4,7 @@ package pl.elpassion.eltc
 
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.Single
 import io.reactivex.observers.TestObserver
@@ -30,14 +31,14 @@ class TeamCityModelTest {
     @Test
     fun `Display correct error on submitting unknown host`() {
         whenever(api.getBuilds(any())).thenReturn(Single.error(UnknownHostException))
-        model.perform(SubmitCredentials("invalid", "user:pass"))
+        model.perform(SubmitCredentials("invalid", "Basic user:pass"))
         observer.assertLastValue(UnknownHost)
     }
 
     @Test
     fun `Display invalid credentials error on unauthorized call to teamcity api`() {
         whenever(api.getBuilds(any())).thenReturn(Single.error(InvalidCredentialsException))
-        model.perform(SubmitCredentials("http://teamcity:8111", "user:wrong_pass"))
+        model.perform(SubmitCredentials("http://teamcity:8111", "Basic user:wrong_pass"))
         observer.assertLastValue(InvalidCredentials)
     }
 
@@ -47,8 +48,15 @@ class TeamCityModelTest {
                 createBuild(id = 668),
                 createBuild(id = 669))
         whenever(api.getBuilds(any())).thenReturn(Single.just(buildList))
-        model.perform(SubmitCredentials("http://teamcity:8111", "user:pass"))
+        model.perform(SubmitCredentials("http://teamcity:8111", "Basic user:pass"))
         observer.assertLastValue(Builds(buildList))
+    }
+    
+    @Test
+    fun `Call api with passed credentials`() {
+        whenever(api.getBuilds(any())).thenReturn(Single.just(emptyList()))
+        model.perform(SubmitCredentials("http://teamcity:8111", "Basic user1:pass1"))
+        verify(api).getBuilds(credentials = "Basic user1:pass1")
     }
 
     private fun createBuild(id: Int) = Build(

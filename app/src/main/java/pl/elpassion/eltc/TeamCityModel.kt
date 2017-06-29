@@ -9,6 +9,12 @@ class TeamCityModel(private val api: TeamCityApi) {
     val state: Observable<AppState> = stateSubject
 
     fun perform(action: UserAction) {
+        if (action is SubmitCredentials) {
+            performSubmitCredentials(action)
+        }
+    }
+
+    private fun performSubmitCredentials(action: SubmitCredentials) {
         val onNext: (List<Build>) -> Unit = {
             stateSubject.onNext(Builds(it))
         }
@@ -19,7 +25,7 @@ class TeamCityModel(private val api: TeamCityApi) {
                 stateSubject.onError(error)
             }
         }
-        api.getBuilds("Basic dXNlcjpwYXNz").subscribe(onNext, onError)
+        api.getBuilds(action.credentials).subscribe(onNext, onError)
     }
 
     private fun TeamCityApiException.toState() = when (this) {
