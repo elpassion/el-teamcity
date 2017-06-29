@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">EL TC</string>
+    <string name="address">Server address</string>
+    <string name="user">User name</string>
+    <string name="password">Password</string>
 </resources>
