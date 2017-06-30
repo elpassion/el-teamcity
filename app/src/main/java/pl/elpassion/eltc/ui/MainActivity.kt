@@ -1,7 +1,6 @@
 package pl.elpassion.eltc.ui
 
 import android.annotation.SuppressLint
-import android.arch.lifecycle.LifecycleActivity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
@@ -21,7 +20,7 @@ import pl.elpassion.eltc.*
 import java.util.*
 
 
-class MainActivity : LifecycleActivity() {
+class MainActivity : BaseActivity() {
 
     lateinit var model: MainModel
     private val builds = mutableListOf<Build>()
@@ -30,6 +29,7 @@ class MainActivity : LifecycleActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        setSupportActionBar(toolbar)
         setupRecyclerView()
         save.setOnClickListener {
             val credentials = getCredentials(user.text.toString(), password.text.toString())
