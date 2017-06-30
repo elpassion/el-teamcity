@@ -39,7 +39,7 @@ object TeamCityApiImpl : TeamCityApi {
             service.getBuild("Basic $credentials", id).mapApiErrors()
 
     override fun getTests(credentials: String, buildId: Int): Single<List<Test>> =
-            service.getTests("Basic $credentials", "build:(id:$buildId)").mapApiErrors()
+            service.getTests("Basic $credentials", "build:(id:$buildId)").mapApiErrors().map(TestsResponse::testOccurrence)
 
     override fun getProjects(credentials: String): Single<List<Project>> =
         service.getProjects("Basic $credentials").mapApiErrors().map(ProjectResponse::project)
@@ -66,7 +66,7 @@ object TeamCityApiImpl : TeamCityApi {
 
         @Headers("Accept: application/json")
         @GET("httpAuth/app/rest/testOccurrences")
-        fun getTests(@Header("Authorization") credentials: String, @Query("locator") locator: String): Single<List<Test>>
+        fun getTests(@Header("Authorization") credentials: String, @Query("locator") locator: String): Single<TestsResponse>
 
         @Headers("Accept: application/json")
         @GET("httpAuth/app/rest/projects?fields=project(id,name,href)")
@@ -89,11 +89,13 @@ data class Build(
         val finishDate: Date
 )
 
+private data class TestsResponse(val testOccurrence: List<Test>)
+
 data class Test(
         val id: String,
         val name: String,
         val status: String,
-        val duration: Int,
+        val duration: Int?,
         val href: String
 )
 
