@@ -9,6 +9,8 @@ class TeamCityModel(private val api: TeamCityApi,
     private val stateSubject = BehaviorSubject.createDefault<AppState>(InitialState)
     val state: Observable<AppState> = stateSubject
 
+    private fun goTo(state: AppState) = stateSubject.onNext(state)
+
     fun perform(action: UserAction) {
         when (action) {
             is StartApp -> loadBuilds()
@@ -22,7 +24,7 @@ class TeamCityModel(private val api: TeamCityApi,
         if (authData != null) {
             getBuilds(authData.credentials)
         } else {
-            stateSubject.onNext(LoginState)
+            goTo(LoginState)
         }
     }
 
@@ -33,16 +35,16 @@ class TeamCityModel(private val api: TeamCityApi,
 
     private fun getBuilds(credentials: String) {
         val onNext: (List<Build>) -> Unit = {
-            stateSubject.onNext(BuildsState(it))
+            goTo(BuildsState(it))
         }
         val onError: (Throwable) -> Unit = { error ->
             if (error is TeamCityApiException) {
-                stateSubject.onNext(error.toState())
+                goTo(error.toState())
             } else {
                 stateSubject.onError(error)
             }
         }
-        stateSubject.onNext(LoadingState)
+        goTo(LoadingState)
         api.getBuilds(credentials).subscribe(onNext, onError)
     }
 
