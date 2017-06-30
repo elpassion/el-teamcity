@@ -57,11 +57,11 @@ object TeamCityApiImpl : TeamCityApi {
     private interface Service {
 
         @Headers("Accept: application/json")
-        @GET("httpAuth/app/rest/builds?fields=build(id,number,status,state,branchName,webUrl,statusText,queuedDate,startDate,finishDate)")
+        @GET("httpAuth/app/rest/builds?fields=build(id,number,status,state,branchName,webUrl,statusText,queuedDate,startDate,finishDate,buildType(id,name,projectName))")
         fun getBuilds(@Header("Authorization") credentials: String): Single<BuildsResponse>
 
         @Headers("Accept: application/json")
-        @GET("httpAuth/app/rest/builds/id:{id}?fields=id,number,status,state,branchName,webUrl,statusText,queuedDate,startDate,finishDate")
+        @GET("httpAuth/app/rest/builds/id:{id}?fields=id,number,status,state,branchName,webUrl,statusText,queuedDate,startDate,finishDate,buildType(id,name,projectName)")
         fun getBuild(@Header("Authorization") credentials: String, @Path("id") id: Int): Single<Build>
 
         @Headers("Accept: application/json")
@@ -86,7 +86,14 @@ data class Build(
         val statusText: String,
         val queuedDate: Date,
         val startDate: Date,
-        val finishDate: Date
+        val finishDate: Date,
+        val buildType: BuildType
+)
+
+data class BuildType(
+        val id: String,
+        val name: String,
+        val projectName: String
 )
 
 data class TestsResponse(val testOccurrence: List<Test>)

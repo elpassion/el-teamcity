@@ -108,5 +108,11 @@ class TeamCityModelTest {
             statusText = "Tests passed: 1",
             queuedDate = Date(),
             startDate = Date(),
-            finishDate = Date())
+            finishDate = Date(),
+            buildType = createBuildType())
+
+    private fun  createBuildType() = BuildType(
+            id = "TeamcityAndroidClient_Build",
+            name = "Build",
+            projectName = "Teamcity Android Client")
 }
