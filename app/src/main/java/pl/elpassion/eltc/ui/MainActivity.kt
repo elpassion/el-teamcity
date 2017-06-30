@@ -100,10 +100,14 @@ class MainActivity : BaseActivity() {
         return true
     }
 
-
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-        R.id.auto_refresh -> TODO()
         R.id.select_projects -> TODO()
+        R.id.auto_refresh -> {
+            val checked = !item.isChecked
+            item.isChecked = checked
+            model.perform(AutoRefresh(checked))
+            true
+        }
         else -> super.onOptionsItemSelected(item)
     }
 }

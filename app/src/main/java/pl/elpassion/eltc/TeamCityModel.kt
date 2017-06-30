@@ -2,8 +2,10 @@ package pl.elpassion.eltc
 
 import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.BehaviorSubject
+import java.util.concurrent.TimeUnit
 
 class TeamCityModel(private val api: TeamCityApi,
                     private val repository: Repository) {
@@ -13,11 +15,16 @@ class TeamCityModel(private val api: TeamCityApi,
 
     private fun goTo(state: AppState) = stateSubject.onNext(state)
 
+    private val refreshInterval = Observable.interval(3, TimeUnit.SECONDS)
+
+    private val refreshDisposable = CompositeDisposable()
+
     fun perform(action: UserAction) {
         when (action) {
             is StartApp -> loadBuilds()
             is SubmitCredentials -> performSubmitCredentials(action)
             is RefreshList -> loadBuilds()
+            is AutoRefresh -> performAutoRefresh(action.enable)
             is SelectProjects -> performSelectProjects()
         }
     }
@@ -40,6 +47,14 @@ class TeamCityModel(private val api: TeamCityApi,
         state.firstElement().subscribe {
             (it as? MainState)?.let { goTo(SelectProjectsDialogState(it.projects)) }
         }
+    }
+
+    private fun performAutoRefresh(enable: Boolean) {
+        refreshDisposable.clear()
+        if (enable)
+            refreshInterval
+                    .subscribe { perform(RefreshList) }
+                    .let { refreshDisposable.add(it) }
     }
 
     private fun getBuildsAndProjects(credentials: String) {
