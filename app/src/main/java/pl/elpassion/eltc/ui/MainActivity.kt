@@ -66,6 +66,7 @@ class MainActivity : BaseActivity() {
                 showBuilds(state.builds)
                 log(state)
             }
+            is SelectProjectsDialogState -> showSelectProjectsDialog(state.projects)
         // TODO: real implementation for Builds state case
             else -> log(state) // TODO: correctly display other states
         }
@@ -101,7 +102,7 @@ class MainActivity : BaseActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-        R.id.select_projects -> TODO()
+        R.id.select_projects -> { model.perform(SelectProjects); true }
         R.id.auto_refresh -> {
             val checked = !item.isChecked
             item.isChecked = checked
@@ -109,5 +110,9 @@ class MainActivity : BaseActivity() {
             true
         }
         else -> super.onOptionsItemSelected(item)
+    }
+
+    private fun showSelectProjectsDialog(projects: List<Project>) {
+        SelectProjectsDialog(projects).show(fragmentManager, "select_projects")
     }
 }
