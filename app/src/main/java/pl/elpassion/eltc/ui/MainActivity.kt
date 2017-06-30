@@ -1,5 +1,6 @@
 package pl.elpassion.eltc.ui
 
+import android.annotation.SuppressLint
 import android.arch.lifecycle.LifecycleActivity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
@@ -68,8 +69,15 @@ class MainActivity : LifecycleActivity() {
         buildsListRecyclerView.adapter = basicAdapterWithLayoutAndBinder(builds.asBasicMutableList(), R.layout.build_item, this::bindItem)
     }
 
+    @SuppressLint("SetTextI18n")
     private fun bindItem(holder: BasicViewHolder<Build>, item: Build) {
-        holder.itemView.buildName.text = item.toString()
+        holder.itemView.buildId.text = "#${item.id}"
+        holder.itemView.buildName.text = item.statusText
+        holder.itemView.buildStatusIcon.setImageResource(when(item.status) {
+            "FAILURE" -> R.drawable.build_failure_icon
+            "SUCCESS" -> R.drawable.build_success_icon
+            else -> R.drawable.build_failure_icon
+        })
     }
 
     private fun showBuilds(builds: List<Build>) {
