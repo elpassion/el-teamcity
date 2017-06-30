@@ -34,6 +34,15 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/projectName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:textColor="@android:color/black"
+            android:textStyle="bold"
+            tools:text="Build name" />
+
+        <TextView
             android:id="@+id/buildName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

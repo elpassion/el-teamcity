@@ -78,6 +78,7 @@ class MainActivity : LifecycleActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun bindItem(holder: BasicViewHolder<Build>, item: Build) {
+        holder.itemView.projectName.text = item.buildType.projectName
         holder.itemView.buildId.text = "#${item.id}"
         holder.itemView.buildName.text = item.statusText
         holder.itemView.buildDetails.text = "Build ${item.state} ${prettyTime.format(item.finishDate)}"
