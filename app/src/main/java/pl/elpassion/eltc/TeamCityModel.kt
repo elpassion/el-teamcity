@@ -26,13 +26,14 @@ class TeamCityModel(private val api: TeamCityApi,
             is RefreshList -> loadBuilds()
             is AutoRefresh -> performAutoRefresh(action.enable)
             is SelectProjects -> performSelectProjects()
+            is SubmitProject -> loadBuilds(action.project)
         }
     }
 
-    private fun loadBuilds() {
+    private fun loadBuilds(selectedProject: Project? = null) {
         val authData = repository.authData
         if (authData != null) {
-            getBuildsAndProjects(authData.credentials)
+            getBuildsAndProjects(authData.credentials, selectedProject)
         } else {
             goTo(LoginState)
         }
@@ -57,7 +58,7 @@ class TeamCityModel(private val api: TeamCityApi,
                     .let { refreshDisposable.add(it) }
     }
 
-    private fun getBuildsAndProjects(credentials: String) {
+    private fun getBuildsAndProjects(credentials: String, selectedProject: Project? = null) {
         val onNext: (Pair<List<Build>, List<Project>>) -> Unit = { (builds, projects) ->
             goTo(MainState(builds, projects))
         }
@@ -70,7 +71,11 @@ class TeamCityModel(private val api: TeamCityApi,
         }
         goTo(LoadingState)
         Single.zip<List<Build>, List<Project>, Pair<List<Build>, List<Project>>>(
-                api.getBuilds(credentials),
+                if (selectedProject != null) {
+                    api.getBuildsForProject(credentials, selectedProject.id)
+                } else {
+                    api.getBuilds(credentials)
+                },
                 api.getProjects(credentials),
                 BiFunction { builds, projects ->
                     builds to projects

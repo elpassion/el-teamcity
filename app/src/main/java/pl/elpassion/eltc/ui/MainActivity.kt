@@ -113,6 +113,8 @@ class MainActivity : BaseActivity() {
     }
 
     private fun showSelectProjectsDialog(projects: List<Project>) {
-        SelectProjectsDialog(projects).show(fragmentManager, "select_projects")
+        SelectProjectsDialog(projects, {
+            model.perform(SubmitProject(it))
+        }).show(fragmentManager, "select_projects")
     }
 }

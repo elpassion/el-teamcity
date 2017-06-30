@@ -6,3 +6,4 @@ data class SubmitCredentials(val address: String, val credentials: String): User
 data class AutoRefresh(val enable: Boolean): UserAction()
 object RefreshList : UserAction()
 object SelectProjects : UserAction()
+data class SubmitProject(val project: Project): UserAction()

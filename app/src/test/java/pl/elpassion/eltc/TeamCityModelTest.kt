@@ -130,6 +130,25 @@ class TeamCityModelTest {
         observer.assertLastValue(SelectProjectsDialogState(projectList))
     }
 
+    @Test
+    fun `Display only builds for specified project`() {
+        val buildList = listOf(
+                createBuild(id = 668),
+                createBuild(id = 669))
+        val projectBuildList = buildList.take(1)
+        val projectList = listOf(
+                createProject(id = "Project1"),
+                createProject(id = "Project2"))
+        whenever(api.getProjects(any())).thenReturn(Single.just(projectList))
+        whenever(api.getBuilds(any())).thenReturn(Single.just(buildList))
+        whenever(api.getBuildsForProject(any(), any())).thenReturn(Single.just(projectBuildList))
+        whenever(repository.authData).thenReturn(AuthData("http://teamcity:8111", "user:pass"))
+        model.perform(StartApp)
+        model.perform(SelectProjects)
+        model.perform(SubmitProject(projectList.first()))
+        observer.assertLastValue(MainState(projectBuildList, projectList))
+    }
+
     private fun createBuild(id: Int) = Build(
             id = id,
             number = 7,
