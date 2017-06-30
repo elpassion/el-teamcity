@@ -18,6 +18,7 @@ class TeamCityModel(private val api: TeamCityApi,
             is StartApp -> loadBuilds()
             is SubmitCredentials -> performSubmitCredentials(action)
             is RefreshList -> loadBuilds()
+            is SelectProjects -> performSelectProjects()
         }
     }
 
@@ -33,6 +34,12 @@ class TeamCityModel(private val api: TeamCityApi,
     private fun performSubmitCredentials(action: SubmitCredentials) = with(action) {
         repository.authData = AuthData(address, credentials)
         getBuildsAndProjects(credentials)
+    }
+
+    private fun performSelectProjects() {
+        state.firstElement().subscribe {
+            (it as? MainState)?.let { goTo(SelectProjectsDialogState(it.projects)) }
+        }
     }
 
     private fun getBuildsAndProjects(credentials: String) {

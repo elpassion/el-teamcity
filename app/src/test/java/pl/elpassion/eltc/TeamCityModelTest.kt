@@ -117,6 +117,19 @@ class TeamCityModelTest {
         observer.assertLastValue(LoadingState)
     }
 
+    @Test
+    fun `Display select projects dialog on select projects action`() {
+        val projectList = listOf(
+                createProject(id = "Project1"),
+                createProject(id = "Project2"))
+        whenever(api.getProjects(any())).thenReturn(Single.just(projectList))
+        whenever(api.getBuilds(any())).thenReturn(Single.just(emptyList()))
+        whenever(repository.authData).thenReturn(AuthData("http://teamcity:8111", "user:pass"))
+        model.perform(StartApp)
+        model.perform(SelectProjects)
+        observer.assertLastValue(SelectProjectsDialogState(projectList))
+    }
+
     private fun createBuild(id: Int) = Build(
             id = id,
             number = 7,
