@@ -14,6 +14,7 @@ import java.util.*
 
 interface TeamCityApi {
     fun getBuilds(credentials: String): Single<List<Build>>
+    fun getBuildsForProject(credentials: String, projectId: String): Single<List<Build>>
     fun getBuild(credentials: String, id: Int): Single<Build>
     fun getTests(credentials: String, buildId: Int): Single<List<Test>>
     fun getProjects(credentials: String): Single<List<Project>>
@@ -35,6 +36,9 @@ object TeamCityApiImpl : TeamCityApi {
     override fun getBuilds(credentials: String): Single<List<Build>> =
             service.getBuilds("Basic $credentials").mapApiErrors().map(BuildsResponse::build)
 
+    override fun getBuildsForProject(credentials: String, projectId: String): Single<List<Build>> =
+            service.getSpecificBuilds("Basic $credentials", "project:(id:$projectId)").mapApiErrors().map(BuildsResponse::build)
+
     override fun getBuild(credentials: String, id: Int): Single<Build> =
             service.getBuild("Basic $credentials", id).mapApiErrors()
 
@@ -42,14 +46,14 @@ object TeamCityApiImpl : TeamCityApi {
             service.getTests("Basic $credentials", "build:(id:$buildId)").mapApiErrors().map(TestsResponse::testOccurrence)
 
     override fun getProjects(credentials: String): Single<List<Project>> =
-        service.getProjects("Basic $credentials").mapApiErrors().map(ProjectsResponse::project)
+            service.getProjects("Basic $credentials").mapApiErrors().map(ProjectsResponse::project)
 
     private fun <T> Single<T>.mapApiErrors() = onErrorResumeNext {
         println("12345 666 $it") // TODO: remove this logging
         Single.error(when {
             it is HttpException && it.code() == 401 -> InvalidCredentialsException // FIXME: this condition is not precise enough
             it is IOException -> NetworkTimeoutException
-            // TODO: other cases
+        // TODO: other cases
             else -> it
         })
     }
@@ -59,6 +63,10 @@ object TeamCityApiImpl : TeamCityApi {
         @Headers("Accept: application/json")
         @GET("httpAuth/app/rest/builds?fields=build(id,number,status,state,branchName,webUrl,statusText,queuedDate,startDate,finishDate,buildType(id,name,projectName))")
         fun getBuilds(@Header("Authorization") credentials: String): Single<BuildsResponse>
+
+        @Headers("Accept: application/json")
+        @GET("httpAuth/app/rest/builds?fields=build(id,number,status,state,branchName,webUrl,statusText,queuedDate,startDate,finishDate,buildType(id,name,projectName))")
+        fun getSpecificBuilds(@Header("Authorization") credentials: String, @Query("locator") locator: String): Single<BuildsResponse>
 
         @Headers("Accept: application/json")
         @GET("httpAuth/app/rest/builds/id:{id}?fields=id,number,status,state,branchName,webUrl,statusText,queuedDate,startDate,finishDate,buildType(id,name,projectName)")

@@ -19,6 +19,13 @@ class TeamCityRealApiTest {
     }
 
     @Test
+    fun `Get builds of the specified project after call to real TeamCity API`() {
+        TeamCityApiImpl
+                .getBuildsForProject(CREDENTIALS, projectId = "TeamcityAndroidClient")
+                .getAndPrint()
+    }
+
+    @Test
     fun `Get single build after call to real TeamCity API`() {
         TeamCityApiImpl
                 .getBuild(CREDENTIALS, id = 1)
