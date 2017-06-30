@@ -11,5 +11,6 @@
         android:id="@+id/select_projects"
         android:orderInCategory="100"
         android:title="@string/select_projects"
-        app:showAsAction="never" />
+        android:icon="@drawable/ic_select_projects"
+        app:showAsAction="ifRoom" />
 </menu>
