@@ -11,12 +11,13 @@ class TeamCityModel(private val api: TeamCityApi,
 
     fun perform(action: UserAction) {
         when (action) {
-            is StartApp -> performStartApp()
+            is StartApp -> loadBuilds()
             is SubmitCredentials -> performSubmitCredentials(action)
+            is RefreshList -> loadBuilds()
         }
     }
 
-    private fun performStartApp() {
+    private fun loadBuilds() {
         val authData = repository.authData
         if (authData != null) {
             getBuilds(authData.credentials)

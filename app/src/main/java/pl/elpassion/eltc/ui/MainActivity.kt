@@ -35,6 +35,9 @@ class MainActivity : LifecycleActivity() {
             val credentials = getCredentials(user.text.toString(), password.text.toString())
             model.perform(SubmitCredentials(address.text.toString(), credentials))
         }
+        swipeToRefreshBuildsList.setOnRefreshListener {
+            model.perform(RefreshList)
+        }
         initModel()
         model.perform(StartApp)
     }

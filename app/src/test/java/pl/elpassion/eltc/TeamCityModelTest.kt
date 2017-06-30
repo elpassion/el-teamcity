@@ -90,6 +90,14 @@ class TeamCityModelTest {
         verify(api).getBuilds(credentials = "user:pass")
     }
 
+    @Test
+    fun `Start loading on refresh list`() {
+        whenever(api.getBuilds(any())).thenReturn(Single.never())
+        whenever(repository.authData).thenReturn(AuthData("http://teamcity:8111", "user:pass"))
+        model.perform(RefreshList)
+        observer.assertLastValue(LoadingState)
+    }
+
     private fun createBuild(id: Int) = Build(
             id = id,
             number = 7,
