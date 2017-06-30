@@ -28,8 +28,7 @@ class TeamCityModel(private val api: TeamCityApi,
         }
         with(action) {
             api.getBuilds(credentials).subscribe(onNext, onError)
-            repository.address = address
-            repository.credentials = credentials
+            repository.authData = AuthData(address, credentials)
         }
     }
 

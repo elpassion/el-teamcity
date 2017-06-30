@@ -7,24 +7,17 @@ import com.google.gson.Gson
 
 class RepositoryImpl(private val application: Application) : Repository {
 
-    private val repository = createSharedPrefs<String?>({
+    private val repository = createSharedPrefs<AuthData?>({
         PreferenceManager.getDefaultSharedPreferences(application)
     }, { Gson() })
 
-    override var address: String?
-        get() = repository.read(ADDRESS_KEY)
+    override var authData: AuthData?
+        get() = repository.read(AUTH_DATA_KEY)
         set(value) {
-            repository.write(ADDRESS_KEY, value)
-        }
-
-    override var credentials: String?
-        get() = repository.read(CREDENTIALS_KEY)
-        set(value) {
-            repository.write(CREDENTIALS_KEY, value)
+            repository.write(AUTH_DATA_KEY, value)
         }
 
     companion object {
-        private const val ADDRESS_KEY = "address"
-        private const val CREDENTIALS_KEY = "credentials"
+        private const val AUTH_DATA_KEY = "auth_data"
     }
 }

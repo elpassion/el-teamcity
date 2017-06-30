@@ -64,8 +64,7 @@ class TeamCityModelTest {
     fun `Save credentials in repository`() {
         whenever(api.getBuilds(any())).thenReturn(Single.just(emptyList()))
         model.perform(SubmitCredentials("http://teamcity:8111", "user:pass"))
-        verify(repository).address = "http://teamcity:8111"
-        verify(repository).credentials = "user:pass"
+        verify(repository).authData = AuthData("http://teamcity:8111", "user:pass")
     }
 
     private fun createBuild(id: Int) = Build(

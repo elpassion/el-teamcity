@@ -1,6 +1,7 @@
 package pl.elpassion.eltc
 
 interface Repository {
-    var address: String?
-    var credentials: String?
+    var authData: AuthData?
 }
+
+data class AuthData(val address: String, val credentials: String)
