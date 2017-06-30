@@ -30,6 +30,13 @@ class TeamCityModelTest {
     }
 
     @Test
+    fun `Start LoadingState on SubmitCredentials action`() {
+        whenever(api.getBuilds(any())).thenReturn(Single.never())
+        model.perform(SubmitCredentials("http://teamcity:8111", "user:pass"))
+        observer.assertLastValue(LoadingState)
+    }
+
+    @Test
     fun `Display correct error on submitting unknown host`() {
         whenever(api.getBuilds(any())).thenReturn(Single.error(UnknownHostException))
         model.perform(SubmitCredentials("invalid", "user:pass"))
