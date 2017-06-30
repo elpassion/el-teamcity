@@ -39,6 +39,6 @@ class SelectProjectsDialog(private val projects: List<Project>,
 class ProjectRadioButton(context: Context, val project: Project) : RadioButton(context) {
 
     init {
-        text = project.name
+        text = project.name.let { if (it == "<Root project>") "All projects" else it }
     }
 }

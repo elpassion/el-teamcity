@@ -71,7 +71,7 @@ class TeamCityModel(private val api: TeamCityApi,
         }
         goTo(LoadingState)
         Single.zip<List<Build>, List<Project>, Pair<List<Build>, List<Project>>>(
-                if (selectedProject != null) {
+                if (selectedProject != null && selectedProject.name != "<Root project>") {
                     api.getBuildsForProject(credentials, selectedProject.id)
                 } else {
                     api.getBuilds(credentials)
