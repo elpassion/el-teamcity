@@ -10,10 +10,13 @@ class TeamCityModel(private val api: TeamCityApi,
     val state: Observable<AppState> = stateSubject
 
     fun perform(action: UserAction) {
-        if (action is SubmitCredentials) {
-            performSubmitCredentials(action)
+        when (action) {
+            is StartApp -> performStartApp()
+            is SubmitCredentials -> performSubmitCredentials(action)
         }
     }
+
+    private fun performStartApp() = stateSubject.onNext(LoadingState)
 
     private fun performSubmitCredentials(action: SubmitCredentials) {
         val onNext: (List<Build>) -> Unit = {

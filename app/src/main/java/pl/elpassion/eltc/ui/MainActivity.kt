@@ -42,7 +42,7 @@ class MainActivity : LifecycleActivity() {
             null -> {
                 credentials.visibility = View.GONE; buildList.visibility = View.GONE
             }
-            MissingCredentialsState -> {
+            LoginState -> {
                 credentials.visibility = View.VISIBLE; buildList.visibility = View.GONE
             }
             is BuildsState -> {

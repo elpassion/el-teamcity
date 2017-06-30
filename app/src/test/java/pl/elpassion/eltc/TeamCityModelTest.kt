@@ -67,6 +67,13 @@ class TeamCityModelTest {
         verify(repository).authData = AuthData("http://teamcity:8111", "user:pass")
     }
 
+    @Test
+    fun `Start loading if credentials are available in repository on app start`() {
+        whenever(repository.authData).thenReturn(AuthData("http://teamcity:8111", "user:pass"))
+        model.perform(StartApp)
+        observer.assertLastValue(LoadingState)
+    }
+
     private fun createBuild(id: Int) = Build(
             id = id,
             number = 7,
