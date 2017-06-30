@@ -103,6 +103,7 @@ class MainActivity : BaseActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.auto_refresh -> TODO()
+        R.id.select_projects -> TODO()
         else -> super.onOptionsItemSelected(item)
     }
 }

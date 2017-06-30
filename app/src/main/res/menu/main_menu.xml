@@ -7,4 +7,9 @@
         android:title="@string/auto_refresh"
         android:checkable="true"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/select_projects"
+        android:orderInCategory="100"
+        android:title="@string/select_projects"
+        app:showAsAction="never" />
 </menu>
