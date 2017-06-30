@@ -39,9 +39,9 @@ class MainActivity: LifecycleActivity() {
     private fun showState(state: AppState?) {
         when(state) {
             null -> { credentials.visibility = View.GONE; buildList.visibility = View.GONE }
-            NoCredentials -> { credentials.visibility = View.VISIBLE; buildList.visibility = View.GONE }
-            is Builds -> { credentials.visibility = View.GONE; buildList.visibility = View.VISIBLE; Log.w("12345", state.list.toString()) }
-            // TODO: real implementation for Builds state case
+            NoCredentialsState -> { credentials.visibility = View.VISIBLE; buildList.visibility = View.GONE }
+            is BuildsState -> { credentials.visibility = View.GONE; buildList.visibility = View.VISIBLE; Log.w("12345", state.list.toString()) }
+            // TODO: real implementation for BuildsState state case
             else -> Log.w("12345", state.toString()) // TODO: correctly display other states
         }
     }

@@ -6,7 +6,7 @@ import io.reactivex.subjects.BehaviorSubject
 class TeamCityModel(private val api: TeamCityApi,
                     private val repository: Repository) {
 
-    private val stateSubject = BehaviorSubject.createDefault<AppState>(NoCredentials)
+    private val stateSubject = BehaviorSubject.createDefault<AppState>(NoCredentialsState)
     val state: Observable<AppState> = stateSubject
 
     fun perform(action: UserAction) {
@@ -17,7 +17,7 @@ class TeamCityModel(private val api: TeamCityApi,
 
     private fun performSubmitCredentials(action: SubmitCredentials) {
         val onNext: (List<Build>) -> Unit = {
-            stateSubject.onNext(Builds(it))
+            stateSubject.onNext(BuildsState(it))
         }
         val onError: (Throwable) -> Unit = { error ->
             if (error is TeamCityApiException) {
@@ -34,8 +34,8 @@ class TeamCityModel(private val api: TeamCityApi,
     }
 
     private fun TeamCityApiException.toState() = when (this) {
-        is UnknownHostException -> UnknownHost
-        is InvalidCredentialsException -> InvalidCredentials
-        is NetworkTimeoutException -> NetworkProblem
+        is UnknownHostException -> UnknownHostState
+        is InvalidCredentialsException -> InvalidCredentialsState
+        is NetworkTimeoutException -> NetworkProblemState
     }
 }

@@ -26,21 +26,21 @@ class TeamCityModelTest {
 
     @Test
     fun `Emit NoCredentials at the beginning`() {
-        observer.assertValue(NoCredentials)
+        observer.assertValue(NoCredentialsState)
     }
 
     @Test
     fun `Display correct error on submitting unknown host`() {
         whenever(api.getBuilds(any())).thenReturn(Single.error(UnknownHostException))
         model.perform(SubmitCredentials("invalid", "user:pass"))
-        observer.assertLastValue(UnknownHost)
+        observer.assertLastValue(UnknownHostState)
     }
 
     @Test
     fun `Display invalid credentials error on unauthorized call to teamcity api`() {
         whenever(api.getBuilds(any())).thenReturn(Single.error(InvalidCredentialsException))
         model.perform(SubmitCredentials("http://teamcity:8111", "user:wrong_pass"))
-        observer.assertLastValue(InvalidCredentials)
+        observer.assertLastValue(InvalidCredentialsState)
     }
 
     @Test
@@ -50,7 +50,7 @@ class TeamCityModelTest {
                 createBuild(id = 669))
         whenever(api.getBuilds(any())).thenReturn(Single.just(buildList))
         model.perform(SubmitCredentials("http://teamcity:8111", "user:pass"))
-        observer.assertLastValue(Builds(buildList))
+        observer.assertLastValue(BuildsState(buildList))
     }
     
     @Test
