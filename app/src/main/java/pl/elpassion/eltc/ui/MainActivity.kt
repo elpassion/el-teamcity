@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Base64
+import android.view.Menu
+import android.view.MenuItem
 import com.elpassion.android.commons.recycler.adapters.basicAdapterWithLayoutAndBinder
 import com.elpassion.android.commons.recycler.basic.BasicViewHolder
 import com.elpassion.android.commons.recycler.basic.asBasicMutableList
@@ -91,5 +93,16 @@ class MainActivity : BaseActivity() {
     private fun showBuilds(builds: List<Build>) {
         this.builds.run { clear(); addAll(builds) }
         buildsListRecyclerView.adapter.notifyDataSetChanged()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        getMenuInflater().inflate(R.menu.main_menu, menu)
+        return true
+    }
+
+
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.auto_refresh -> TODO()
+        else -> super.onOptionsItemSelected(item)
     }
 }
