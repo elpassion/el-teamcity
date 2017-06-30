@@ -53,6 +53,7 @@ class MainActivity : LifecycleActivity() {
     }
 
     private fun showState(state: AppState?) {
+        swipeToRefreshBuildsList.isRefreshing = false
         log(state)
         when (state) {
             null -> screens.showOneChild(null)
