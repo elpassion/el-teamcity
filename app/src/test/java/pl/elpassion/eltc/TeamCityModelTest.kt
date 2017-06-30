@@ -25,8 +25,8 @@ class TeamCityModelTest {
     }
 
     @Test
-    fun `Emit NoCredentials at the beginning`() {
-        observer.assertValue(NoCredentialsState)
+    fun `Emit InitialState before app start`() {
+        observer.assertValue(InitialState)
     }
 
     @Test

@@ -6,7 +6,7 @@ import io.reactivex.subjects.BehaviorSubject
 class TeamCityModel(private val api: TeamCityApi,
                     private val repository: Repository) {
 
-    private val stateSubject = BehaviorSubject.createDefault<AppState>(NoCredentialsState)
+    private val stateSubject = BehaviorSubject.createDefault<AppState>(InitialState)
     val state: Observable<AppState> = stateSubject
 
     fun perform(action: UserAction) {
