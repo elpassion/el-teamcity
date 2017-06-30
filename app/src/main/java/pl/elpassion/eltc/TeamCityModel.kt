@@ -26,9 +26,9 @@ class TeamCityModel(private val api: TeamCityApi,
         }
     }
 
-    private fun performSubmitCredentials(action: SubmitCredentials) {
-        repository.authData = AuthData(action.address, action.credentials)
-        getBuilds(action.credentials)
+    private fun performSubmitCredentials(action: SubmitCredentials) = with(action) {
+        repository.authData = AuthData(address, credentials)
+        getBuilds(credentials)
     }
 
     private fun getBuilds(credentials: String) {
