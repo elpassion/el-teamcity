@@ -1,6 +1,8 @@
 package pl.elpassion.eltc
 
 import io.reactivex.Observable
+import io.reactivex.Single
+import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.BehaviorSubject
 
 class TeamCityModel(private val api: TeamCityApi,
@@ -22,7 +24,7 @@ class TeamCityModel(private val api: TeamCityApi,
     private fun loadBuilds() {
         val authData = repository.authData
         if (authData != null) {
-            getBuilds(authData.credentials)
+            getBuildsAndProjects(authData.credentials)
         } else {
             goTo(LoginState)
         }
@@ -30,12 +32,12 @@ class TeamCityModel(private val api: TeamCityApi,
 
     private fun performSubmitCredentials(action: SubmitCredentials) = with(action) {
         repository.authData = AuthData(address, credentials)
-        getBuilds(credentials)
+        getBuildsAndProjects(credentials)
     }
 
-    private fun getBuilds(credentials: String) {
-        val onNext: (List<Build>) -> Unit = {
-            goTo(BuildsState(it))
+    private fun getBuildsAndProjects(credentials: String) {
+        val onNext: (Pair<List<Build>, List<Project>>) -> Unit = { (builds, projects) ->
+            goTo(MainState(builds, projects))
         }
         val onError: (Throwable) -> Unit = { error ->
             if (error is TeamCityApiException) {
@@ -45,7 +47,13 @@ class TeamCityModel(private val api: TeamCityApi,
             }
         }
         goTo(LoadingState)
-        api.getBuilds(credentials).subscribe(onNext, onError)
+        Single.zip<List<Build>, List<Project>, Pair<List<Build>, List<Project>>>(
+                api.getBuilds(credentials),
+                api.getProjects(credentials),
+                BiFunction { builds, projects ->
+                    builds to projects
+                })
+                .subscribe(onNext, onError)
     }
 
     private fun TeamCityApiException.toState() = when (this) {

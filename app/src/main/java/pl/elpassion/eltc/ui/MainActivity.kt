@@ -61,9 +61,9 @@ class MainActivity : BaseActivity() {
             null -> screens.showOneChild(null)
             LoginState -> screens.showOneChild(loginScreen)
             LoadingState -> screens.showOneChild(loadingScreen)
-            is BuildsState -> {
+            is MainState -> {
                 screens.showOneChild(buildsScreen)
-                showBuilds(state.list)
+                showBuilds(state.builds)
                 log(state)
             }
         // TODO: real implementation for Builds state case
