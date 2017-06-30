@@ -19,13 +19,14 @@
     </android.support.design.widget.AppBarLayout>
 
     <FrameLayout
+        android:id="@+id/screens"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <include layout="@layout/credentials" />
+        <include layout="@layout/login_screen" />
 
-        <include layout="@layout/build_list" />
+        <include layout="@layout/builds_screen" />
     </FrameLayout>
 
 </android.support.design.widget.CoordinatorLayout>

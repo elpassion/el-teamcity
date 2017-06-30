@@ -7,12 +7,16 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Base64
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
+import android.view.ViewGroup
 import com.elpassion.android.commons.recycler.adapters.basicAdapterWithLayoutAndBinder
 import com.elpassion.android.commons.recycler.basic.BasicViewHolder
 import com.elpassion.android.commons.recycler.basic.asBasicMutableList
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.build_item.view.*
-import kotlinx.android.synthetic.main.build_list.*
-import kotlinx.android.synthetic.main.credentials.*
+import kotlinx.android.synthetic.main.builds_screen.*
+import kotlinx.android.synthetic.main.login_screen.*
 import pl.elpassion.eltc.*
 
 
@@ -46,15 +50,10 @@ class MainActivity : LifecycleActivity() {
     private fun showState(state: AppState?) {
         log(state)
         when (state) {
-            null -> {
-                credentials.visibility = View.GONE; buildList.visibility = View.GONE
-            }
-            LoginState -> {
-                credentials.visibility = View.VISIBLE; buildList.visibility = View.GONE
-            }
+            null -> screens.showOneChild(null)
+            LoginState -> screens.showOneChild(loginScreen)
             is BuildsState -> {
-                credentials.visibility = View.GONE
-                buildList.visibility = View.VISIBLE
+                screens.showOneChild(buildsScreen)
                 showBuilds(state.list)
                 log(state)
             }
@@ -64,9 +63,9 @@ class MainActivity : LifecycleActivity() {
     }
 
     private fun setupRecyclerView() {
-        recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = basicAdapterWithLayoutAndBinder(builds.asBasicMutableList(), R.layout.build_item, this::bindItem)
+        buildsListRecyclerView.setHasFixedSize(true)
+        buildsListRecyclerView.layoutManager = LinearLayoutManager(this)
+        buildsListRecyclerView.adapter = basicAdapterWithLayoutAndBinder(builds.asBasicMutableList(), R.layout.build_item, this::bindItem)
     }
 
     private fun bindItem(holder: BasicViewHolder<Build>, item: Build) {
@@ -75,7 +74,14 @@ class MainActivity : LifecycleActivity() {
 
     private fun showBuilds(builds: List<Build>) {
         this.builds.run { clear(); addAll(builds) }
-        recyclerView.adapter.notifyDataSetChanged()
+        buildsListRecyclerView.adapter.notifyDataSetChanged()
     }
 
 }
+
+private fun ViewGroup.showOneChild(child: View?) {
+    for (c in views)
+        c.visibility = if (c === child) VISIBLE else GONE
+}
+
+private val ViewGroup.views: List<View> get() = (0 until childCount).map { getChildAt(it) }
