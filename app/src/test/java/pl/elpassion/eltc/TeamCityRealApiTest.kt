@@ -8,7 +8,7 @@ import org.junit.Test
 @Ignore
 class TeamCityRealApiTest {
 
-    private val CREDENTIALS = "Basic dXNlcjpwYXNz"
+    private val CREDENTIALS = "dXNlcjpwYXNz"
 
     @Test
     fun `Get builds after call to real TeamCity API`() {
@@ -16,7 +16,7 @@ class TeamCityRealApiTest {
                 .subscribe({
                     println(it.joinToString { "\n$it" })
                 }, {
-                    println(it.message)
+                    throw it
                 })
     }
 
@@ -26,7 +26,7 @@ class TeamCityRealApiTest {
                 .subscribe({
                     println(it)
                 }, {
-                    println(it.message)
+                    throw it
                 })
     }
 
@@ -36,7 +36,7 @@ class TeamCityRealApiTest {
                 .subscribe({
                     println(it)
                 }, {
-                    println(it.message)
+                    throw it
                 })
     }
 }
