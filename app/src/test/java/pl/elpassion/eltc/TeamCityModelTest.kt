@@ -74,6 +74,13 @@ class TeamCityModelTest {
         observer.assertLastValue(LoadingState)
     }
 
+    @Test
+    fun `Display login if credentials are not available in repository on app start`() {
+        whenever(repository.authData).thenReturn(null)
+        model.perform(StartApp)
+        observer.assertLastValue(LoginState)
+    }
+
     private fun createBuild(id: Int) = Build(
             id = id,
             number = 7,

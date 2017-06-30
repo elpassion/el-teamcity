@@ -16,7 +16,13 @@ class TeamCityModel(private val api: TeamCityApi,
         }
     }
 
-    private fun performStartApp() = stateSubject.onNext(LoadingState)
+    private fun performStartApp() {
+        if (repository.authData != null) {
+            stateSubject.onNext(LoadingState)
+        } else {
+            stateSubject.onNext(LoginState)
+        }
+    }
 
     private fun performSubmitCredentials(action: SubmitCredentials) {
         val onNext: (List<Build>) -> Unit = {
