@@ -37,13 +37,15 @@
             android:id="@+id/buildName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:singleLine="true"
             android:textColor="@android:color/black"
             tools:text="Build name" />
 
         <TextView
             android:id="@+id/buildDetails"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:singleLine="true" />
 
     </LinearLayout>
 
