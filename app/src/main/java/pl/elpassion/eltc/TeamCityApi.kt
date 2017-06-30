@@ -16,6 +16,7 @@ interface TeamCityApi {
     fun getBuilds(credentials: String): Single<List<Build>>
     fun getBuild(credentials: String, id: Int): Single<Build>
     fun getTests(credentials: String, buildId: Int): Single<List<Test>>
+    fun getProjects(credentials: String): Single<List<Project>>
 }
 
 object TeamCityApiImpl : TeamCityApi {
@@ -40,6 +41,9 @@ object TeamCityApiImpl : TeamCityApi {
     override fun getTests(credentials: String, buildId: Int): Single<List<Test>> =
             service.getTests("Basic $credentials", "build:(id:$buildId)").mapApiErrors()
 
+    override fun getProjects(credentials: String): Single<List<Project>> =
+        service.getProjects("Basic $credentials").mapApiErrors().map(ProjectResponse::project)
+
     private fun <T> Single<T>.mapApiErrors() = onErrorResumeNext {
         println("12345 666 $it") // TODO: remove this logging
         Single.error(when {
@@ -63,6 +67,10 @@ object TeamCityApiImpl : TeamCityApi {
         @Headers("Accept: application/json")
         @GET("httpAuth/app/rest/testOccurrences")
         fun getTests(@Header("Authorization") credentials: String, @Query("locator") locator: String): Single<List<Test>>
+
+        @Headers("Accept: application/json")
+        @GET("httpAuth/app/rest/projects?fields=project(id,name,href)")
+        fun getProjects(@Header("Authorization") credentials: String): Single<ProjectResponse>
     }
 }
 
@@ -86,5 +94,13 @@ data class Test(
         val name: String,
         val status: String,
         val duration: Int,
+        val href: String
+)
+
+private data class ProjectResponse(val project: List<Project>)
+
+data class Project(
+        val id: String,
+        val name: String,
         val href: String
 )

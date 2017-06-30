@@ -32,5 +32,12 @@ class TeamCityRealApiTest {
                 .getAndPrint()
     }
 
+    @Test
+    fun `Get all projects after call to real TeamCity API`() {
+        TeamCityApiImpl
+                .getProjects(CREDENTIALS)
+                .getAndPrint()
+    }
+
     fun <T> Single<T>.getAndPrint() = println(blockingGet())
 }
