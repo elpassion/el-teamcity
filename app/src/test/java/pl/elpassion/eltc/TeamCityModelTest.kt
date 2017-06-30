@@ -69,6 +69,7 @@ class TeamCityModelTest {
 
     @Test
     fun `Start loading if credentials are available in repository on app start`() {
+        whenever(api.getBuilds(any())).thenReturn(Single.never())
         whenever(repository.authData).thenReturn(AuthData("http://teamcity:8111", "user:pass"))
         model.perform(StartApp)
         observer.assertLastValue(LoadingState)
@@ -79,6 +80,14 @@ class TeamCityModelTest {
         whenever(repository.authData).thenReturn(null)
         model.perform(StartApp)
         observer.assertLastValue(LoginState)
+    }
+
+    @Test
+    fun `Call api with passed credentials if available in repository on app start`() {
+        whenever(api.getBuilds(any())).thenReturn(Single.just(emptyList()))
+        whenever(repository.authData).thenReturn(AuthData("http://teamcity:8111", "user:pass"))
+        model.perform(StartApp)
+        verify(api).getBuilds(credentials = "user:pass")
     }
 
     private fun createBuild(id: Int) = Build(

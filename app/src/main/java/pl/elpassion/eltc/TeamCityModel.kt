@@ -17,14 +17,21 @@ class TeamCityModel(private val api: TeamCityApi,
     }
 
     private fun performStartApp() {
-        if (repository.authData != null) {
+        val authData = repository.authData
+        if (authData != null) {
             stateSubject.onNext(LoadingState)
+            getBuilds(authData.credentials)
         } else {
             stateSubject.onNext(LoginState)
         }
     }
 
     private fun performSubmitCredentials(action: SubmitCredentials) {
+        repository.authData = AuthData(action.address, action.credentials)
+        getBuilds(action.credentials)
+    }
+
+    private fun getBuilds(credentials: String) {
         val onNext: (List<Build>) -> Unit = {
             stateSubject.onNext(BuildsState(it))
         }
@@ -35,10 +42,7 @@ class TeamCityModel(private val api: TeamCityApi,
                 stateSubject.onError(error)
             }
         }
-        with(action) {
-            api.getBuilds(credentials).subscribe(onNext, onError)
-            repository.authData = AuthData(address, credentials)
-        }
+        api.getBuilds(credentials).subscribe(onNext, onError)
     }
 
     private fun TeamCityApiException.toState() = when (this) {
