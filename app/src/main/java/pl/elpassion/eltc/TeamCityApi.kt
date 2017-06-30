@@ -74,7 +74,7 @@ object TeamCityApiImpl : TeamCityApi {
     }
 }
 
-private data class BuildsResponse(val build: List<Build>)
+data class BuildsResponse(val build: List<Build>)
 
 data class Build(
         val id: Int,
@@ -89,7 +89,7 @@ data class Build(
         val finishDate: Date
 )
 
-private data class TestsResponse(val testOccurrence: List<Test>)
+data class TestsResponse(val testOccurrence: List<Test>)
 
 data class Test(
         val id: String,
@@ -99,7 +99,7 @@ data class Test(
         val href: String
 )
 
-private data class ProjectsResponse(val project: List<Project>)
+data class ProjectsResponse(val project: List<Project>)
 
 data class Project(
         val id: String,
