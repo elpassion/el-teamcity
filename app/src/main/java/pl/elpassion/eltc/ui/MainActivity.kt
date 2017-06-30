@@ -8,11 +8,12 @@ import android.util.Base64
 import android.util.Log
 import android.view.View
 import kotlinx.android.synthetic.main.build_list.*
+import kotlinx.android.synthetic.main.build_list.view.*
 import kotlinx.android.synthetic.main.credentials.*
 import pl.elpassion.eltc.*
 
 
-class MainActivity: LifecycleActivity() {
+class MainActivity : LifecycleActivity() {
 
     lateinit var model: MainModel
 
@@ -37,9 +38,13 @@ class MainActivity: LifecycleActivity() {
     }
 
     private fun showState(state: AppState?) {
-        when(state) {
-            null -> { credentials.visibility = View.GONE; buildList.visibility = View.GONE }
-            MissingCredentialsState -> { credentials.visibility = View.VISIBLE; buildList.visibility = View.GONE }
+        when (state) {
+            null -> {
+                credentials.visibility = View.GONE; buildList.visibility = View.GONE
+            }
+            MissingCredentialsState -> {
+                credentials.visibility = View.VISIBLE; buildList.visibility = View.GONE
+            }
             is BuildsState -> {
                 credentials.visibility = View.GONE
                 buildList.visibility = View.VISIBLE
