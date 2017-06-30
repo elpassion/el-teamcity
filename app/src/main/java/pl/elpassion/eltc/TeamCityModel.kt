@@ -19,7 +19,6 @@ class TeamCityModel(private val api: TeamCityApi,
     private fun performStartApp() {
         val authData = repository.authData
         if (authData != null) {
-            stateSubject.onNext(LoadingState)
             getBuilds(authData.credentials)
         } else {
             stateSubject.onNext(LoginState)
@@ -42,6 +41,7 @@ class TeamCityModel(private val api: TeamCityApi,
                 stateSubject.onError(error)
             }
         }
+        stateSubject.onNext(LoadingState)
         api.getBuilds(credentials).subscribe(onNext, onError)
     }
 

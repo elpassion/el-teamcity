@@ -26,6 +26,8 @@
 
         <include layout="@layout/login_screen" />
 
+        <include layout="@layout/loading_screen" />
+
         <include layout="@layout/builds_screen" />
     </FrameLayout>
 

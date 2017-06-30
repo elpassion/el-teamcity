@@ -8,16 +8,13 @@ import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Base64
-import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
-import android.view.ViewGroup
 import com.elpassion.android.commons.recycler.adapters.basicAdapterWithLayoutAndBinder
 import com.elpassion.android.commons.recycler.basic.BasicViewHolder
 import com.elpassion.android.commons.recycler.basic.asBasicMutableList
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.build_item.view.*
 import kotlinx.android.synthetic.main.builds_screen.*
+import kotlinx.android.synthetic.main.loading_screen.*
 import kotlinx.android.synthetic.main.login_screen.*
 import org.ocpsoft.prettytime.PrettyTime
 import pl.elpassion.eltc.*
@@ -57,6 +54,7 @@ class MainActivity : LifecycleActivity() {
         when (state) {
             null -> screens.showOneChild(null)
             LoginState -> screens.showOneChild(loginScreen)
+            LoadingState -> screens.showOneChild(loadingScreen)
             is BuildsState -> {
                 screens.showOneChild(buildsScreen)
                 showBuilds(state.list)
@@ -89,12 +87,4 @@ class MainActivity : LifecycleActivity() {
         this.builds.run { clear(); addAll(builds) }
         buildsListRecyclerView.adapter.notifyDataSetChanged()
     }
-
 }
-
-private fun ViewGroup.showOneChild(child: View?) {
-    for (c in views)
-        c.visibility = if (c === child) VISIBLE else GONE
-}
-
-private val ViewGroup.views: List<View> get() = (0 until childCount).map { getChildAt(it) }
