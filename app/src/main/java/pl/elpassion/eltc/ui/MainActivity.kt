@@ -19,13 +19,16 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.build_item.view.*
 import kotlinx.android.synthetic.main.builds_screen.*
 import kotlinx.android.synthetic.main.login_screen.*
+import org.ocpsoft.prettytime.PrettyTime
 import pl.elpassion.eltc.*
+import java.util.*
 
 
 class MainActivity : LifecycleActivity() {
 
     lateinit var model: MainModel
     private val builds = mutableListOf<Build>()
+    private val prettyTime = PrettyTime(Locale.US)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,8 +78,8 @@ class MainActivity : LifecycleActivity() {
     private fun bindItem(holder: BasicViewHolder<Build>, item: Build) {
         holder.itemView.buildId.text = "#${item.id}"
         holder.itemView.buildName.text = item.statusText
-        holder.itemView.buildStatusIcon.setImageResource(when(item.status) {
-            "FAILURE" -> R.drawable.build_failure_icon
+        holder.itemView.buildDetails.text = "Build ${item.state} ${prettyTime.format(item.finishDate)}"
+        holder.itemView.buildStatusIcon.setImageResource(when (item.status) {
             "SUCCESS" -> R.drawable.build_success_icon
             else -> R.drawable.build_failure_icon
         })

@@ -12,6 +12,7 @@ buildscript {
     ext.mockito_kotlin_version = '1.5.0'
     ext.moshi_version = '1.5.0'
     ext.android_commons_version = '0.0.15'
+    ext.pretty_time_version = '3.2.7.Final'
     repositories {
         google()
         jcenter()
