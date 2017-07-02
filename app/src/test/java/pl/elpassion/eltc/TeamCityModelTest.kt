@@ -42,7 +42,7 @@ class TeamCityModelTest {
         whenever(api.getProjects(any())).thenReturn(Single.never())
         whenever(api.getBuilds(any())).thenReturn(Single.error(UnknownHostException))
         model.perform(SubmitCredentials("invalid", "user:pass"))
-        observer.assertLastValue(UnknownHostState)
+        observer.assertLastValue(LoginState(unknownHost = true))
     }
 
     @Test
@@ -50,7 +50,7 @@ class TeamCityModelTest {
         whenever(api.getProjects(any())).thenReturn(Single.never())
         whenever(api.getBuilds(any())).thenReturn(Single.error(InvalidCredentialsException))
         model.perform(SubmitCredentials("http://teamcity:8111", "user:wrong_pass"))
-        observer.assertLastValue(InvalidCredentialsState)
+        observer.assertLastValue(LoginState(invalidCredentials = true))
     }
 
     @Test
@@ -96,7 +96,7 @@ class TeamCityModelTest {
     fun `Display login if credentials are not available in repository on app start`() {
         whenever(repository.authData).thenReturn(null)
         model.perform(StartApp)
-        observer.assertLastValue(LoginState)
+        observer.assertLastValue(LoginState())
     }
 
     @Test

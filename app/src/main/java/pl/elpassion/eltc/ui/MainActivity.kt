@@ -59,16 +59,17 @@ class MainActivity : BaseActivity() {
         log(state)
         when (state) {
             null -> screens.showOneChild(null)
-            LoginState -> screens.showOneChild(loginScreen)
-            LoadingState -> screens.showOneChild(loadingScreen)
+            is InitialState -> screens.showOneChild(null)
+            is LoadingState -> screens.showOneChild(loadingScreen)
+            is LoginState -> {
+                screens.showOneChild(loginScreen)
+                showLoginDetails(state)
+            }
             is MainState -> {
                 screens.showOneChild(buildsScreen)
                 showBuilds(state.builds)
-                log(state)
             }
             is SelectProjectsDialogState -> showSelectProjectsDialog(state.projects)
-        // TODO: real implementation for Builds state case
-            else -> log(state) // TODO: correctly display other states
         }
     }
 
@@ -94,6 +95,11 @@ class MainActivity : BaseActivity() {
     private fun showBuilds(builds: List<Build>) {
         this.builds.run { clear(); addAll(builds) }
         buildsListRecyclerView.adapter.notifyDataSetChanged()
+    }
+
+    private fun showLoginDetails(state: LoginState) {
+        state.errorMessage?.let { coordinator.snack(it) }
+        // TODO: set login screen textViews
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

@@ -35,7 +35,7 @@ class TeamCityModel(private val api: TeamCityApi,
         if (authData != null) {
             getBuildsAndProjects(authData.credentials, selectedProject)
         } else {
-            goTo(LoginState)
+            goTo(LoginState())
         }
     }
 
@@ -84,8 +84,8 @@ class TeamCityModel(private val api: TeamCityApi,
     }
 
     private fun TeamCityApiException.toState() = when (this) {
-        is UnknownHostException -> UnknownHostState
-        is InvalidCredentialsException -> InvalidCredentialsState
-        is NetworkTimeoutException -> NetworkProblemState
+        is UnknownHostException -> LoginState(unknownHost = true)
+        is InvalidCredentialsException -> LoginState(invalidCredentials = true)
+        is NetworkTimeoutException -> LoginState(networkProblem = true)
     }
 }
