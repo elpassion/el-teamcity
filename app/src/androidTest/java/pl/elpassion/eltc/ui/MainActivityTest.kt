@@ -3,6 +3,9 @@ package pl.elpassion.eltc.ui
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
 import com.elpassion.android.commons.espresso.isDisplayed
+import com.elpassion.android.commons.espresso.isNotDisplayed
+import android.support.test.espresso.Espresso.onView
+import com.elpassion.android.commons.espresso.onId
 import com.elpassion.android.commons.espresso.onText
 import com.nhaarman.mockito_kotlin.mock
 import io.reactivex.subjects.BehaviorSubject
@@ -25,8 +28,15 @@ class MainActivityTest {
     }
 
     @Test
+    fun Do_not_display_any_screen_before_state_change() {
+        onId(R.id.loginScreen).isNotDisplayed()
+        onId(R.id.loadingScreen).isNotDisplayed()
+        onId(R.id.buildsScreen).isNotDisplayed()
+    }
+
+    @Test
     fun Display_login_screen() {
         states.onNext(LoginState())
-        onText(R.string.login).isDisplayed()
+        onId(R.id.loginScreen).isDisplayed()
     }
 }
