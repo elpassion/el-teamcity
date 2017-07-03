@@ -24,6 +24,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     implementation "com.android.support:appcompat-v7:$android_support_version"
     implementation "com.android.support:support-v4:$android_support_version"
     implementation "com.android.support:design:$android_support_version"
@@ -43,6 +44,10 @@ dependencies {
     annotationProcessor "android.arch.lifecycle:compiler:$android_arch_version"
     testImplementation "junit:junit:$junit_version"
     testImplementation(group: 'com.nhaarman', name: 'mockito-kotlin-kt1.1', version: mockito_kotlin_version)
+    androidTestImplementation "com.elpassion.android.commons:espresso:$android_commons_version"
+    androidTestImplementation(group: 'com.nhaarman', name: 'mockito-kotlin-kt1.1', version: mockito_kotlin_version)
+    androidTestImplementation(group: 'org.mockito', name: 'mockito-android', version: mockito_android_version)
+    androidTestImplementation "com.android.support.test:runner:$runner_version"
     androidTestImplementation("com.android.support.test.espresso:espresso-core:$espresso_version", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })

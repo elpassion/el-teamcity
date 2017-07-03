@@ -16,7 +16,7 @@ class TeamCityModelTest {
 
     val repository = mock<Repository>()
     val api = mock<TeamCityApi>()
-    val model = TeamCityModel(api, repository)
+    val model = TeamCityModelImpl(api, repository)
     val observer = TestObserver<AppState>()
 
     @Before
