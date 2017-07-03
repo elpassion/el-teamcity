@@ -5,6 +5,7 @@ import android.support.test.runner.AndroidJUnit4
 import com.elpassion.android.commons.espresso.isDisplayed
 import com.elpassion.android.commons.espresso.isNotDisplayed
 import com.elpassion.android.commons.espresso.onId
+import com.elpassion.android.commons.espresso.onText
 import com.nhaarman.mockito_kotlin.mock
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
@@ -45,8 +46,8 @@ class MainActivityTest {
     }
 
     @Test
-    fun Display_builds_screen() {
-        states.onNext(MainState(emptyList(), emptyList()))
-        onId(R.id.buildsScreen).isDisplayed()
+    fun Display_builds_screen_with_provided_data() {
+        states.onNext(MainState(listOf(createBuild(667)), emptyList()))
+        onText("#667").isDisplayed()
     }
 }
