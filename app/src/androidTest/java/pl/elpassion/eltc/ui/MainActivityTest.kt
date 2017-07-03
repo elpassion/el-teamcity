@@ -39,4 +39,10 @@ class MainActivityTest {
         states.onNext(LoginState())
         onId(R.id.loginScreen).isDisplayed()
     }
+
+    @Test
+    fun Display_loading_screen() {
+        states.onNext(LoadingState)
+        onId(R.id.loadingScreen).isDisplayed()
+    }
 }
