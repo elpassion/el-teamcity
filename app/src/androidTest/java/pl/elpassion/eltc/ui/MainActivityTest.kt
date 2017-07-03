@@ -4,9 +4,7 @@ import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
 import com.elpassion.android.commons.espresso.isDisplayed
 import com.elpassion.android.commons.espresso.isNotDisplayed
-import android.support.test.espresso.Espresso.onView
 import com.elpassion.android.commons.espresso.onId
-import com.elpassion.android.commons.espresso.onText
 import com.nhaarman.mockito_kotlin.mock
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
@@ -44,5 +42,11 @@ class MainActivityTest {
     fun Display_loading_screen() {
         states.onNext(LoadingState)
         onId(R.id.loadingScreen).isDisplayed()
+    }
+
+    @Test
+    fun Display_builds_screen() {
+        states.onNext(MainState(emptyList(), emptyList()))
+        onId(R.id.buildsScreen).isDisplayed()
     }
 }
