@@ -2,17 +2,15 @@ package pl.elpassion.eltc.ui
 
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
-import com.elpassion.android.commons.espresso.isDisplayed
-import com.elpassion.android.commons.espresso.isNotDisplayed
-import com.elpassion.android.commons.espresso.onId
-import com.elpassion.android.commons.espresso.onText
-import com.nhaarman.mockito_kotlin.mock
+import com.elpassion.android.commons.espresso.*
+import com.nhaarman.mockito_kotlin.*
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import pl.elpassion.eltc.*
+import pl.elpassion.eltc.R
 
 @RunWith(AndroidJUnit4::class)
 class MainActivityTest {
@@ -22,8 +20,10 @@ class MainActivityTest {
 
     val states: Subject<AppState> = BehaviorSubject.createDefault(InitialState)
 
+    val model: TeamCityModel = mock { on { state } doReturn states }
+
     init {
-        DI.provideTeamCityModel = { mock { on { state }.thenReturn(states) } }
+        DI.provideTeamCityModel = { model }
     }
 
     @Test
@@ -37,6 +37,13 @@ class MainActivityTest {
     fun Display_login_screen() {
         states.onNext(LoginState())
         onId(R.id.loginScreen).isDisplayed()
+    }
+
+    @Test
+    fun Perform_submit_action() {
+        states.onNext(LoginState())
+        onText(R.string.login).click()
+        verify(model).perform(argThat { this is SubmitCredentials })
     }
 
     @Test
