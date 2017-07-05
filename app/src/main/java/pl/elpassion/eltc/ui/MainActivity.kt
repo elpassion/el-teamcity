@@ -10,8 +10,7 @@ import android.util.Base64
 import android.view.Menu
 import android.view.MenuItem
 import com.elpassion.android.commons.recycler.adapters.basicAdapterWithLayoutAndBinder
-import com.elpassion.android.commons.recycler.basic.BasicViewHolder
-import com.elpassion.android.commons.recycler.basic.asBasicMutableList
+import com.elpassion.android.commons.recycler.basic.ViewHolderBinder
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.build_item.view.*
 import kotlinx.android.synthetic.main.builds_screen.*
@@ -77,11 +76,11 @@ class MainActivity : BaseActivity() {
         buildsListRecyclerView.setHasFixedSize(true)
         buildsListRecyclerView.layoutManager = LinearLayoutManager(this)
         buildsListRecyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
-        buildsListRecyclerView.adapter = basicAdapterWithLayoutAndBinder(builds.asBasicMutableList(), R.layout.build_item, this::bindItem)
+        buildsListRecyclerView.adapter = basicAdapterWithLayoutAndBinder(builds, R.layout.build_item, this::bindItem)
     }
 
     @SuppressLint("SetTextI18n")
-    private fun bindItem(holder: BasicViewHolder<Build>, item: Build) {
+    private fun bindItem(holder: ViewHolderBinder<Build>, item: Build) {
         holder.itemView.projectName.text = item.buildType.projectName
         holder.itemView.buildId.text = "#${item.id}"
         holder.itemView.buildName.text = item.statusText

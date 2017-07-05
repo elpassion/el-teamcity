@@ -47,13 +47,13 @@ dependencies {
     implementation group: 'io.reactivex.rxjava2', name: 'rxjava', version: rxjava2_version
     implementation "com.squareup.moshi:moshi-kotlin:$moshi_version"
     implementation "com.squareup.moshi:moshi-adapters:$moshi_version"
-    implementation "com.elpassion.android.commons:recycler:$android_commons_version"
-    implementation "com.elpassion.android.commons:shared-preferences:$android_commons_version"
+    implementation "com.github.elpassion.android-commons:recycler:$android_commons_version"
+    implementation "com.github.elpassion.android-commons:shared-preferences:$android_commons_version"
     implementation "org.ocpsoft.prettytime:prettytime:$pretty_time_version"
     annotationProcessor "android.arch.lifecycle:compiler:$android_arch_version"
     testImplementation "junit:junit:$junit_version"
     testImplementation(group: 'com.nhaarman', name: 'mockito-kotlin-kt1.1', version: mockito_kotlin_version)
-    androidTestImplementation "com.elpassion.android.commons:espresso:$android_commons_version"
+    androidTestImplementation "com.github.elpassion.android-commons:espresso:$android_commons_version"
     androidTestImplementation(group: 'com.nhaarman', name: 'mockito-kotlin-kt1.1', version: mockito_kotlin_version)
     androidTestImplementation(group: 'org.mockito', name: 'mockito-android', version: mockito_android_version)
     androidTestImplementation "com.android.support.test:runner:$runner_version"
