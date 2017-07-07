@@ -20,6 +20,8 @@ class TeamCityModelTest {
 
     @Before
     fun setup() {
+        whenever(api.getProjects(any())).thenReturn(Single.never())
+        whenever(api.getBuilds(any())).thenReturn(Single.never())
         model.state.subscribe(observer)
     }
 
@@ -30,15 +32,12 @@ class TeamCityModelTest {
 
     @Test
     fun `Start LoadingState on SubmitCredentials action`() {
-        whenever(api.getProjects(any())).thenReturn(Single.never())
-        whenever(api.getBuilds(any())).thenReturn(Single.never())
         model.perform(SubmitCredentials("http://teamcity:8111", "user:pass"))
         observer.assertLastValue(LoadingState)
     }
 
     @Test
     fun `Display correct error on submitting unknown host`() {
-        whenever(api.getProjects(any())).thenReturn(Single.never())
         whenever(api.getBuilds(any())).thenReturn(Single.error(UnknownHostException))
         model.perform(SubmitCredentials("invalid", "user:pass"))
         observer.assertLastValue(LoginState(unknownHost = true))
@@ -46,7 +45,6 @@ class TeamCityModelTest {
 
     @Test
     fun `Display invalid credentials error on unauthorized call to teamcity api`() {
-        whenever(api.getProjects(any())).thenReturn(Single.never())
         whenever(api.getBuilds(any())).thenReturn(Single.error(InvalidCredentialsException))
         model.perform(SubmitCredentials("http://teamcity:8111", "user:wrong_pass"))
         observer.assertLastValue(LoginState(invalidCredentials = true))
@@ -68,7 +66,6 @@ class TeamCityModelTest {
 
     @Test
     fun `Call api with passed credentials`() {
-        whenever(api.getProjects(any())).thenReturn(Single.never())
         whenever(api.getBuilds(any())).thenReturn(Single.just(emptyList()))
         model.perform(SubmitCredentials("http://teamcity:8111", "user1:pass1"))
         verify(api).getBuilds(credentials = "user1:pass1")
@@ -76,7 +73,6 @@ class TeamCityModelTest {
 
     @Test
     fun `Save credentials in repository`() {
-        whenever(api.getProjects(any())).thenReturn(Single.never())
         whenever(api.getBuilds(any())).thenReturn(Single.just(emptyList()))
         model.perform(SubmitCredentials("http://teamcity:8111", "user:pass"))
         verify(repository).authData = AuthData("http://teamcity:8111", "user:pass")
@@ -84,8 +80,6 @@ class TeamCityModelTest {
 
     @Test
     fun `Start loading if credentials are available in repository on app start`() {
-        whenever(api.getProjects(any())).thenReturn(Single.never())
-        whenever(api.getBuilds(any())).thenReturn(Single.never())
         whenever(repository.authData).thenReturn(AuthData("http://teamcity:8111", "user:pass"))
         model.perform(StartApp)
         observer.assertLastValue(LoadingState)
@@ -100,7 +94,6 @@ class TeamCityModelTest {
 
     @Test
     fun `Call api with passed credentials if available in repository on app start`() {
-        whenever(api.getProjects(any())).thenReturn(Single.never())
         whenever(api.getBuilds(any())).thenReturn(Single.just(emptyList()))
         whenever(repository.authData).thenReturn(AuthData("http://teamcity:8111", "user:pass"))
         model.perform(StartApp)
@@ -109,8 +102,6 @@ class TeamCityModelTest {
 
     @Test
     fun `Start loading on refresh list`() {
-        whenever(api.getProjects(any())).thenReturn(Single.never())
-        whenever(api.getBuilds(any())).thenReturn(Single.never())
         whenever(repository.authData).thenReturn(AuthData("http://teamcity:8111", "user:pass"))
         model.perform(RefreshList)
         observer.assertLastValue(LoadingState)
