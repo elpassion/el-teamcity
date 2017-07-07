@@ -18,7 +18,7 @@
             android:src="@drawable/build_failure_icon" />
 
         <TextView
-            android:id="@+id/buildId"
+            android:id="@+id/buildNumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

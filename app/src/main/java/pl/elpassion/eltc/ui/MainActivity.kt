@@ -82,7 +82,7 @@ class MainActivity : BaseActivity() {
     @SuppressLint("SetTextI18n")
     private fun bindItem(holder: ViewHolderBinder<Build>, item: Build) = with(holder.itemView) {
         projectName.text = item.buildType.projectName
-        buildId.text = "#${item.id}"
+        buildNumber.text = "#${item.number}"
         buildName.text = item.statusText
         buildDetails.text = "Build ${item.state} ${prettyTime.format(item.finishDate)}"
         buildStatusIcon.setImageResource(when (item.status) {
