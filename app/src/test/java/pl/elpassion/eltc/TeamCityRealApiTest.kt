@@ -6,10 +6,11 @@ import io.reactivex.Single
 import org.junit.Ignore
 import org.junit.Test
 
-@Ignore
+//@Ignore
 class TeamCityRealApiTest {
 
     private val CREDENTIALS = "dXNlcjpwYXNz"
+    private val INVALID_CREDENTIALS = "invalid credentials"
 
     @Test
     fun `Get builds after call to real TeamCity API`() {
@@ -43,6 +44,13 @@ class TeamCityRealApiTest {
     fun `Get all projects after call to real TeamCity API`() {
         TeamCityApiImpl
                 .getProjects(CREDENTIALS)
+                .getAndPrint()
+    }
+
+    @Test(expected = InvalidCredentialsException::class)
+    fun `Expect proper exception after call to API with invalid credentials`() {
+        TeamCityApiImpl
+                .getBuilds(INVALID_CREDENTIALS)
                 .getAndPrint()
     }
 

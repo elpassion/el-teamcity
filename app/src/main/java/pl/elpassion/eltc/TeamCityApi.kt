@@ -49,11 +49,9 @@ object TeamCityApiImpl : TeamCityApi {
             service.getProjects("Basic $credentials").mapApiErrors().map(ProjectsResponse::project)
 
     private fun <T> Single<T>.mapApiErrors() = onErrorResumeNext {
-        println("12345 666 $it") // TODO: remove this logging
         Single.error(when {
             it is HttpException && it.code() == 401 -> InvalidCredentialsException // FIXME: this condition is not precise enough
             it is IOException -> NetworkTimeoutException
-        // TODO: other cases
             else -> it
         })
     }
