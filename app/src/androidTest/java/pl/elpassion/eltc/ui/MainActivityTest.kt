@@ -54,7 +54,7 @@ class MainActivityTest {
 
     @Test
     fun Display_builds_screen_with_provided_data() {
-        states.onNext(MainState(listOf(createBuild(667)), emptyList()))
-        onText("#667").isDisplayed()
+        states.onNext(MainState(listOf(createBuild(number = 76)), emptyList()))
+        onText("#76").isDisplayed()
     }
 }

@@ -2,9 +2,9 @@ package pl.elpassion.eltc
 
 import java.util.*
 
-fun createBuild(id: Int) = Build(
+fun createBuild(id: Int = 1, number: Int = 7) = Build(
         id = id,
-        number = 7,
+        number = number,
         status = "SUCCESS",
         state = "finished",
         branchName = "master",
