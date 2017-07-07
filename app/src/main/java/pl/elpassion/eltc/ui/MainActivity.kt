@@ -80,12 +80,12 @@ class MainActivity : BaseActivity() {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun bindItem(holder: ViewHolderBinder<Build>, item: Build) {
-        holder.itemView.projectName.text = item.buildType.projectName
-        holder.itemView.buildId.text = "#${item.id}"
-        holder.itemView.buildName.text = item.statusText
-        holder.itemView.buildDetails.text = "Build ${item.state} ${prettyTime.format(item.finishDate)}"
-        holder.itemView.buildStatusIcon.setImageResource(when (item.status) {
+    private fun bindItem(holder: ViewHolderBinder<Build>, item: Build) = with(holder.itemView) {
+        projectName.text = item.buildType.projectName
+        buildId.text = "#${item.id}"
+        buildName.text = item.statusText
+        buildDetails.text = "Build ${item.state} ${prettyTime.format(item.finishDate)}"
+        buildStatusIcon.setImageResource(when (item.status) {
             "SUCCESS" -> R.drawable.build_success_icon
             else -> R.drawable.build_failure_icon
         })
