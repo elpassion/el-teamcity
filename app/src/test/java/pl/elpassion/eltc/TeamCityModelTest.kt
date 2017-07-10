@@ -121,6 +121,12 @@ class TeamCityModelTest {
     }
 
     @Test
+    fun `Display login on log out`() {
+        model.perform(LogOut)
+        observer.assertLastValue(LoginState())
+    }
+
+    @Test
     fun `Display only builds for specified project`() {
         val buildList = listOf(
                 createBuild(id = 668),
