@@ -1,4 +1,4 @@
-package pl.elpassion.eltc.ui
+package pl.elpassion.eltc.builds
 
 import android.annotation.SuppressLint
 import android.arch.lifecycle.Observer
@@ -11,8 +11,8 @@ import android.view.Menu
 import android.view.MenuItem
 import com.elpassion.android.commons.recycler.adapters.basicAdapterWithLayoutAndBinder
 import com.elpassion.android.commons.recycler.basic.ViewHolderBinder
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.build_item.view.*
+import kotlinx.android.synthetic.main.builds_activity.*
 import kotlinx.android.synthetic.main.builds_screen.*
 import kotlinx.android.synthetic.main.loading_screen.*
 import kotlinx.android.synthetic.main.login_screen.*
@@ -21,7 +21,7 @@ import pl.elpassion.eltc.*
 import java.util.*
 
 
-class MainActivity : BaseActivity() {
+class BuildsActivity : BaseActivity() {
 
     lateinit var model: MainModel
     private val builds = mutableListOf<Build>()
@@ -29,7 +29,7 @@ class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.builds_activity)
         setSupportActionBar(toolbar)
         setupRecyclerView()
         save.setOnClickListener {

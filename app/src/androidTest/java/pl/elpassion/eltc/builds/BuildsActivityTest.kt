@@ -1,4 +1,4 @@
-package pl.elpassion.eltc.ui
+package pl.elpassion.eltc.builds
 
 import android.support.test.espresso.Espresso
 import android.support.test.rule.ActivityTestRule
@@ -17,10 +17,10 @@ import pl.elpassion.eltc.*
 import pl.elpassion.eltc.R
 
 @RunWith(AndroidJUnit4::class)
-class MainActivityTest {
+class BuildsActivityTest {
 
     @JvmField @Rule
-    val activityRule = ActivityTestRule(MainActivity::class.java)
+    val activityRule = ActivityTestRule(BuildsActivity::class.java)
 
     val states: Subject<AppState> = BehaviorSubject.createDefault(InitialState)
 

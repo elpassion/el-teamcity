@@ -1,4 +1,4 @@
-package pl.elpassion.eltc.ui
+package pl.elpassion.eltc
 
 import android.arch.lifecycle.LifecycleRegistry
 import android.arch.lifecycle.LifecycleRegistryOwner

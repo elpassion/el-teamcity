@@ -13,7 +13,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".builds.BuildsActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
             >

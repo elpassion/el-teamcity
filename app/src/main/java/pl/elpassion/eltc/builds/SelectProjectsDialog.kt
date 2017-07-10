@@ -1,4 +1,4 @@
-package pl.elpassion.eltc.ui
+package pl.elpassion.eltc.builds
 
 import android.app.DialogFragment
 import android.content.Context
@@ -10,6 +10,7 @@ import android.widget.RadioButton
 import kotlinx.android.synthetic.main.select_projects_dialog.*
 import pl.elpassion.eltc.Project
 import pl.elpassion.eltc.R
+import pl.elpassion.eltc.views
 
 class SelectProjectsDialog(private val projects: List<Project>,
                            private val onProjectSelected: (Project) -> Unit) : DialogFragment() {

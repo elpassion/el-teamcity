@@ -1,4 +1,4 @@
-package pl.elpassion.eltc.ui
+package pl.elpassion.eltc
 
 import android.support.design.widget.Snackbar
 import android.view.View
