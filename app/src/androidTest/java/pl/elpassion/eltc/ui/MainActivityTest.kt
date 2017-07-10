@@ -1,9 +1,13 @@
 package pl.elpassion.eltc.ui
 
+import android.support.test.espresso.Espresso
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
 import com.elpassion.android.commons.espresso.*
-import com.nhaarman.mockito_kotlin.*
+import com.nhaarman.mockito_kotlin.argThat
+import com.nhaarman.mockito_kotlin.doReturn
+import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.verify
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
 import org.junit.Rule
@@ -56,5 +60,13 @@ class MainActivityTest {
     fun Display_builds_screen_with_provided_data() {
         states.onNext(MainState(listOf(createBuild(number = 76)), emptyList()))
         onText("#76").isDisplayed()
+    }
+
+    @Test
+    fun Perform_logout_action() {
+        states.onNext(MainState(emptyList(), emptyList()))
+        Espresso.openContextualActionModeOverflowMenu()
+        onText(R.string.logout).click()
+        verify(model).perform(argThat { this is LogOut })
     }
 }

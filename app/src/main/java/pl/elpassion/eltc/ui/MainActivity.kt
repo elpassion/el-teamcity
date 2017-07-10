@@ -114,6 +114,7 @@ class MainActivity : BaseActivity() {
             model.perform(AutoRefresh(checked))
             true
         }
+        R.id.logout -> { model.perform(LogOut); true }
         else -> super.onOptionsItemSelected(item)
     }
 
