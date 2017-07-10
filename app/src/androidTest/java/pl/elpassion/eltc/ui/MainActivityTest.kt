@@ -67,6 +67,6 @@ class MainActivityTest {
         states.onNext(MainState(emptyList(), emptyList()))
         Espresso.openContextualActionModeOverflowMenu()
         onText(R.string.logout).click()
-        verify(model).perform(argThat { this is LogOut })
+        verify(model).perform(argThat { this is Logout })
     }
 }

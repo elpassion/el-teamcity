@@ -121,8 +121,8 @@ class TeamCityModelTest {
     }
 
     @Test
-    fun `Display login on log out`() {
-        model.perform(LogOut)
+    fun `Display login on logout`() {
+        model.perform(Logout)
         observer.assertLastValue(LoginState())
     }
 
