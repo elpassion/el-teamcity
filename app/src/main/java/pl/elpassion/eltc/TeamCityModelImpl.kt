@@ -27,7 +27,7 @@ class TeamCityModelImpl(private val api: TeamCityApi,
             is AutoRefresh -> performAutoRefresh(action.enable)
             is SelectProjects -> performSelectProjects()
             is SubmitProject -> loadBuilds(action.project)
-            is Logout -> goTo(LoginState())
+            is Logout -> logout()
         }
     }
 
@@ -82,6 +82,11 @@ class TeamCityModelImpl(private val api: TeamCityApi,
                     builds to projects
                 })
                 .subscribe(onNext, onError)
+    }
+
+    private fun logout() {
+        repository.authData = null
+        goTo(LoginState())
     }
 
     private fun TeamCityApiException.toState() = when (this) {

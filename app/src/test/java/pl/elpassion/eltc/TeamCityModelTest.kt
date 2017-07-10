@@ -121,12 +121,6 @@ class TeamCityModelTest {
     }
 
     @Test
-    fun `Display login on logout`() {
-        model.perform(Logout)
-        observer.assertLastValue(LoginState())
-    }
-
-    @Test
     fun `Display only builds for specified project`() {
         val buildList = listOf(
                 createBuild(id = 668),
@@ -145,4 +139,15 @@ class TeamCityModelTest {
         observer.assertLastValue(MainState(projectBuildList, projectList))
     }
 
+    @Test
+    fun `Display login on logout`() {
+        model.perform(Logout)
+        observer.assertLastValue(LoginState())
+    }
+
+    @Test
+    fun `Clear auth data on logout`() {
+        model.perform(Logout)
+        verify(repository).authData = null
+    }
 }
