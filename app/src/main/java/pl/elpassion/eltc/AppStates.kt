@@ -3,7 +3,7 @@ package pl.elpassion.eltc
 sealed class AppState
 object InitialState: AppState()
 object LoadingState : AppState()
-data class MainState(val builds: List<Build>, val projects: List<Project>) : AppState()
+data class BuildsState(val builds: List<Build>, val projects: List<Project>) : AppState()
 data class SelectProjectsDialogState(val projects: List<Project>) : AppState()
 
 data class LoginState(

@@ -61,7 +61,7 @@ class TeamCityModelTest {
         whenever(api.getBuilds(any())).thenReturn(Single.just(buildList))
         whenever(api.getProjects(any())).thenReturn(Single.just(projectList))
         model.perform(SubmitCredentials("http://teamcity:8111", "user:pass"))
-        observer.assertLastValue(MainState(buildList, projectList))
+        observer.assertLastValue(BuildsState(buildList, projectList))
     }
 
     @Test
@@ -136,7 +136,7 @@ class TeamCityModelTest {
         model.perform(StartApp)
         model.perform(SelectProjects)
         model.perform(SubmitProject(projectList.first()))
-        observer.assertLastValue(MainState(projectBuildList, projectList))
+        observer.assertLastValue(BuildsState(projectBuildList, projectList))
     }
 
     @Test

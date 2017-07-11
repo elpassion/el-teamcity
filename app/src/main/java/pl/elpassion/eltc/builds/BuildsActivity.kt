@@ -45,7 +45,7 @@ class BuildsActivity : BaseActivity() {
                 startActivity(Intent(this, LoginActivity::class.java))
                 finish()
             }
-            is MainState -> {
+            is BuildsState -> {
                 loader.hide()
                 swipeToRefreshBuildsList.isRefreshing = false
                 showBuilds(state.builds)

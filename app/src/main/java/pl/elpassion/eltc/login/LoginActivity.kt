@@ -24,7 +24,7 @@ class LoginActivity : BaseActivity() {
             is LoadingState -> {
                 loader.show()
             }
-            is MainState -> {
+            is BuildsState -> {
                 startActivity(Intent(this, BuildsActivity::class.java))
                 finish()
             }

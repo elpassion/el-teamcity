@@ -19,7 +19,7 @@ class InitialActivity : BaseActivity() {
                 startActivity(Intent(this, LoginActivity::class.java))
                 finish()
             }
-            is MainState -> {
+            is BuildsState -> {
                 startActivity(Intent(this, BuildsActivity::class.java))
                 finish()
             }

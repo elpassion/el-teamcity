@@ -47,7 +47,7 @@ class TeamCityModelImpl(private val api: TeamCityApi,
 
     private fun performSelectProjects() {
         state.firstElement().subscribe {
-            (it as? MainState)?.let { goTo(SelectProjectsDialogState(it.projects)) }
+            (it as? BuildsState)?.let { goTo(SelectProjectsDialogState(it.projects)) }
         }
     }
 
@@ -61,7 +61,7 @@ class TeamCityModelImpl(private val api: TeamCityApi,
 
     private fun getBuildsAndProjects(credentials: String, selectedProject: Project? = null) {
         val onNext: (Pair<List<Build>, List<Project>>) -> Unit = { (builds, projects) ->
-            goTo(MainState(builds, projects))
+            goTo(BuildsState(builds, projects))
         }
         val onError: (Throwable) -> Unit = { error ->
             if (error is TeamCityApiException) {

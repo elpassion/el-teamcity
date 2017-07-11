@@ -41,20 +41,20 @@ class BuildsActivityTest {
 
     @Test
     fun Display_builds_screen_with_provided_data() {
-        states.onNext(MainState(listOf(createBuild(number = 76)), emptyList()))
+        states.onNext(BuildsState(listOf(createBuild(number = 76)), emptyList()))
         onText("#76").isDisplayed()
     }
 
     @Test
     fun Hide_loader_on_new_data() {
         states.onNext(LoadingState)
-        states.onNext(MainState(listOf(createBuild(number = 76)), emptyList()))
+        states.onNext(BuildsState(listOf(createBuild(number = 76)), emptyList()))
         onId(R.id.loader).isNotDisplayed()
     }
 
     @Test
     fun Perform_logout_action() {
-        states.onNext(MainState(emptyList(), emptyList()))
+        states.onNext(BuildsState(emptyList(), emptyList()))
         Espresso.openContextualActionModeOverflowMenu()
         onText(R.string.logout).click()
         verify(model).perform(argThat { this is Logout })
