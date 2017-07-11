@@ -3,12 +3,13 @@ package pl.elpassion.eltc
 import android.app.Application
 import android.preference.PreferenceManager
 import com.elpassion.android.commons.sharedpreferences.createSharedPrefs
+import com.elpassion.sharedpreferences.moshiadapter.moshiConverterAdapter
 
 class RepositoryImpl(private val application: Application) : Repository {
 
     private val repository = createSharedPrefs<AuthData?>({
         PreferenceManager.getDefaultSharedPreferences(application)
-    })
+    }, moshiConverterAdapter())
 
     override var authData: AuthData?
         get() = repository.read(AUTH_DATA_KEY)
