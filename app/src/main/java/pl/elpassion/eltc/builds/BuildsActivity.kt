@@ -36,6 +36,7 @@ class BuildsActivity : BaseActivity() {
     override fun showState(state: AppState?) {
         when (state) {
             is InitialState -> {
+                //TODO: Add state between InitialState and BuildsState
                 model.perform(RefreshList)
             }
             is LoadingState -> {
