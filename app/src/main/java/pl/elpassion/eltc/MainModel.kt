@@ -1,10 +1,9 @@
-package pl.elpassion.eltc.ui
+package pl.elpassion.eltc
 
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
 import android.util.Log
 import io.reactivex.plugins.RxJavaPlugins
-import pl.elpassion.eltc.*
 
 
 class MainModel(application: Application) : AndroidViewModel(application) {

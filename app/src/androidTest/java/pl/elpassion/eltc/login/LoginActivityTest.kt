@@ -1,6 +1,5 @@
-package pl.elpassion.eltc.ui
+package pl.elpassion.eltc.login
 
-import android.support.test.espresso.Espresso
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
 import com.elpassion.android.commons.espresso.*
@@ -15,12 +14,16 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import pl.elpassion.eltc.*
 import pl.elpassion.eltc.R
+import pl.elpassion.eltc.builds.BuildsActivity
 
 @RunWith(AndroidJUnit4::class)
-class MainActivityTest {
+class LoginActivityTest {
 
     @JvmField @Rule
-    val activityRule = ActivityTestRule(MainActivity::class.java)
+    val activityRule = ActivityTestRule(LoginActivity::class.java)
+
+    @JvmField @Rule
+    val intents = InitIntentsRule()
 
     val states: Subject<AppState> = BehaviorSubject.createDefault(InitialState)
 
@@ -31,19 +34,6 @@ class MainActivityTest {
     }
 
     @Test
-    fun Do_not_display_any_screen_before_state_change() {
-        onId(R.id.loginScreen).isNotDisplayed()
-        onId(R.id.loadingScreen).isNotDisplayed()
-        onId(R.id.buildsScreen).isNotDisplayed()
-    }
-
-    @Test
-    fun Display_login_screen() {
-        states.onNext(LoginState())
-        onId(R.id.loginScreen).isDisplayed()
-    }
-
-    @Test
     fun Perform_submit_action() {
         states.onNext(LoginState())
         onText(R.string.login).click()
@@ -51,22 +41,14 @@ class MainActivityTest {
     }
 
     @Test
-    fun Display_loading_screen() {
+    fun Display_loader_on_loading() {
         states.onNext(LoadingState)
-        onId(R.id.loadingScreen).isDisplayed()
+        onId(R.id.loader).isDisplayed()
     }
 
     @Test
     fun Display_builds_screen_with_provided_data() {
         states.onNext(MainState(listOf(createBuild(number = 76)), emptyList()))
-        onText("#76").isDisplayed()
-    }
-
-    @Test
-    fun Perform_logout_action() {
-        states.onNext(MainState(emptyList(), emptyList()))
-        Espresso.openContextualActionModeOverflowMenu()
-        onText(R.string.logout).click()
-        verify(model).perform(argThat { this is Logout })
+        checkIntent(BuildsActivity::class.java)
     }
 }

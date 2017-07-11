@@ -1,74 +1,58 @@
-package pl.elpassion.eltc.ui
+package pl.elpassion.eltc.builds
 
 import android.annotation.SuppressLint
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Base64
 import android.view.Menu
 import android.view.MenuItem
 import com.elpassion.android.commons.recycler.adapters.basicAdapterWithLayoutAndBinder
 import com.elpassion.android.commons.recycler.basic.ViewHolderBinder
-import kotlinx.android.synthetic.main.activity_main.*
+import com.elpassion.android.view.hide
+import com.elpassion.android.view.show
 import kotlinx.android.synthetic.main.build_item.view.*
-import kotlinx.android.synthetic.main.builds_screen.*
-import kotlinx.android.synthetic.main.loading_screen.*
-import kotlinx.android.synthetic.main.login_screen.*
+import kotlinx.android.synthetic.main.builds_activity.*
 import org.ocpsoft.prettytime.PrettyTime
 import pl.elpassion.eltc.*
+import pl.elpassion.eltc.login.LoginActivity
 import java.util.*
 
+class BuildsActivity : BaseActivity() {
 
-class MainActivity : BaseActivity() {
-
-    lateinit var model: MainModel
     private val builds = mutableListOf<Build>()
     private val prettyTime = PrettyTime(Locale.US)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.builds_activity)
         setSupportActionBar(toolbar)
         setupRecyclerView()
-        save.setOnClickListener {
-            val credentials = getCredentials(user.text.toString(), password.text.toString())
-            model.perform(SubmitCredentials(address.text.toString(), credentials))
-        }
         swipeToRefreshBuildsList.setOnRefreshListener {
             model.perform(RefreshList)
         }
-        initModel()
-        model.perform(StartApp)
     }
 
-    private fun getCredentials(user: String, password: String): String {
-        val data = "$user:$password".toByteArray()
-        return Base64.encodeToString(data, Base64.NO_WRAP)
-    }
-
-    private fun initModel() {
-        model = ViewModelProviders.of(this).get(MainModel::class.java)
-        model.state.observe(this, Observer<AppState> { showState(it) })
-    }
-
-    private fun showState(state: AppState?) {
-        swipeToRefreshBuildsList.isRefreshing = false
-        log(state)
+    override fun showState(state: AppState?) {
         when (state) {
-            null -> screens.showOneChild(null)
-            is InitialState -> screens.showOneChild(null)
-            is LoadingState -> screens.showOneChild(loadingScreen)
+            is InitialState -> {
+                model.perform(RefreshList)
+            }
+            is LoadingState -> {
+                loader.show()
+            }
             is LoginState -> {
-                screens.showOneChild(loginScreen)
-                showLoginDetails(state)
+                startActivity(Intent(this, LoginActivity::class.java))
+                finish()
             }
             is MainState -> {
-                screens.showOneChild(buildsScreen)
+                loader.hide()
+                swipeToRefreshBuildsList.isRefreshing = false
                 showBuilds(state.builds)
             }
-            is SelectProjectsDialogState -> showSelectProjectsDialog(state.projects)
+            is SelectProjectsDialogState -> {
+                showSelectProjectsDialog(state.projects)
+            }
         }
     }
 
