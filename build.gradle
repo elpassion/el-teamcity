@@ -13,7 +13,7 @@ buildscript {
     ext.mockito_kotlin_version = '1.5.0'
     ext.mockito_android_version = '2.8.47'
     ext.moshi_version = '1.5.0'
-    ext.android_commons_version = 'jitpack-SNAPSHOT'
+    ext.android_commons_version = '0.0.20'
     ext.pretty_time_version = '3.2.7.Final'
     repositories {
         google()
@@ -31,7 +31,6 @@ allprojects {
         google()
         jcenter()
         mavenCentral()
-        maven { url 'https://jitpack.io' }
     }
 }
 
