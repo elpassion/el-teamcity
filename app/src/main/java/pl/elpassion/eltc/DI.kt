@@ -4,7 +4,9 @@ import android.app.Application
 
 object DI {
 
-    var provideTeamCityModel: () -> TeamCityModel = { TeamCityModelImpl(provideTeamCityApi(), provideRepository()) }
+    private val model by lazy { TeamCityModelImpl(provideTeamCityApi(), provideRepository()) }
+
+    var provideTeamCityModel: () -> TeamCityModel = { model }
 
     var provideTeamCityApi = { TeamCityApiImpl }
 
