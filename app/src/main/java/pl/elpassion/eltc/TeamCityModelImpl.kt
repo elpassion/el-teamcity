@@ -8,7 +8,7 @@ import io.reactivex.subjects.BehaviorSubject
 import java.util.concurrent.TimeUnit
 
 class TeamCityModelImpl(private val api: TeamCityApi,
-                             private val repository: Repository): TeamCityModel {
+                        private val repository: Repository) : TeamCityModel {
 
     private val stateSubject = BehaviorSubject.createDefault<AppState>(InitialState)
     override val state: Observable<AppState> = stateSubject
@@ -89,9 +89,9 @@ class TeamCityModelImpl(private val api: TeamCityApi,
         goTo(LoginState())
     }
 
-    private fun TeamCityApiException.toState() = when (this) {
-        is UnknownHostException -> LoginState(unknownHost = true)
-        is InvalidCredentialsException -> LoginState(invalidCredentials = true)
-        is NetworkTimeoutException -> LoginState(networkProblem = true)
-    }
+    private fun TeamCityApiException.toState() = LoginState(error = when (this) {
+        is UnknownHostException -> LoginState.Error.UNKNOWN_HOST
+        is InvalidCredentialsException -> LoginState.Error.INVALID_CREDENTIALS
+        is NetworkTimeoutException -> LoginState.Error.NETWORK_PROBLEM
+    })
 }

@@ -3,6 +3,7 @@ package pl.elpassion.eltc.login
 import android.content.Intent
 import android.os.Bundle
 import android.util.Base64
+import com.elpassion.android.view.hide
 import com.elpassion.android.view.show
 import kotlinx.android.synthetic.main.login_activity.*
 import pl.elpassion.eltc.*
@@ -23,7 +24,12 @@ class LoginActivity : BaseActivity() {
 
     override fun showState(state: AppState?) {
         when (state) {
-            is LoginState -> loginForm.show()
+            is LoginState -> {
+                loginForm.show()
+                if (state.error != null) {
+                    loader.hide()
+                }
+            }
             is LoadingState -> loader.show()
             is BuildsState -> openBuildsScreen()
         }

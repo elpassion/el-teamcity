@@ -64,6 +64,13 @@ class LoginActivityTest {
     }
 
     @Test
+    fun Hide_loader_on_login_error() {
+        states.onNext(LoadingState)
+        states.onNext(LoginState(error = LoginState.Error.UNKNOWN_HOST))
+        onId(R.id.loader).isNotDisplayed()
+    }
+
+    @Test
     fun Display_builds_screen_with_provided_data() {
         states.onNext(BuildsState(listOf(createBuild(number = 76)), emptyList()))
         checkIntent(BuildsActivity::class.java)
