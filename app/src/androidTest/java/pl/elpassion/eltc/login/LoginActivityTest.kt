@@ -40,6 +40,12 @@ class LoginActivityTest {
     }
 
     @Test
+    fun Show_login_form_on_login_state() {
+        states.onNext(LoginState())
+        onId(R.id.loginForm).isDisplayed()
+    }
+
+    @Test
     fun Perform_submit_action() {
         states.onNext(LoginState())
         onText(R.string.login).click()
