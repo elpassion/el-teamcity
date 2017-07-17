@@ -40,6 +40,11 @@ class LoginActivityTest {
     }
 
     @Test
+    fun Do_not_show_login_form_before_login_state() {
+        onId(R.id.loginForm).isNotDisplayed()
+    }
+
+    @Test
     fun Show_login_form_on_login_state() {
         states.onNext(LoginState())
         onId(R.id.loginForm).isDisplayed()

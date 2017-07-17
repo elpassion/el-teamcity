@@ -23,9 +23,8 @@ class LoginActivity : BaseActivity() {
 
     override fun showState(state: AppState?) {
         when (state) {
-            is LoadingState -> {
-                loader.show()
-            }
+            is LoginState -> loginForm.show()
+            is LoadingState -> loader.show()
             is BuildsState -> {
                 startActivity(Intent(this, BuildsActivity::class.java))
                 finish()
