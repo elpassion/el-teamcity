@@ -14,7 +14,9 @@ abstract class BaseActivity : RxAppCompatActivity() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     log("STATE: $it")
-                    showState(it)
+                    if (!isFinishing) {
+                        showState(it)
+                    }
                 }
     }
 
