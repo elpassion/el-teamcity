@@ -77,6 +77,12 @@ class LoginActivityTest {
     }
 
     @Test
+    fun Display_error_message_on_unknown_host() {
+        states.onNext(LoginState(error = LoginState.Error.UNKNOWN_HOST))
+        onText(LoginState.Error.UNKNOWN_HOST.message).isDisplayed()
+    }
+
+    @Test
     fun Display_builds_screen_with_provided_data() {
         states.onNext(BuildsState(listOf(createBuild(number = 76)), emptyList()))
         checkIntent(BuildsActivity::class.java)
