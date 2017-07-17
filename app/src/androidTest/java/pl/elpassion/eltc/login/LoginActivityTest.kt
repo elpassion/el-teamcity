@@ -9,6 +9,7 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
+import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -34,6 +35,11 @@ class LoginActivityTest {
     }
 
     @Test
+    fun Do_not_display_any_screen_before_state_change() {
+        Assert.assertFalse(activityRule.activity.isFinishing)
+    }
+
+    @Test
     fun Perform_submit_action() {
         states.onNext(LoginState())
         onText(R.string.login).click()
@@ -50,5 +56,6 @@ class LoginActivityTest {
     fun Display_builds_screen_with_provided_data() {
         states.onNext(BuildsState(listOf(createBuild(number = 76)), emptyList()))
         checkIntent(BuildsActivity::class.java)
+        onText("#76").isDisplayed()
     }
 }

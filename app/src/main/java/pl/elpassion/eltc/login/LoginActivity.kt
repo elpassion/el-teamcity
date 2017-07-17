@@ -18,6 +18,7 @@ class LoginActivity : BaseActivity() {
             val credentials = getCredentials(user.text.toString(), password.text.toString())
             model.perform(SubmitCredentials(address.text.toString(), credentials))
         }
+        model.perform(StartApp)
     }
 
     override fun showState(state: AppState?) {
