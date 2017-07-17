@@ -1,4 +1,4 @@
-package pl.elpassion.eltc
+package pl.elpassion.eltc.util
 
 import android.util.Log
 

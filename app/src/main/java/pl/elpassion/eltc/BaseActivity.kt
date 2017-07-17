@@ -3,6 +3,7 @@ package pl.elpassion.eltc
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
 import com.trello.rxlifecycle2.kotlin.bindToLifecycle
 import io.reactivex.android.schedulers.AndroidSchedulers
+import pl.elpassion.eltc.util.log
 
 abstract class BaseActivity : RxAppCompatActivity() {
 
