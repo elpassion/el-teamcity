@@ -73,19 +73,19 @@ class LoginActivityTest {
     @Test
     fun Display_error_message_on_invalid_credentials() {
         states.onNext(LoginState(error = LoginState.Error.INVALID_CREDENTIALS))
-        onText(LoginState.Error.INVALID_CREDENTIALS.message).isDisplayed()
+        onText(LoginState.Error.INVALID_CREDENTIALS.message).isDisplayedEffectively()
     }
 
     @Test
     fun Display_error_message_on_unknown_host() {
         states.onNext(LoginState(error = LoginState.Error.UNKNOWN_HOST))
-        onText(LoginState.Error.UNKNOWN_HOST.message).isDisplayed()
+        onText(LoginState.Error.UNKNOWN_HOST.message).isDisplayedEffectively()
     }
 
     @Test
     fun Display_error_message_on_network_problem() {
         states.onNext(LoginState(error = LoginState.Error.NETWORK_PROBLEM))
-        onText(LoginState.Error.NETWORK_PROBLEM.message).isDisplayed()
+        onText(LoginState.Error.NETWORK_PROBLEM.message).isDisplayedEffectively()
     }
 
     @Test
