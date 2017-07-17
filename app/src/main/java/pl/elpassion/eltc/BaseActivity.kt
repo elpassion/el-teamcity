@@ -1,28 +1,22 @@
 package pl.elpassion.eltc
 
-import android.arch.lifecycle.LifecycleRegistry
-import android.arch.lifecycle.LifecycleRegistryOwner
-import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import android.util.Log
+import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
+import com.trello.rxlifecycle2.kotlin.bindToLifecycle
 
-abstract class BaseActivity : AppCompatActivity(), LifecycleRegistryOwner {
+abstract class BaseActivity : RxAppCompatActivity() {
 
     lateinit var model: MainModel
 
-    private val registry = LifecycleRegistry(this)
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        initModel()
-    }
-
-    override fun getLifecycle() = registry
-
-    private fun initModel() {
+    protected fun initModel() {
         model = ViewModelProviders.of(this).get(MainModel::class.java)
-        model.state.observe(this, Observer<AppState> { showState(it) })
+        model.state
+                .bindToLifecycle(this)
+                .subscribe {
+                    Log.w("NEW STATE", it.toString())
+                    showState(it)
+                }
     }
 
     abstract fun showState(state: AppState?)

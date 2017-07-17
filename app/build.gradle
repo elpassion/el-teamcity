@@ -47,6 +47,8 @@ dependencies {
     implementation group: 'io.reactivex.rxjava2', name: 'rxjava', version: rxjava2_version
     implementation "com.squareup.moshi:moshi-kotlin:$moshi_version"
     implementation "com.squareup.moshi:moshi-adapters:$moshi_version"
+    implementation group: 'com.trello.rxlifecycle2', name: 'rxlifecycle-components', version: rx_lifecycle_version
+    implementation group: 'com.trello.rxlifecycle2', name: 'rxlifecycle-kotlin', version: rx_lifecycle_version
     implementation "com.elpassion.android.commons:recycler:$android_commons_version"
     implementation "com.elpassion.android.commons:shared-preferences:$android_commons_version"
     implementation "com.elpassion.android.commons:shared-preferences-moshi-converter-adapter:$android_commons_version"

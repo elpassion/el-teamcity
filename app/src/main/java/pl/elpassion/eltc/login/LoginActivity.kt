@@ -13,6 +13,7 @@ class LoginActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login_activity)
+        initModel()
         save.setOnClickListener {
             val credentials = getCredentials(user.text.toString(), password.text.toString())
             model.perform(SubmitCredentials(address.text.toString(), credentials))

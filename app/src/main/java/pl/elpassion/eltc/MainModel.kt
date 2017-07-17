@@ -25,6 +25,6 @@ class MainModel(application: Application) : AndroidViewModel(application) {
 
     fun perform(action: UserAction) = model.perform(action)
 
-    val state = RxLiveData(model.state)
+    val state get() = model.state
 
 }
