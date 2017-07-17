@@ -20,8 +20,8 @@ abstract class BaseActivity : RxAppCompatActivity() {
     protected fun initModel() {
         model = ViewModelProviders.of(this).get(MainModel::class.java)
         model.state
-                .observeOn(AndroidSchedulers.mainThread())
                 .bindToLifecycle(this)
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     Log.w("NEW STATE", it.toString())
                     showState(it)
