@@ -36,7 +36,7 @@ class BuildsActivity : BaseActivity() {
     }
 
     override fun showState(state: AppState?) {
-        Log.w("BA NEW STATE", state.toString())
+        Log.w("BUILDS ACT NEW STATE", state.toString())
         when (state) {
             is InitialState -> {
                 //TODO: Add state between InitialState and BuildsState
