@@ -78,11 +78,6 @@ class BuildsActivity : BaseActivity() {
         buildsListRecyclerView.adapter.notifyDataSetChanged()
     }
 
-    private fun showLoginDetails(state: LoginState) {
-        state.errorMessage?.let { coordinator.snack(it) }
-        // TODO: set login screen textViews
-    }
-
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
         return true
