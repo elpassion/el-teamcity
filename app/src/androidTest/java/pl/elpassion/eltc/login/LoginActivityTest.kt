@@ -83,6 +83,12 @@ class LoginActivityTest {
     }
 
     @Test
+    fun Display_error_message_on_network_problem() {
+        states.onNext(LoginState(error = LoginState.Error.NETWORK_PROBLEM))
+        onText(LoginState.Error.NETWORK_PROBLEM.message).isDisplayed()
+    }
+
+    @Test
     fun Display_builds_screen_with_provided_data() {
         states.onNext(BuildsState(listOf(createBuild(number = 76)), emptyList()))
         checkIntent(BuildsActivity::class.java)
