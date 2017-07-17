@@ -8,6 +8,7 @@ import com.elpassion.android.view.show
 import kotlinx.android.synthetic.main.login_activity.*
 import pl.elpassion.eltc.*
 import pl.elpassion.eltc.builds.BuildsActivity
+import pl.elpassion.eltc.util.snack
 
 class LoginActivity : BaseActivity() {
 
@@ -28,6 +29,7 @@ class LoginActivity : BaseActivity() {
                 loginForm.show()
                 if (state.error != null) {
                     loader.hide()
+                    coordinator.snack(state.error.message)
                 }
             }
             is LoadingState -> loader.show()
