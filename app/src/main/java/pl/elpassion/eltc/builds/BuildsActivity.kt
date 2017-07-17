@@ -36,13 +36,8 @@ class BuildsActivity : BaseActivity() {
 
     override fun showState(state: AppState?) {
         when (state) {
-            is LoadingState -> {
-                loader.show()
-            }
-            is LoginState -> {
-                startActivity(Intent(this, LoginActivity::class.java))
-                finish()
-            }
+            is LoadingState -> loader.show()
+            is LoginState -> openLoginScreen()
             is BuildsState -> {
                 loader.hide()
                 swipeToRefreshBuildsList.isRefreshing = false
@@ -71,6 +66,11 @@ class BuildsActivity : BaseActivity() {
             "SUCCESS" -> R.drawable.build_success_icon
             else -> R.drawable.build_failure_icon
         })
+    }
+
+    private fun openLoginScreen() {
+        startActivity(Intent(this, LoginActivity::class.java))
+        finish()
     }
 
     private fun showBuilds(builds: List<Build>) {

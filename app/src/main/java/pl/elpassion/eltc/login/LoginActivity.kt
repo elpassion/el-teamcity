@@ -25,15 +25,17 @@ class LoginActivity : BaseActivity() {
         when (state) {
             is LoginState -> loginForm.show()
             is LoadingState -> loader.show()
-            is BuildsState -> {
-                startActivity(Intent(this, BuildsActivity::class.java))
-                finish()
-            }
+            is BuildsState -> openBuildsScreen()
         }
     }
 
     private fun getCredentials(user: String, password: String): String {
         val data = "$user:$password".toByteArray()
         return Base64.encodeToString(data, Base64.NO_WRAP)
+    }
+
+    private fun openBuildsScreen() {
+        startActivity(Intent(this, BuildsActivity::class.java))
+        finish()
     }
 }
