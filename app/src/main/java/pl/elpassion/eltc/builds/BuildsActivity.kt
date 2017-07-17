@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import com.elpassion.android.commons.recycler.adapters.basicAdapterWithLayoutAndBinder
@@ -36,7 +35,6 @@ class BuildsActivity : BaseActivity() {
     }
 
     override fun showState(state: AppState?) {
-        Log.w("BUILDS ACT NEW STATE", state.toString())
         when (state) {
             is InitialState -> {
                 //TODO: Add state between InitialState and BuildsState
