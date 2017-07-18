@@ -4,7 +4,7 @@ sealed class UserAction
 object StartApp : UserAction() // TODO: FinishApp action where we cancel auto refresh etc?
 data class SubmitCredentials(val address: String, val credentials: String): UserAction()
 object AcceptLoginError : UserAction()
-data class AutoRefresh(val enable: Boolean): UserAction()
+data class AutoRefresh(val isEnabled: Boolean): UserAction()
 object RefreshList : UserAction()
 object SelectProjects : UserAction()
 data class SubmitProject(val project: Project): UserAction()

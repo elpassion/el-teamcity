@@ -25,7 +25,7 @@ class TeamCityModelImpl(private val api: TeamCityApi,
             is SubmitCredentials -> performSubmitCredentials(action)
             is AcceptLoginError -> goTo(LoginState())
             is RefreshList -> loadBuilds()
-            is AutoRefresh -> performAutoRefresh(action.enable)
+            is AutoRefresh -> performAutoRefresh(action.isEnabled)
             is SelectProjects -> performSelectProjects()
             is SubmitProject -> loadBuilds(action.project)
             is Logout -> logout()
@@ -51,12 +51,11 @@ class TeamCityModelImpl(private val api: TeamCityApi,
         }
     }
 
-    private fun performAutoRefresh(enable: Boolean) {
+    private fun performAutoRefresh(isEnabled: Boolean) {
         refreshDisposable.clear()
-        if (enable)
-            refreshInterval
-                    .subscribe { perform(RefreshList) }
-                    .let { refreshDisposable.add(it) }
+        if (isEnabled) {
+            refreshInterval.subscribe { perform(RefreshList) }.let { refreshDisposable.add(it) }
+        }
     }
 
     private fun getBuildsAndProjects(authData: AuthData, selectedProject: Project? = null) {
