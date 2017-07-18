@@ -33,6 +33,9 @@ class TeamCityModelImpl(private val api: TeamCityApi,
     }
 
     private fun loadBuilds(selectedProject: Project? = null) {
+        if (selectedProject != null) {
+            repository.selectedProjects = listOf(selectedProject)
+        }
         val authData = repository.authData
         if (authData != null) {
             getBuildsAndProjects(authData, selectedProject)

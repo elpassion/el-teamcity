@@ -145,6 +145,16 @@ class TeamCityModelTest {
     }
 
     @Test
+    fun `Save selected projects in repository`() {
+        val projectList = listOf(
+                createProject(id = "Project1"),
+                createProject(id = "Project2"))
+        whenever(api.getProjects(any())).thenReturn(Single.just(projectList))
+        model.perform(SubmitProject(projectList.first()))
+        verify(repository).selectedProjects = projectList.take(1)
+    }
+
+    @Test
     fun `Display login on logout`() {
         model.perform(Logout)
         observer.assertLastValue(LoginState())
