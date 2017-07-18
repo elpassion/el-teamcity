@@ -23,6 +23,7 @@ class TeamCityModelImpl(private val api: TeamCityApi,
         when (action) {
             is StartApp -> loadBuilds()
             is SubmitCredentials -> performSubmitCredentials(action)
+            is AcceptLoginError -> goTo(LoginState())
             is RefreshList -> loadBuilds()
             is AutoRefresh -> performAutoRefresh(action.enable)
             is SelectProjects -> performSelectProjects()

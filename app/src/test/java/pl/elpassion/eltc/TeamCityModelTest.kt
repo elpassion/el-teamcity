@@ -155,4 +155,12 @@ class TeamCityModelTest {
         model.perform(Logout)
         verify(repository).authData = null
     }
+
+    @Test
+    fun `Display login without error on login error accepted`() {
+        whenever(api.getBuilds(any())).thenReturn(Single.error(UnknownHostException))
+        model.perform(SubmitCredentials("http://teamcity:8111", "user:pass"))
+        model.perform(AcceptLoginError)
+        observer.assertLastValue(LoginState(error = null))
+    }
 }
