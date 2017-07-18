@@ -27,18 +27,22 @@ class TeamCityModelImpl(private val api: TeamCityApi,
             is RefreshList -> loadBuilds()
             is AutoRefresh -> performAutoRefresh(action.isEnabled)
             is SelectProjects -> performSelectProjects()
-            is SubmitProject -> loadBuilds(action.project)
+            is SubmitProject -> performSubmitProject(action.project)
             is Logout -> logout()
         }
     }
 
-    private fun loadBuilds(selectedProject: Project? = null) {
+    private fun performSubmitProject(selectedProject: Project?) {
         if (selectedProject != null) {
             repository.selectedProjects = listOf(selectedProject)
         }
+        loadBuilds()
+    }
+
+    private fun loadBuilds() {
         val authData = repository.authData
         if (authData != null) {
-            getBuildsAndProjects(authData, selectedProject)
+            getBuildsAndProjects(authData)
         } else {
             goTo(LoginState())
         }
@@ -61,7 +65,7 @@ class TeamCityModelImpl(private val api: TeamCityApi,
         }
     }
 
-    private fun getBuildsAndProjects(authData: AuthData, selectedProject: Project? = null) {
+    private fun getBuildsAndProjects(authData: AuthData) {
         val onNext: (Pair<List<Build>, List<Project>>) -> Unit = { (builds, projects) ->
             if (repository.authData == null) {
                 repository.authData = authData
@@ -76,6 +80,7 @@ class TeamCityModelImpl(private val api: TeamCityApi,
             }
         }
         goTo(LoadingState)
+        val selectedProject = repository.selectedProjects.firstOrNull()
         with(authData) {
             Single.zip<List<Build>, List<Project>, Pair<List<Build>, List<Project>>>(
                     if (selectedProject != null && selectedProject.name != "<Root project>") {

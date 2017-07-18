@@ -138,6 +138,7 @@ class TeamCityModelTest {
         whenever(api.getBuilds(any())).thenReturn(Single.just(buildList))
         whenever(api.getBuildsForProject(any(), any())).thenReturn(Single.just(projectBuildList))
         whenever(repository.authData).thenReturn(AuthData("http://teamcity:8111", "user:pass"))
+        whenever(repository.selectedProjects).thenReturn(projectList.take(1))
         model.perform(StartApp)
         model.perform(SelectProjects)
         model.perform(SubmitProject(projectList.first()))
