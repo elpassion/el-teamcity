@@ -94,4 +94,11 @@ class LoginActivityTest {
         checkIntent(BuildsActivity::class.java)
         onText("#76").isDisplayed()
     }
+
+    @Test
+    fun Disable_login_button_on_pending_result() {
+        states.onNext(LoginState())
+        onText(R.string.login).click()
+        onText(R.string.login).isDisabled()
+    }
 }

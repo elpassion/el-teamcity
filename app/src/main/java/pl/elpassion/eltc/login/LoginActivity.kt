@@ -3,6 +3,7 @@ package pl.elpassion.eltc.login
 import android.content.Intent
 import android.os.Bundle
 import android.util.Base64
+import com.elpassion.android.view.disable
 import com.elpassion.android.view.hide
 import com.elpassion.android.view.show
 import kotlinx.android.synthetic.main.login_activity.*
@@ -17,6 +18,7 @@ class LoginActivity : BaseActivity() {
         setContentView(R.layout.login_activity)
         initModel()
         loginButton.setOnClickListener {
+            loginButton.disable()
             val credentials = getCredentials(user.text.toString(), password.text.toString())
             model.perform(SubmitCredentials(address.text.toString(), credentials))
         }
