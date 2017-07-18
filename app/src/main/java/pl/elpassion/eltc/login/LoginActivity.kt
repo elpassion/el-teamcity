@@ -30,6 +30,7 @@ class LoginActivity : BaseActivity() {
                 if (state.error != null) {
                     loader.hide()
                     coordinator.snack(state.error.message)
+                    model.perform(AcceptLoginError)
                 }
             }
             is LoadingState -> loader.show()
