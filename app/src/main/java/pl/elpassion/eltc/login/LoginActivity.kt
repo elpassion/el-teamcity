@@ -17,7 +17,6 @@ class LoginActivity : BaseActivity() {
         setContentView(R.layout.login_activity)
         initModel()
         loginButton.setOnClickListener {
-            loginButton.isClickable = false
             val credentials = getCredentials(user.text.toString(), password.text.toString())
             model.perform(SubmitCredentials(address.text.toString(), credentials))
         }
@@ -35,7 +34,10 @@ class LoginActivity : BaseActivity() {
                     model.perform(AcceptLoginError)
                 }
             }
-            is LoadingState -> loader.show()
+            is LoadingState -> {
+                loginButton.isClickable = false
+                loader.show()
+            }
             is BuildsState -> openBuildsScreen()
         }
     }
