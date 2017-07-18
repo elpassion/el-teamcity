@@ -93,6 +93,7 @@ class TeamCityModelImpl(private val api: TeamCityApi,
 
     private fun logout() {
         repository.authData = null
+        repository.selectedProjects = emptyList()
         goTo(LoginState())
     }
 

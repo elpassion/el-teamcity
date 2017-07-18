@@ -167,6 +167,12 @@ class TeamCityModelTest {
     }
 
     @Test
+    fun `Clear selected projects on logout`() {
+        model.perform(Logout)
+        verify(repository).selectedProjects = emptyList()
+    }
+
+    @Test
     fun `Display login without error on login error accepted`() {
         whenever(api.getBuilds(any())).thenReturn(Single.error(UnknownHostException))
         model.perform(SubmitCredentials("http://teamcity:8111", "user:pass"))
