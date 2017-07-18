@@ -96,9 +96,17 @@ class LoginActivityTest {
     }
 
     @Test
-    fun Disable_login_button_on_pending_result() {
+    fun Disable_login_button_on_pending_api_result() {
         states.onNext(LoginState())
         onText(R.string.login).click()
-        onText(R.string.login).isDisabled()
+        onText(R.string.login).isNotClickable()
+    }
+
+    @Test
+    fun Enable_login_button_on_api_result_received() {
+        states.onNext(LoginState())
+        onText(R.string.login).click()
+        states.onNext(LoginState(error = LoginState.Error.INVALID_CREDENTIALS))
+        onText(R.string.login).isClickable()
     }
 }
