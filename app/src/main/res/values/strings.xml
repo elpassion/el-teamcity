@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">EL TC</string>
+    <string name="login_head">Connect to TeamCity server</string>
+    <string name="login_body">Enter TeamCity server address along with your credentials, used in the HTTP authentication, in the form below.</string>
     <string name="address">Server address</string>
     <string name="user">User name</string>
     <string name="password">Password</string>
