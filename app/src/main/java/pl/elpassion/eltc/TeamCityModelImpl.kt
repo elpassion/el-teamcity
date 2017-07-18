@@ -34,15 +34,14 @@ class TeamCityModelImpl(private val api: TeamCityApi,
     private fun loadBuilds(selectedProject: Project? = null) {
         val authData = repository.authData
         if (authData != null) {
-            getBuildsAndProjects(authData.credentials, selectedProject)
+            getBuildsAndProjects(authData, selectedProject)
         } else {
             goTo(LoginState())
         }
     }
 
     private fun performSubmitCredentials(action: SubmitCredentials) = with(action) {
-        repository.authData = AuthData(address, credentials)
-        getBuildsAndProjects(credentials)
+        getBuildsAndProjects(AuthData(address, credentials))
     }
 
     private fun performSelectProjects() {
@@ -59,8 +58,11 @@ class TeamCityModelImpl(private val api: TeamCityApi,
                     .let { refreshDisposable.add(it) }
     }
 
-    private fun getBuildsAndProjects(credentials: String, selectedProject: Project? = null) {
+    private fun getBuildsAndProjects(authData: AuthData, selectedProject: Project? = null) {
         val onNext: (Pair<List<Build>, List<Project>>) -> Unit = { (builds, projects) ->
+            if (repository.authData == null) {
+                repository.authData = authData
+            }
             goTo(BuildsState(builds, projects))
         }
         val onError: (Throwable) -> Unit = { error ->
@@ -71,17 +73,19 @@ class TeamCityModelImpl(private val api: TeamCityApi,
             }
         }
         goTo(LoadingState)
-        Single.zip<List<Build>, List<Project>, Pair<List<Build>, List<Project>>>(
-                if (selectedProject != null && selectedProject.name != "<Root project>") {
-                    api.getBuildsForProject(credentials, selectedProject.id)
-                } else {
-                    api.getBuilds(credentials)
-                },
-                api.getProjects(credentials),
-                BiFunction { builds, projects ->
-                    builds to projects
-                })
-                .subscribe(onNext, onError)
+        with(authData) {
+            Single.zip<List<Build>, List<Project>, Pair<List<Build>, List<Project>>>(
+                    if (selectedProject != null && selectedProject.name != "<Root project>") {
+                        api.getBuildsForProject(credentials, selectedProject.id)
+                    } else {
+                        api.getBuilds(credentials)
+                    },
+                    api.getProjects(credentials),
+                    BiFunction { builds, projects ->
+                        builds to projects
+                    })
+                    .subscribe(onNext, onError)
+        }
     }
 
     private fun logout() {

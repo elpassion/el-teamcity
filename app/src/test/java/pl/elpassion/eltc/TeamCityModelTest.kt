@@ -2,10 +2,7 @@
 
 package pl.elpassion.eltc
 
-import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockito_kotlin.*
 import io.reactivex.Single
 import io.reactivex.observers.TestObserver
 import org.junit.Before
@@ -72,7 +69,15 @@ class TeamCityModelTest {
     }
 
     @Test
-    fun `Save credentials in repository`() {
+    fun `Don't save credentials in repository on login error`() {
+        whenever(api.getBuilds(any())).thenReturn(Single.error(UnknownHostException))
+        model.perform(SubmitCredentials("http://teamcity:8111", "user:pass"))
+        verify(repository, never()).authData = any()
+    }
+
+    @Test
+    fun `Save credentials in repository on successful login`() {
+        whenever(api.getProjects(any())).thenReturn(Single.just(emptyList()))
         whenever(api.getBuilds(any())).thenReturn(Single.just(emptyList()))
         model.perform(SubmitCredentials("http://teamcity:8111", "user:pass"))
         verify(repository).authData = AuthData("http://teamcity:8111", "user:pass")
