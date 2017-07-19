@@ -131,30 +131,30 @@ class TeamCityModelTest {
                 createBuild(id = 668),
                 createBuild(id = 669))
         val projectBuildList = buildList.take(1)
-        val projectList = listOf(
+        val selectedProjects = listOf(
                 createProject(id = "Project1"),
-                createProject(id = "Project2"),
-                createProject(id = "Project3"))
-        whenever(api.getProjects(any())).thenReturn(Single.just(projectList))
+                createProject(id = "Project2"))
+        val allProjects = selectedProjects + listOf(createProject(id = "Project3"))
+        whenever(api.getProjects(any())).thenReturn(Single.just(allProjects))
         whenever(api.getBuilds(any())).thenReturn(Single.just(buildList))
         whenever(api.getBuildsForProject(any(), any())).thenReturn(Single.just(projectBuildList))
         whenever(repository.authData).thenReturn(AuthData("http://teamcity:8111", "user:pass"))
-        whenever(repository.selectedProjects).thenReturn(projectList.take(2))
+        whenever(repository.selectedProjects).thenReturn(selectedProjects)
         model.perform(StartApp)
         model.perform(SelectProjects)
-        model.perform(SubmitProjects(projectList.take(2)))
-        observer.assertLastValue(BuildsState(projectBuildList, projectList))
+        model.perform(SubmitProjects(selectedProjects))
+        observer.assertLastValue(BuildsState(projectBuildList, allProjects))
     }
 
     @Test
     fun `Save selected projects in repository`() {
-        val projectList = listOf(
+        val selectedProjects = listOf(
                 createProject(id = "Project1"),
-                createProject(id = "Project2"),
-                createProject(id = "Project3"))
-        whenever(api.getProjects(any())).thenReturn(Single.just(projectList))
-        model.perform(SubmitProjects(projectList.take(2)))
-        verify(repository).selectedProjects = projectList.take(2)
+                createProject(id = "Project2"))
+        val allProjects = selectedProjects + listOf(createProject(id = "Project3"))
+        whenever(api.getProjects(any())).thenReturn(Single.just(allProjects))
+        model.perform(SubmitProjects(selectedProjects))
+        verify(repository).selectedProjects = selectedProjects
     }
 
     @Test
