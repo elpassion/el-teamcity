@@ -1,5 +1,6 @@
 package pl.elpassion.eltc.builds
 
+import android.annotation.SuppressLint
 import android.app.DialogFragment
 import android.content.Context
 import android.os.Bundle
@@ -12,6 +13,7 @@ import pl.elpassion.eltc.Project
 import pl.elpassion.eltc.R
 import pl.elpassion.eltc.util.views
 
+@SuppressLint("ValidFragment")
 class SelectProjectsDialog(private val projects: List<Project>,
                            private val onProjectSelected: (Project) -> Unit) : DialogFragment() {
 
@@ -36,6 +38,7 @@ class SelectProjectsDialog(private val projects: List<Project>,
     }
 }
 
+@SuppressLint("ViewConstructor")
 class ProjectCheckBox(context: Context, val project: Project) : CheckBox(context) {
 
     init {
