@@ -27,15 +27,13 @@ class TeamCityModelImpl(private val api: TeamCityApi,
             is RefreshList -> loadBuilds()
             is AutoRefresh -> performAutoRefresh(action.isEnabled)
             is SelectProjects -> performSelectProjects()
-            is SubmitProject -> performSubmitProject(action.project)
+            is SubmitProjects -> performSubmitProjects(action.projects)
             is Logout -> logout()
         }
     }
 
-    private fun performSubmitProject(selectedProject: Project?) {
-        if (selectedProject != null) {
-            repository.selectedProjects = listOf(selectedProject)
-        }
+    private fun performSubmitProjects(projects: List<Project>) {
+        repository.selectedProjects = projects
         loadBuilds()
     }
 

@@ -126,22 +126,23 @@ class TeamCityModelTest {
     }
 
     @Test
-    fun `Display only builds for specified project`() {
+    fun `Display only builds for selected projects`() {
         val buildList = listOf(
                 createBuild(id = 668),
                 createBuild(id = 669))
         val projectBuildList = buildList.take(1)
         val projectList = listOf(
                 createProject(id = "Project1"),
-                createProject(id = "Project2"))
+                createProject(id = "Project2"),
+                createProject(id = "Project3"))
         whenever(api.getProjects(any())).thenReturn(Single.just(projectList))
         whenever(api.getBuilds(any())).thenReturn(Single.just(buildList))
         whenever(api.getBuildsForProject(any(), any())).thenReturn(Single.just(projectBuildList))
         whenever(repository.authData).thenReturn(AuthData("http://teamcity:8111", "user:pass"))
-        whenever(repository.selectedProjects).thenReturn(projectList.take(1))
+        whenever(repository.selectedProjects).thenReturn(projectList.take(2))
         model.perform(StartApp)
         model.perform(SelectProjects)
-        model.perform(SubmitProject(projectList.first()))
+        model.perform(SubmitProjects(projectList.take(2)))
         observer.assertLastValue(BuildsState(projectBuildList, projectList))
     }
 
@@ -149,10 +150,11 @@ class TeamCityModelTest {
     fun `Save selected projects in repository`() {
         val projectList = listOf(
                 createProject(id = "Project1"),
-                createProject(id = "Project2"))
+                createProject(id = "Project2"),
+                createProject(id = "Project3"))
         whenever(api.getProjects(any())).thenReturn(Single.just(projectList))
-        model.perform(SubmitProject(projectList.first()))
-        verify(repository).selectedProjects = projectList.take(1)
+        model.perform(SubmitProjects(projectList.take(2)))
+        verify(repository).selectedProjects = projectList.take(2)
     }
 
     @Test

@@ -97,7 +97,7 @@ class BuildsActivity : BaseActivity() {
 
     private fun showSelectProjectsDialog(projects: List<Project>) {
         SelectProjectsDialog(projects, {
-            model.perform(SubmitProject(it))
+            model.perform(SubmitProjects(listOf(it)))
         }).show(fragmentManager, "select_projects")
     }
 }
