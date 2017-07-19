@@ -16,7 +16,9 @@ import pl.elpassion.eltc.R
 
 @SuppressLint("ValidFragment")
 class SelectProjectsDialog(private val projects: List<Project>,
-                           private val onProjectSelected: (Project) -> Unit) : DialogFragment() {
+                           private val onProjectsSelected: (List<Project>) -> Unit) : DialogFragment() {
+
+    private val selectedProjects = mutableListOf<Project>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.select_projects_dialog, container)
@@ -32,10 +34,17 @@ class SelectProjectsDialog(private val projects: List<Project>,
         projectsRecyclerView.layoutManager = LinearLayoutManager(activity)
         projectsRecyclerView.adapter = basicAdapterWithLayoutAndBinder(
                 projects, R.layout.project_item, this::bindItem)
+        confirmButton.setOnClickListener { onProjectsSelected(selectedProjects); dismiss() }
     }
 
     private fun bindItem(holder: ViewHolderBinder<Project>, item: Project) = with(holder.itemView) {
         projectName.text = item.name.let { if (it == "<Root project>") "All projects" else it }
-        projectName.setOnCheckedChangeListener { _, _ -> onProjectSelected(item) }
+        projectName.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                selectedProjects.add(item)
+            } else {
+                selectedProjects.remove(item)
+            }
+        }
     }
 }
