@@ -115,15 +115,33 @@ class TeamCityModelTest {
 
     @Test
     fun `Display select projects dialog on select projects action`() {
-        val projectList = listOf(
+        val allProjects = listOf(
                 createProject(id = "Project1"),
                 createProject(id = "Project2"))
-        whenever(api.getProjects(any())).thenReturn(Single.just(projectList))
+        whenever(api.getProjects(any())).thenReturn(Single.just(allProjects))
         whenever(api.getBuilds(any())).thenReturn(Single.just(emptyList()))
         whenever(repository.authData).thenReturn(AuthData("http://teamcity:8111", "user:pass"))
         model.perform(StartApp)
         model.perform(SelectProjects)
-        observer.assertLastValue(SelectProjectsDialogState(projectList.map { SelectableProject(it, false) }))
+        observer.assertLastValue(SelectProjectsDialogState(
+                allProjects.map { SelectableProject(it, false) }))
+    }
+
+    @Test
+    fun `Select currently selected projects on select projects action`() {
+        val project1 = createProject(id = "Project1")
+        val project2 = createProject(id = "Project2")
+        val selectedProjects = listOf(project1)
+        val allProjects = listOf(project1, project2)
+        whenever(api.getProjects(any())).thenReturn(Single.just(allProjects))
+        whenever(api.getBuildsForProject(any(), any())).thenReturn(Single.just(emptyList()))
+        whenever(repository.authData).thenReturn(AuthData("http://teamcity:8111", "user:pass"))
+        whenever(repository.selectedProjects).thenReturn(selectedProjects)
+        model.perform(StartApp)
+        model.perform(SelectProjects)
+        observer.assertLastValue(SelectProjectsDialogState(listOf(
+                SelectableProject(project1, isSelected = true),
+                SelectableProject(project2, isSelected = false))))
     }
 
     @Test

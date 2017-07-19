@@ -54,8 +54,9 @@ class TeamCityModelImpl(private val api: TeamCityApi,
     private fun performSelectProjects() {
         state.firstElement().subscribe {
             (it as? BuildsState)?.let {
+                val selectedProjects = repository.selectedProjects
                 goTo(SelectProjectsDialogState(it.projects.map {
-                    SelectableProject(it, false)
+                    SelectableProject(it, isSelected = selectedProjects.contains(it))
                 }))
             }
         }
