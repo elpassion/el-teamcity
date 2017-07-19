@@ -20,7 +20,7 @@ fun createBuildType() = BuildType(
         name = "Build",
         projectName = "Teamcity Android Client")
 
-fun createProject(id: String) = Project(
+fun createProject(id: String = "Project1", name: String = "Project name") = Project(
         id = id,
-        name = "Project name",
+        name = name,
         href = "href")

@@ -53,6 +53,18 @@ class BuildsActivityTest {
     }
 
     @Test
+    fun Display_dialog_with_projects_list_on_select_projects_action() {
+        val projects = listOf(
+                createProject(name = "Project 1"),
+                createProject(name = "Project 2"),
+                createProject(name = "Project 3"))
+        states.onNext(SelectProjectsDialogState(projects))
+        onText("Project 1").isDisplayed()
+        onText("Project 2").isDisplayed()
+        onText("Project 3").isDisplayed()
+    }
+
+    @Test
     fun Perform_logout_action() {
         states.onNext(BuildsState(emptyList(), emptyList()))
         Espresso.openContextualActionModeOverflowMenu()
