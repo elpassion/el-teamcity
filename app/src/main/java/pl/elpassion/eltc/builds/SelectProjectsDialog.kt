@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RadioButton
+import android.widget.CheckBox
 import kotlinx.android.synthetic.main.select_projects_dialog.*
 import pl.elpassion.eltc.Project
 import pl.elpassion.eltc.R
@@ -26,18 +26,17 @@ class SelectProjectsDialog(private val projects: List<Project>,
 
     private fun setupRadioGroup() {
         projects.forEach {
-            projectsRadioGroup.addView(ProjectRadioButton(activity, it))
+            projectsRadioGroup.addView(ProjectCheckBox(activity, it))
         }
         projectsRadioGroup.views.forEach {
-            (it as ProjectRadioButton).setOnCheckedChangeListener { compoundButton, _ ->
-                onProjectSelected((compoundButton as ProjectRadioButton).project)
-                dismiss()
+            (it as ProjectCheckBox).setOnCheckedChangeListener { compoundButton, _ ->
+                onProjectSelected((compoundButton as ProjectCheckBox).project)
             }
         }
     }
 }
 
-class ProjectRadioButton(context: Context, val project: Project) : RadioButton(context) {
+class ProjectCheckBox(context: Context, val project: Project) : CheckBox(context) {
 
     init {
         text = project.name.let { if (it == "<Root project>") "All projects" else it }
