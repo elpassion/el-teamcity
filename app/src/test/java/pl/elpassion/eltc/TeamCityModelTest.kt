@@ -7,6 +7,7 @@ import io.reactivex.Single
 import io.reactivex.observers.TestObserver
 import org.junit.Before
 import org.junit.Test
+import pl.elpassion.eltc.builds.SelectableProject
 
 class TeamCityModelTest {
 
@@ -122,7 +123,7 @@ class TeamCityModelTest {
         whenever(repository.authData).thenReturn(AuthData("http://teamcity:8111", "user:pass"))
         model.perform(StartApp)
         model.perform(SelectProjects)
-        observer.assertLastValue(SelectProjectsDialogState(projectList))
+        observer.assertLastValue(SelectProjectsDialogState(projectList.map { SelectableProject(it, false) }))
     }
 
     @Test

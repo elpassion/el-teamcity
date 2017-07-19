@@ -5,6 +5,7 @@ import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.BehaviorSubject
+import pl.elpassion.eltc.builds.SelectableProject
 import java.util.concurrent.TimeUnit
 
 class TeamCityModelImpl(private val api: TeamCityApi,
@@ -52,7 +53,11 @@ class TeamCityModelImpl(private val api: TeamCityApi,
 
     private fun performSelectProjects() {
         state.firstElement().subscribe {
-            (it as? BuildsState)?.let { goTo(SelectProjectsDialogState(it.projects)) }
+            (it as? BuildsState)?.let {
+                goTo(SelectProjectsDialogState(it.projects.map {
+                    SelectableProject(it, false)
+                }))
+            }
         }
     }
 

@@ -95,7 +95,7 @@ class BuildsActivity : BaseActivity() {
         else -> super.onOptionsItemSelected(item)
     }
 
-    private fun showSelectProjectsDialog(projects: List<Project>) {
+    private fun showSelectProjectsDialog(projects: List<SelectableProject>) {
         SelectProjectsDialog(projects, {
             model.perform(SubmitProjects(it))
         }).show(fragmentManager, "select_projects")

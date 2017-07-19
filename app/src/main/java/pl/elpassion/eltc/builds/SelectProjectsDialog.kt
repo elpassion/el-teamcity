@@ -15,7 +15,7 @@ import pl.elpassion.eltc.Project
 import pl.elpassion.eltc.R
 
 @SuppressLint("ValidFragment")
-class SelectProjectsDialog(private val projects: List<Project>,
+class SelectProjectsDialog(private val projects: List<SelectableProject>,
                            private val onProjectsSelected: (List<Project>) -> Unit) : DialogFragment() {
 
     private val selectedProjects = mutableListOf<Project>()
@@ -37,13 +37,14 @@ class SelectProjectsDialog(private val projects: List<Project>,
         confirmButton.setOnClickListener { onProjectsSelected(selectedProjects); dismiss() }
     }
 
-    private fun bindItem(holder: ViewHolderBinder<Project>, item: Project) = with(holder.itemView) {
-        projectName.text = item.name.let { if (it == "<Root project>") "All projects" else it }
+    private fun bindItem(holder: ViewHolderBinder<SelectableProject>,
+                         item: SelectableProject) = with(holder.itemView) {
+        projectName.text = item.project.name.let { if (it == "<Root project>") "All projects" else it }
         projectName.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                selectedProjects.add(item)
+                selectedProjects.add(item.project)
             } else {
-                selectedProjects.remove(item)
+                selectedProjects.remove(item.project)
             }
         }
     }
