@@ -18,7 +18,8 @@ import pl.elpassion.eltc.R
 class SelectProjectsDialog(private val projects: List<SelectableProject>,
                            private val onProjectsSelected: (List<Project>) -> Unit) : DialogFragment() {
 
-    private val selectedProjects = mutableListOf<Project>()
+    private val selectedProjects = projects
+            .filter { it.isSelected }.map { it.project }.toMutableList()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.select_projects_dialog, container)
