@@ -4,6 +4,7 @@ import android.app.Application
 import android.preference.PreferenceManager
 import com.elpassion.android.commons.sharedpreferences.createSharedPrefs
 import com.elpassion.sharedpreferences.moshiadapter.moshiConverterAdapter
+import com.squareup.moshi.Types
 
 class RepositoryImpl(private val application: Application) : Repository {
 
@@ -13,7 +14,7 @@ class RepositoryImpl(private val application: Application) : Repository {
 
     private val selectedProjectsRepository = createSharedPrefs<List<Project>>({
         PreferenceManager.getDefaultSharedPreferences(application)
-    }, moshiConverterAdapter())
+    }, moshiConverterAdapter(type = Types.newParameterizedType(List::class.java, Project::class.java)))
 
     override var authData: AuthData?
         get() = authDataRepository.read(AUTH_DATA_KEY)
