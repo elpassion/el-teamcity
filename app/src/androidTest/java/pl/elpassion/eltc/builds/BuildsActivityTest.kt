@@ -77,6 +77,17 @@ class BuildsActivityTest {
     }
 
     @Test
+    fun Check_already_selected_projects_in_projects_dialog() {
+        states.onNext(SelectProjectsDialogState(listOf(
+                createSelectableProject(name = "Project 1", isSelected = true),
+                createSelectableProject(name = "Project 2"),
+                createSelectableProject(name = "Project 3", isSelected = true))))
+        onText("Project 1").isChecked()
+        onText("Project 2").isNotChecked()
+        onText("Project 3").isChecked()
+    }
+
+    @Test
     fun Perform_logout_action() {
         states.onNext(BuildsState(emptyList(), emptyList()))
         Espresso.openContextualActionModeOverflowMenu()

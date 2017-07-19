@@ -40,6 +40,7 @@ class SelectProjectsDialog(private val projects: List<SelectableProject>,
     private fun bindItem(holder: ViewHolderBinder<SelectableProject>,
                          item: SelectableProject) = with(holder.itemView) {
         projectName.text = item.project.name.let { if (it == "<Root project>") "All projects" else it }
+        projectName.isChecked = item.isSelected
         projectName.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 selectedProjects.add(item.project)
