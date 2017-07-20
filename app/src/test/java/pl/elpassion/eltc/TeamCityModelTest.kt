@@ -107,6 +107,23 @@ class TeamCityModelTest {
     }
 
     @Test
+    fun `Call api for filtered builds when specific projects are selected`() {
+        val selectedProjects = listOf(
+                createProject(id = "Project1"),
+                createProject(id = "Project2"))
+        whenever(api.getBuilds(any())).thenReturn(Single.just(emptyList()))
+        whenever(repository.authData).thenReturn(AuthData("http://teamcity:8111", "user:pass"))
+        whenever(repository.selectedProjects).thenReturn(selectedProjects)
+        model.perform(StartApp)
+        verify(api).getBuildsForProject(
+                credentials = "user:pass",
+                projectId = selectedProjects[0].id)
+        verify(api).getBuildsForProject(
+                credentials = "user:pass",
+                projectId = selectedProjects[1].id)
+    }
+
+    @Test
     fun `Start loading on refresh list`() {
         whenever(repository.authData).thenReturn(AuthData("http://teamcity:8111", "user:pass"))
         model.perform(RefreshList)

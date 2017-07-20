@@ -84,11 +84,14 @@ class TeamCityModelImpl(private val api: TeamCityApi,
             }
         }
         goTo(LoadingState)
-        val selectedProject = repository.selectedProjects.firstOrNull()
         with(authData) {
             Single.zip<List<Build>, List<Project>, Pair<List<Build>, List<Project>>>(
-                    if (selectedProject != null && selectedProject.name != "<Root project>") {
-                        api.getBuildsForProject(credentials, selectedProject.id)
+                    if (repository.selectedProjects.isNotEmpty()) {
+                        Single.zip<List<Build>, List<Build>>(repository.selectedProjects.map {
+                            api.getBuildsForProject(credentials, it.id)
+                        }, {
+                            it.map { it as List<Build> }.flatten().sortedByDescending { it.finishDate }
+                        })
                     } else {
                         api.getBuilds(credentials)
                     },
