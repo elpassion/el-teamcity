@@ -14,7 +14,7 @@ import java.util.*
 
 interface TeamCityApi {
     fun getBuilds(credentials: String): Single<List<Build>>
-    fun getBuildsForProject(credentials: String, projectId: String): Single<List<Build>>
+    fun getBuildsForProjects(credentials: String, projectIds: List<String>): Single<List<Build>>
     fun getBuild(credentials: String, id: Int): Single<Build>
     fun getTests(credentials: String, buildId: Int): Single<List<Test>>
     fun getProjects(credentials: String): Single<List<Project>>
@@ -36,8 +36,13 @@ object TeamCityApiImpl : TeamCityApi {
     override fun getBuilds(credentials: String): Single<List<Build>> =
             service.getBuilds("Basic $credentials").mapApiErrors().map(BuildsResponse::build)
 
-    override fun getBuildsForProject(credentials: String, projectId: String): Single<List<Build>> =
-            service.getSpecificBuilds("Basic $credentials", "project:(id:$projectId)").mapApiErrors().map(BuildsResponse::build)
+    override fun getBuildsForProjects(credentials: String, projectIds: List<String>): Single<List<Build>> =
+            Single.zip<List<Build>, List<Build>>(projectIds.map {
+                service.getSpecificBuilds("Basic $credentials", "project:(id:$it)")
+                        .mapApiErrors().map(BuildsResponse::build)
+            }, {
+                it.map { it as List<Build> }.flatten().sortedByDescending { it.finishDate }
+            })
 
     override fun getBuild(credentials: String, id: Int): Single<Build> =
             service.getBuild("Basic $credentials", id).mapApiErrors()

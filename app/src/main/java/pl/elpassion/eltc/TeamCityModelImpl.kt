@@ -87,11 +87,7 @@ class TeamCityModelImpl(private val api: TeamCityApi,
         with(authData) {
             Single.zip<List<Build>, List<Project>, Pair<List<Build>, List<Project>>>(
                     if (repository.selectedProjects.isNotEmpty()) {
-                        Single.zip<List<Build>, List<Build>>(repository.selectedProjects.map {
-                            api.getBuildsForProject(credentials, it.id)
-                        }, {
-                            it.map { it as List<Build> }.flatten().sortedByDescending { it.finishDate }
-                        })
+                        api.getBuildsForProjects(credentials, repository.selectedProjects.map { it.id })
                     } else {
                         api.getBuilds(credentials)
                     },

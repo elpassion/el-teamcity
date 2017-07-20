@@ -111,16 +111,13 @@ class TeamCityModelTest {
         val selectedProjects = listOf(
                 createProject(id = "Project1"),
                 createProject(id = "Project2"))
-        whenever(api.getBuilds(any())).thenReturn(Single.just(emptyList()))
+        whenever(api.getBuildsForProjects(any(), any())).thenReturn(Single.just(emptyList()))
         whenever(repository.authData).thenReturn(AuthData("http://teamcity:8111", "user:pass"))
         whenever(repository.selectedProjects).thenReturn(selectedProjects)
         model.perform(StartApp)
-        verify(api).getBuildsForProject(
+        verify(api).getBuildsForProjects(
                 credentials = "user:pass",
-                projectId = selectedProjects[0].id)
-        verify(api).getBuildsForProject(
-                credentials = "user:pass",
-                projectId = selectedProjects[1].id)
+                projectIds = selectedProjects.map { it.id })
     }
 
     @Test
@@ -151,7 +148,7 @@ class TeamCityModelTest {
         val selectedProjects = listOf(project1)
         val allProjects = listOf(project1, project2)
         whenever(api.getProjects(any())).thenReturn(Single.just(allProjects))
-        whenever(api.getBuildsForProject(any(), any())).thenReturn(Single.just(emptyList()))
+        whenever(api.getBuildsForProjects(any(), any())).thenReturn(Single.just(emptyList()))
         whenever(repository.authData).thenReturn(AuthData("http://teamcity:8111", "user:pass"))
         whenever(repository.selectedProjects).thenReturn(selectedProjects)
         model.perform(StartApp)
@@ -163,23 +160,22 @@ class TeamCityModelTest {
 
     @Test
     fun `Display only builds for selected projects`() {
-        val buildList = listOf(
+        val allBuilds = listOf(
                 createBuild(id = 668),
-                createBuild(id = 669))
-        val projectBuildList = buildList.take(1)
+                createBuild(id = 669),
+                createBuild(id = 670))
         val selectedProjects = listOf(
                 createProject(id = "Project1"),
                 createProject(id = "Project2"))
         val allProjects = selectedProjects + listOf(createProject(id = "Project3"))
         whenever(api.getProjects(any())).thenReturn(Single.just(allProjects))
-        whenever(api.getBuilds(any())).thenReturn(Single.just(buildList))
-        whenever(api.getBuildsForProject(any(), any())).thenReturn(Single.just(projectBuildList))
+        whenever(api.getBuildsForProjects(any(), any())).thenReturn(Single.just(listOf(allBuilds[0], allBuilds[1])))
         whenever(repository.authData).thenReturn(AuthData("http://teamcity:8111", "user:pass"))
         whenever(repository.selectedProjects).thenReturn(selectedProjects)
         model.perform(StartApp)
         model.perform(SelectProjects)
         model.perform(SubmitProjects(selectedProjects))
-        observer.assertLastValue(BuildsState(projectBuildList, allProjects))
+        observer.assertLastValue(BuildsState(listOf(allBuilds[0], allBuilds[1]), allProjects))
     }
 
     @Test

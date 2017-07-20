@@ -22,7 +22,7 @@ class TeamCityRealApiTest {
     @Test
     fun `Get builds of the specified project after call to real TeamCity API`() {
         TeamCityApiImpl
-                .getBuildsForProject(CREDENTIALS, projectId = "TeamcityAndroidClient")
+                .getBuildsForProjects(CREDENTIALS, projectIds = listOf("TeamcityAndroidClient"))
                 .getAndPrint()
     }
 
