@@ -1,8 +1,7 @@
-package pl.elpassion.eltc
+package pl.elpassion.eltc.login
 
-interface Repository {
+interface LoginRepository {
     var authData: AuthData?
-    var selectedProjects: List<Project>
 }
 
 data class AuthData(val address: String, val credentials: String)

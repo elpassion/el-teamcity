@@ -5,11 +5,15 @@ import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.BehaviorSubject
+import pl.elpassion.eltc.builds.BuildsRepository
 import pl.elpassion.eltc.builds.SelectableProject
+import pl.elpassion.eltc.login.AuthData
+import pl.elpassion.eltc.login.LoginRepository
 import java.util.concurrent.TimeUnit
 
 class TeamCityModelImpl(private val api: TeamCityApi,
-                        private val repository: Repository) : TeamCityModel {
+                        private val loginRepository: LoginRepository,
+                        private val buildsRepository: BuildsRepository) : TeamCityModel {
 
     private val stateSubject = BehaviorSubject.createDefault<AppState>(InitialState)
     override val state: Observable<AppState> = stateSubject
@@ -34,12 +38,12 @@ class TeamCityModelImpl(private val api: TeamCityApi,
     }
 
     private fun performSubmitProjects(projects: List<Project>) {
-        repository.selectedProjects = projects
+        buildsRepository.selectedProjects = projects
         loadBuilds()
     }
 
     private fun loadBuilds() {
-        val authData = repository.authData
+        val authData = loginRepository.authData
         if (authData != null) {
             getBuildsAndProjects(authData)
         } else {
@@ -54,7 +58,7 @@ class TeamCityModelImpl(private val api: TeamCityApi,
     private fun performSelectProjects() {
         state.firstElement().subscribe {
             (it as? BuildsState)?.let {
-                val selectedProjects = repository.selectedProjects
+                val selectedProjects = buildsRepository.selectedProjects
                 goTo(SelectProjectsDialogState(it.projects.map {
                     SelectableProject(it, isSelected = selectedProjects.contains(it))
                 }))
@@ -71,8 +75,8 @@ class TeamCityModelImpl(private val api: TeamCityApi,
 
     private fun getBuildsAndProjects(authData: AuthData) {
         val onNext: (Pair<List<Build>, List<Project>>) -> Unit = { (builds, projects) ->
-            if (repository.authData == null) {
-                repository.authData = authData
+            if (loginRepository.authData == null) {
+                loginRepository.authData = authData
             }
             goTo(BuildsState(builds, projects))
         }
@@ -86,8 +90,8 @@ class TeamCityModelImpl(private val api: TeamCityApi,
         goTo(LoadingState)
         with(authData) {
             Single.zip<List<Build>, List<Project>, Pair<List<Build>, List<Project>>>(
-                    if (repository.selectedProjects.isNotEmpty()) {
-                        api.getBuildsForProjects(credentials, repository.selectedProjects.map { it.id })
+                    if (buildsRepository.selectedProjects.isNotEmpty()) {
+                        api.getBuildsForProjects(credentials, buildsRepository.selectedProjects.map { it.id })
                     } else {
                         api.getBuilds(credentials)
                     },
@@ -100,8 +104,8 @@ class TeamCityModelImpl(private val api: TeamCityApi,
     }
 
     private fun logout() {
-        repository.authData = null
-        repository.selectedProjects = emptyList()
+        loginRepository.authData = null
+        buildsRepository.selectedProjects = emptyList()
         goTo(LoginState())
     }
 
