@@ -4,11 +4,15 @@ import com.squareup.moshi.KotlinJsonAdapterFactory
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Rfc3339DateJsonAdapter
 import io.reactivex.Single
+import okhttp3.OkHttpClient
 import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.http.*
+import retrofit2.http.GET
+import retrofit2.http.Header
+import retrofit2.http.Path
+import retrofit2.http.Query
 import java.io.IOException
 import java.util.*
 
@@ -27,9 +31,17 @@ object TeamCityApiImpl : TeamCityApi {
             .add(KotlinJsonAdapterFactory())
             .add(Date::class.java, Rfc3339DateJsonAdapter().nullSafe())
             .build()
+    private val client = OkHttpClient.Builder()
+            .addInterceptor { chain ->
+                chain.proceed(chain.request().newBuilder()
+                        .addHeader("Accept", "application/json")
+                        .build())
+            }
+            .build()
     private val retrofit = Retrofit.Builder().baseUrl(URL)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.createAsync())
             .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .client(client)
             .build()
     private val service = retrofit.create(Service::class.java)
 
@@ -63,23 +75,18 @@ object TeamCityApiImpl : TeamCityApi {
 
     private interface Service {
 
-        @Headers("Accept: application/json")
         @GET("httpAuth/app/rest/builds?fields=build(id,number,status,state,branchName,webUrl,statusText,queuedDate,startDate,finishDate,buildType(id,name,projectName))")
         fun getBuilds(@Header("Authorization") credentials: String): Single<BuildsResponse>
 
-        @Headers("Accept: application/json")
         @GET("httpAuth/app/rest/builds?fields=build(id,number,status,state,branchName,webUrl,statusText,queuedDate,startDate,finishDate,buildType(id,name,projectName))")
         fun getSpecificBuilds(@Header("Authorization") credentials: String, @Query("locator") locator: String): Single<BuildsResponse>
 
-        @Headers("Accept: application/json")
         @GET("httpAuth/app/rest/builds/id:{id}?fields=id,number,status,state,branchName,webUrl,statusText,queuedDate,startDate,finishDate,buildType(id,name,projectName)")
         fun getBuild(@Header("Authorization") credentials: String, @Path("id") id: Int): Single<Build>
 
-        @Headers("Accept: application/json")
         @GET("httpAuth/app/rest/testOccurrences")
         fun getTests(@Header("Authorization") credentials: String, @Query("locator") locator: String): Single<TestsResponse>
 
-        @Headers("Accept: application/json")
         @GET("httpAuth/app/rest/projects?fields=project(id,name,href)")
         fun getProjects(@Header("Authorization") credentials: String): Single<ProjectsResponse>
     }
