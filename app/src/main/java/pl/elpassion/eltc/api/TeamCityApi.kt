@@ -1,24 +1,16 @@
 package pl.elpassion.eltc.api
 
-import com.squareup.moshi.KotlinJsonAdapterFactory
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.Rfc3339DateJsonAdapter
 import io.reactivex.Single
-import okhttp3.OkHttpClient
 import pl.elpassion.eltc.Build
 import pl.elpassion.eltc.Project
 import pl.elpassion.eltc.Test
 import pl.elpassion.eltc.login.LoginRepository
 import retrofit2.HttpException
-import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Path
 import retrofit2.http.Query
 import java.io.IOException
-import java.util.*
 
 interface TeamCityApi {
     fun getBuilds(): Single<List<Build>>
@@ -31,23 +23,8 @@ interface TeamCityApi {
 class TeamCityApiImpl(private val loginRepository: LoginRepository) : TeamCityApi {
 
     private val URL = "http://192.168.1.155:8111"
-    private val moshi = Moshi.Builder()
-            .add(KotlinJsonAdapterFactory())
-            .add(Date::class.java, Rfc3339DateJsonAdapter().nullSafe())
-            .build()
     private val credentials get() = "Basic ${loginRepository.authData?.credentials}"
-    private val client = OkHttpClient.Builder()
-            .addInterceptor { chain ->
-                chain.proceed(chain.request().newBuilder()
-                        .addHeader("Accept", "application/json")
-                        .build())
-            }
-            .build()
-    private val retrofit = Retrofit.Builder().baseUrl(URL)
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.createAsync())
-            .addConverterFactory(MoshiConverterFactory.create(moshi))
-            .client(client)
-            .build()
+    private var retrofit = createRetrofit(URL)
     private val service = retrofit.create(Service::class.java)
 
     override fun getBuilds(): Single<List<Build>> =
