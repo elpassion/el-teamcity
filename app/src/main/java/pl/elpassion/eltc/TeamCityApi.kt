@@ -52,10 +52,13 @@ class TeamCityApiImpl(private val loginRepository: LoginRepository) : TeamCityAp
 
     override fun getBuildsForProjects(projectIds: List<String>): Single<List<Build>> =
             Single.zip<List<Build>, List<Build>>(projectIds.map {
-                service.getBuilds(credentials, "project:(id:$it)").mapApiErrors().map(BuildsResponse::build)
+                getBuildsForProject(it)
             }, {
                 it.map { it as List<Build> }.flatten().sortedByDescending { it.finishDate }
             })
+
+    private fun getBuildsForProject(projectId: String) =
+            service.getBuilds(credentials, "project:(id:$projectId)").mapApiErrors().map(BuildsResponse::build)
 
     override fun getBuild(id: Int): Single<Build> =
             service.getBuild(credentials, id).mapApiErrors()
