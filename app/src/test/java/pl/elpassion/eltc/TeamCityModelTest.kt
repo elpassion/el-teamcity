@@ -83,7 +83,7 @@ class TeamCityModelTest {
 
     @Test
     fun `Start loading if credentials are available in repository on app start`() {
-        whenever(loginRepository.authData).thenReturn(AuthData("http://teamcity:8111", "user:pass"))
+        stubLoginRepositoryToReturnAuthData()
         model.perform(StartApp)
         observer.assertLastValue(LoadingState)
     }
@@ -98,7 +98,7 @@ class TeamCityModelTest {
     @Test
     fun `Display builds if auth data available in repository on app start`() {
         whenever(api.getBuilds()).thenReturn(Single.just(emptyList()))
-        whenever(loginRepository.authData).thenReturn(AuthData("http://teamcity:8111", "user:pass"))
+        stubLoginRepositoryToReturnAuthData()
         model.perform(StartApp)
         verify(api).getBuilds()
     }
@@ -109,7 +109,7 @@ class TeamCityModelTest {
                 createProject(id = "Project1"),
                 createProject(id = "Project2"))
         whenever(api.getBuildsForProjects(any())).thenReturn(Single.just(emptyList()))
-        whenever(loginRepository.authData).thenReturn(AuthData("http://teamcity:8111", "user:pass"))
+        stubLoginRepositoryToReturnAuthData()
         whenever(buildsRepository.selectedProjects).thenReturn(selectedProjects)
         model.perform(StartApp)
         verify(api).getBuildsForProjects(projectIds = selectedProjects.map { it.id })
@@ -117,7 +117,7 @@ class TeamCityModelTest {
 
     @Test
     fun `Start loading on refresh list`() {
-        whenever(loginRepository.authData).thenReturn(AuthData("http://teamcity:8111", "user:pass"))
+        stubLoginRepositoryToReturnAuthData()
         model.perform(RefreshList)
         observer.assertLastValue(LoadingState)
     }
@@ -129,7 +129,7 @@ class TeamCityModelTest {
                 createProject(id = "Project2"))
         whenever(api.getProjects()).thenReturn(Single.just(allProjects))
         whenever(api.getBuilds()).thenReturn(Single.just(emptyList()))
-        whenever(loginRepository.authData).thenReturn(AuthData("http://teamcity:8111", "user:pass"))
+        stubLoginRepositoryToReturnAuthData()
         model.perform(StartApp)
         model.perform(SelectProjects)
         observer.assertLastValue(SelectProjectsDialogState(
@@ -144,7 +144,7 @@ class TeamCityModelTest {
         val allProjects = listOf(project1, project2)
         whenever(api.getProjects()).thenReturn(Single.just(allProjects))
         whenever(api.getBuildsForProjects(any())).thenReturn(Single.just(emptyList()))
-        whenever(loginRepository.authData).thenReturn(AuthData("http://teamcity:8111", "user:pass"))
+        stubLoginRepositoryToReturnAuthData()
         whenever(buildsRepository.selectedProjects).thenReturn(selectedProjects)
         model.perform(StartApp)
         model.perform(SelectProjects)
@@ -165,7 +165,7 @@ class TeamCityModelTest {
         val allProjects = selectedProjects + listOf(createProject(id = "Project3"))
         whenever(api.getProjects()).thenReturn(Single.just(allProjects))
         whenever(api.getBuildsForProjects(any())).thenReturn(Single.just(listOf(allBuilds[0], allBuilds[1])))
-        whenever(loginRepository.authData).thenReturn(AuthData("http://teamcity:8111", "user:pass"))
+        stubLoginRepositoryToReturnAuthData()
         whenever(buildsRepository.selectedProjects).thenReturn(selectedProjects)
         model.perform(StartApp)
         model.perform(SelectProjects)
@@ -208,5 +208,9 @@ class TeamCityModelTest {
         model.perform(SubmitCredentials("http://teamcity:8111", "user:pass"))
         model.perform(AcceptLoginError)
         observer.assertLastValue(LoginState(error = null))
+    }
+
+    private fun stubLoginRepositoryToReturnAuthData() {
+        whenever(loginRepository.authData).thenReturn(AuthData("http://teamcity:8111", "user:pass"))
     }
 }
