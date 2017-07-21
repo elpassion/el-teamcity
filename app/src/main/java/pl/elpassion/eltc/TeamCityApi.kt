@@ -52,8 +52,7 @@ class TeamCityApiImpl(private val loginRepository: LoginRepository) : TeamCityAp
 
     override fun getBuildsForProjects(projectIds: List<String>): Single<List<Build>> =
             Single.zip<List<Build>, List<Build>>(projectIds.map {
-                service.getSpecificBuilds(credentials, "project:(id:$it)")
-                        .mapApiErrors().map(BuildsResponse::build)
+                service.getBuilds(credentials, "project:(id:$it)").mapApiErrors().map(BuildsResponse::build)
             }, {
                 it.map { it as List<Build> }.flatten().sortedByDescending { it.finishDate }
             })
@@ -81,7 +80,7 @@ class TeamCityApiImpl(private val loginRepository: LoginRepository) : TeamCityAp
         fun getBuilds(@Header("Authorization") credentials: String): Single<BuildsResponse>
 
         @GET("httpAuth/app/rest/builds?fields=build(id,number,status,state,branchName,webUrl,statusText,queuedDate,startDate,finishDate,buildType(id,name,projectName))")
-        fun getSpecificBuilds(@Header("Authorization") credentials: String, @Query("locator") locator: String): Single<BuildsResponse>
+        fun getBuilds(@Header("Authorization") credentials: String, @Query("locator") locator: String): Single<BuildsResponse>
 
         @GET("httpAuth/app/rest/builds/id:{id}?fields=id,number,status,state,branchName,webUrl,statusText,queuedDate,startDate,finishDate,buildType(id,name,projectName)")
         fun getBuild(@Header("Authorization") credentials: String, @Path("id") id: Int): Single<Build>
