@@ -9,6 +9,9 @@ import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.observers.TestObserver
 import org.junit.Before
 import org.junit.Test
+import pl.elpassion.eltc.api.InvalidCredentialsException
+import pl.elpassion.eltc.api.TeamCityApi
+import pl.elpassion.eltc.api.UnknownHostException
 import pl.elpassion.eltc.builds.BuildsRepository
 import pl.elpassion.eltc.builds.SelectableProject
 import pl.elpassion.eltc.login.AuthData

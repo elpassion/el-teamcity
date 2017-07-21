@@ -1,6 +1,7 @@
 package pl.elpassion.eltc
 
 import android.app.Application
+import pl.elpassion.eltc.api.TeamCityApiImpl
 import pl.elpassion.eltc.builds.BuildsRepositoryImpl
 import pl.elpassion.eltc.login.LoginRepositoryImpl
 

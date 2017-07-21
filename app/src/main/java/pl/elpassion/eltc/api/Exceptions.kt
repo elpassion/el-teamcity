@@ -1,4 +1,4 @@
-package pl.elpassion.eltc
+package pl.elpassion.eltc.api
 
 sealed class TeamCityApiException : RuntimeException()
 object UnknownHostException: TeamCityApiException()

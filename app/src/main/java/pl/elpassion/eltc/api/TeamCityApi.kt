@@ -1,10 +1,13 @@
-package pl.elpassion.eltc
+package pl.elpassion.eltc.api
 
 import com.squareup.moshi.KotlinJsonAdapterFactory
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Rfc3339DateJsonAdapter
 import io.reactivex.Single
 import okhttp3.OkHttpClient
+import pl.elpassion.eltc.Build
+import pl.elpassion.eltc.Project
+import pl.elpassion.eltc.Test
 import pl.elpassion.eltc.login.LoginRepository
 import retrofit2.HttpException
 import retrofit2.Retrofit
@@ -103,40 +106,6 @@ class TeamCityApiImpl(private val loginRepository: LoginRepository) : TeamCityAp
 
 data class BuildsResponse(val build: List<Build>)
 
-data class Build(
-        val id: Int,
-        val number: Int,
-        val status: String,
-        val state: String,
-        val branchName: String?,
-        val webUrl: String,
-        val statusText: String,
-        val queuedDate: Date,
-        val startDate: Date,
-        val finishDate: Date,
-        val buildType: BuildType
-)
-
-data class BuildType(
-        val id: String,
-        val name: String,
-        val projectName: String
-)
-
 data class TestsResponse(val testOccurrence: List<Test>)
 
-data class Test(
-        val id: String,
-        val name: String,
-        val status: String,
-        val duration: Int?,
-        val href: String
-)
-
 data class ProjectsResponse(val project: List<Project>)
-
-data class Project(
-        val id: String,
-        val name: String,
-        val href: String
-)

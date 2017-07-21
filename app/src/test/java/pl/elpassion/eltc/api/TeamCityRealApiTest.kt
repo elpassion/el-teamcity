@@ -1,6 +1,6 @@
 @file:Suppress("IllegalIdentifier")
 
-package pl.elpassion.eltc
+package pl.elpassion.eltc.api
 
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
