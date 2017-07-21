@@ -52,7 +52,9 @@ class TeamCityModelImpl(private val api: TeamCityApi,
     }
 
     private fun performSubmitCredentials(action: SubmitCredentials) = with(action) {
-        getBuildsAndProjects(AuthData(address, credentials))
+        val authData = AuthData(address, credentials)
+        loginRepository.authData = authData
+        getBuildsAndProjects(authData)
     }
 
     private fun performSelectProjects() {
@@ -75,12 +77,10 @@ class TeamCityModelImpl(private val api: TeamCityApi,
 
     private fun getBuildsAndProjects(authData: AuthData) {
         val onNext: (Pair<List<Build>, List<Project>>) -> Unit = { (builds, projects) ->
-            if (loginRepository.authData == null) {
-                loginRepository.authData = authData
-            }
             goTo(BuildsState(builds, projects))
         }
         val onError: (Throwable) -> Unit = { error ->
+            loginRepository.authData = null
             if (error is TeamCityApiException) {
                 goTo(error.toState())
             } else {
@@ -91,11 +91,11 @@ class TeamCityModelImpl(private val api: TeamCityApi,
         with(authData) {
             Single.zip<List<Build>, List<Project>, Pair<List<Build>, List<Project>>>(
                     if (buildsRepository.selectedProjects.isNotEmpty()) {
-                        api.getBuildsForProjects(credentials, buildsRepository.selectedProjects.map { it.id })
+                        api.getBuildsForProjects(buildsRepository.selectedProjects.map { it.id })
                     } else {
-                        api.getBuilds(credentials)
+                        api.getBuilds()
                     },
-                    api.getProjects(credentials),
+                    api.getProjects(),
                     BiFunction { builds, projects ->
                         builds to projects
                     })

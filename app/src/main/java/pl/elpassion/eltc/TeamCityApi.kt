@@ -5,6 +5,7 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.Rfc3339DateJsonAdapter
 import io.reactivex.Single
 import okhttp3.OkHttpClient
+import pl.elpassion.eltc.login.LoginRepository
 import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -17,20 +18,21 @@ import java.io.IOException
 import java.util.*
 
 interface TeamCityApi {
-    fun getBuilds(credentials: String): Single<List<Build>>
-    fun getBuildsForProjects(credentials: String, projectIds: List<String>): Single<List<Build>>
-    fun getBuild(credentials: String, id: Int): Single<Build>
-    fun getTests(credentials: String, buildId: Int): Single<List<Test>>
-    fun getProjects(credentials: String): Single<List<Project>>
+    fun getBuilds(): Single<List<Build>>
+    fun getBuildsForProjects(projectIds: List<String>): Single<List<Build>>
+    fun getBuild(id: Int): Single<Build>
+    fun getTests(buildId: Int): Single<List<Test>>
+    fun getProjects(): Single<List<Project>>
 }
 
-object TeamCityApiImpl : TeamCityApi {
+class TeamCityApiImpl(private val loginRepository: LoginRepository) : TeamCityApi {
 
     private val URL = "http://192.168.1.155:8111"
     private val moshi = Moshi.Builder()
             .add(KotlinJsonAdapterFactory())
             .add(Date::class.java, Rfc3339DateJsonAdapter().nullSafe())
             .build()
+    private val credentials get() = "Basic ${loginRepository.authData?.credentials}"
     private val client = OkHttpClient.Builder()
             .addInterceptor { chain ->
                 chain.proceed(chain.request().newBuilder()
@@ -45,25 +47,25 @@ object TeamCityApiImpl : TeamCityApi {
             .build()
     private val service = retrofit.create(Service::class.java)
 
-    override fun getBuilds(credentials: String): Single<List<Build>> =
-            service.getBuilds("Basic $credentials").mapApiErrors().map(BuildsResponse::build)
+    override fun getBuilds(): Single<List<Build>> =
+            service.getBuilds(credentials).mapApiErrors().map(BuildsResponse::build)
 
-    override fun getBuildsForProjects(credentials: String, projectIds: List<String>): Single<List<Build>> =
+    override fun getBuildsForProjects(projectIds: List<String>): Single<List<Build>> =
             Single.zip<List<Build>, List<Build>>(projectIds.map {
-                service.getSpecificBuilds("Basic $credentials", "project:(id:$it)")
+                service.getSpecificBuilds(credentials, "project:(id:$it)")
                         .mapApiErrors().map(BuildsResponse::build)
             }, {
                 it.map { it as List<Build> }.flatten().sortedByDescending { it.finishDate }
             })
 
-    override fun getBuild(credentials: String, id: Int): Single<Build> =
-            service.getBuild("Basic $credentials", id).mapApiErrors()
+    override fun getBuild(id: Int): Single<Build> =
+            service.getBuild(credentials, id).mapApiErrors()
 
-    override fun getTests(credentials: String, buildId: Int): Single<List<Test>> =
-            service.getTests("Basic $credentials", "build:(id:$buildId)").mapApiErrors().map(TestsResponse::testOccurrence)
+    override fun getTests(buildId: Int): Single<List<Test>> =
+            service.getTests(credentials, "build:(id:$buildId)").mapApiErrors().map(TestsResponse::testOccurrence)
 
-    override fun getProjects(credentials: String): Single<List<Project>> =
-            service.getProjects("Basic $credentials").mapApiErrors().map(ProjectsResponse::project)
+    override fun getProjects(): Single<List<Project>> =
+            service.getProjects(credentials).mapApiErrors().map(ProjectsResponse::project)
 
     private fun <T> Single<T>.mapApiErrors() = onErrorResumeNext {
         Single.error(when {
