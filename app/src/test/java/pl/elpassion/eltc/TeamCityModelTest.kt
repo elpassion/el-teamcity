@@ -2,8 +2,10 @@
 
 package pl.elpassion.eltc
 
-import com.nhaarman.mockito_kotlin.*
-import io.reactivex.Single
+import com.nhaarman.mockito_kotlin.any
+import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.observers.TestObserver
 import org.junit.Before
 import org.junit.Test
@@ -22,8 +24,8 @@ class TeamCityModelTest {
 
     @Before
     fun setup() {
-        whenever(api.getProjects()).thenReturn(Single.never())
-        whenever(api.getBuilds()).thenReturn(Single.never())
+        whenever(api.getProjects()).thenNever()
+        whenever(api.getBuilds()).thenNever()
         model.state.subscribe(observer)
     }
 
@@ -40,14 +42,14 @@ class TeamCityModelTest {
 
     @Test
     fun `Display correct error on submitting unknown host`() {
-        whenever(api.getBuilds()).thenReturn(Single.error(UnknownHostException))
+        whenever(api.getBuilds()).thenError(UnknownHostException)
         model.perform(SubmitCredentials("invalid", "user:pass"))
         observer.assertLastValue(LoginState(error = LoginState.Error.UNKNOWN_HOST))
     }
 
     @Test
     fun `Display invalid credentials error on unauthorized call to teamcity api`() {
-        whenever(api.getBuilds()).thenReturn(Single.error(InvalidCredentialsException))
+        whenever(api.getBuilds()).thenError(InvalidCredentialsException)
         model.perform(SubmitCredentials("http://teamcity:8111", "user:wrong_pass"))
         observer.assertLastValue(LoginState(error = LoginState.Error.INVALID_CREDENTIALS))
     }
@@ -60,23 +62,23 @@ class TeamCityModelTest {
         val projectList = listOf(
                 createProject(id = "Project1"),
                 createProject(id = "Project2"))
-        whenever(api.getBuilds()).thenReturn(Single.just(buildList))
-        whenever(api.getProjects()).thenReturn(Single.just(projectList))
+        whenever(api.getBuilds()).thenJust(buildList)
+        whenever(api.getProjects()).thenJust(projectList)
         model.perform(SubmitCredentials("http://teamcity:8111", "user:pass"))
         observer.assertLastValue(BuildsState(buildList, projectList))
     }
 
     @Test
     fun `Save credentials in repository on login`() {
-        whenever(api.getProjects()).thenReturn(Single.just(emptyList()))
-        whenever(api.getBuilds()).thenReturn(Single.just(emptyList()))
+        whenever(api.getProjects()).thenJust(emptyList())
+        whenever(api.getBuilds()).thenJust(emptyList())
         model.perform(SubmitCredentials("http://teamcity:8111", "user:pass"))
         verify(loginRepository).authData = AuthData("http://teamcity:8111", "user:pass")
     }
 
     @Test
     fun `Clear credentials in repository on login error`() {
-        whenever(api.getBuilds()).thenReturn(Single.error(UnknownHostException))
+        whenever(api.getBuilds()).thenError(UnknownHostException)
         model.perform(SubmitCredentials("http://teamcity:8111", "user:pass"))
         verify(loginRepository).authData = null
     }
@@ -97,7 +99,7 @@ class TeamCityModelTest {
 
     @Test
     fun `Display builds if auth data available in repository on app start`() {
-        whenever(api.getBuilds()).thenReturn(Single.just(emptyList()))
+        whenever(api.getBuilds()).thenJust(emptyList())
         stubLoginRepositoryToReturnAuthData()
         model.perform(StartApp)
         verify(api).getBuilds()
@@ -108,7 +110,7 @@ class TeamCityModelTest {
         val selectedProjects = listOf(
                 createProject(id = "Project1"),
                 createProject(id = "Project2"))
-        whenever(api.getBuildsForProjects(any())).thenReturn(Single.just(emptyList()))
+        whenever(api.getBuildsForProjects(any())).thenJust(emptyList())
         stubLoginRepositoryToReturnAuthData()
         whenever(buildsRepository.selectedProjects).thenReturn(selectedProjects)
         model.perform(StartApp)
@@ -127,8 +129,8 @@ class TeamCityModelTest {
         val allProjects = listOf(
                 createProject(id = "Project1"),
                 createProject(id = "Project2"))
-        whenever(api.getProjects()).thenReturn(Single.just(allProjects))
-        whenever(api.getBuilds()).thenReturn(Single.just(emptyList()))
+        whenever(api.getProjects()).thenJust(allProjects)
+        whenever(api.getBuilds()).thenJust(emptyList())
         stubLoginRepositoryToReturnAuthData()
         model.perform(StartApp)
         model.perform(SelectProjects)
@@ -142,8 +144,8 @@ class TeamCityModelTest {
         val project2 = createProject(id = "Project2")
         val selectedProjects = listOf(project1)
         val allProjects = listOf(project1, project2)
-        whenever(api.getProjects()).thenReturn(Single.just(allProjects))
-        whenever(api.getBuildsForProjects(any())).thenReturn(Single.just(emptyList()))
+        whenever(api.getProjects()).thenJust(allProjects)
+        whenever(api.getBuildsForProjects(any())).thenJust(emptyList())
         stubLoginRepositoryToReturnAuthData()
         whenever(buildsRepository.selectedProjects).thenReturn(selectedProjects)
         model.perform(StartApp)
@@ -163,8 +165,8 @@ class TeamCityModelTest {
                 createProject(id = "Project1"),
                 createProject(id = "Project2"))
         val allProjects = selectedProjects + listOf(createProject(id = "Project3"))
-        whenever(api.getProjects()).thenReturn(Single.just(allProjects))
-        whenever(api.getBuildsForProjects(any())).thenReturn(Single.just(listOf(allBuilds[0], allBuilds[1])))
+        whenever(api.getProjects()).thenJust(allProjects)
+        whenever(api.getBuildsForProjects(any())).thenJust(listOf(allBuilds[0], allBuilds[1]))
         stubLoginRepositoryToReturnAuthData()
         whenever(buildsRepository.selectedProjects).thenReturn(selectedProjects)
         model.perform(StartApp)
@@ -179,7 +181,7 @@ class TeamCityModelTest {
                 createProject(id = "Project1"),
                 createProject(id = "Project2"))
         val allProjects = selectedProjects + listOf(createProject(id = "Project3"))
-        whenever(api.getProjects()).thenReturn(Single.just(allProjects))
+        whenever(api.getProjects()).thenJust(allProjects)
         model.perform(SubmitProjects(selectedProjects))
         verify(buildsRepository).selectedProjects = selectedProjects
     }
@@ -204,7 +206,7 @@ class TeamCityModelTest {
 
     @Test
     fun `Display login without error on login error accepted`() {
-        whenever(api.getBuilds()).thenReturn(Single.error(UnknownHostException))
+        whenever(api.getBuilds()).thenError(UnknownHostException)
         model.perform(SubmitCredentials("http://teamcity:8111", "user:pass"))
         model.perform(AcceptLoginError)
         observer.assertLastValue(LoginState(error = null))
