@@ -76,20 +76,25 @@ class TeamCityApiImpl(private val loginRepository: LoginRepository) : TeamCityAp
 
     private interface Service {
 
-        @GET("httpAuth/app/rest/builds?fields=build(id,number,status,state,branchName,webUrl,statusText,queuedDate,startDate,finishDate,buildType(id,name,projectName))")
+        @GET("httpAuth/app/rest/builds?fields=build($BUILD_FIELDS)")
         fun getBuilds(@Header("Authorization") credentials: String): Single<BuildsResponse>
 
-        @GET("httpAuth/app/rest/builds?fields=build(id,number,status,state,branchName,webUrl,statusText,queuedDate,startDate,finishDate,buildType(id,name,projectName))")
+        @GET("httpAuth/app/rest/builds?fields=build($BUILD_FIELDS)")
         fun getBuilds(@Header("Authorization") credentials: String, @Query("locator") locator: String): Single<BuildsResponse>
 
-        @GET("httpAuth/app/rest/builds/id:{id}?fields=id,number,status,state,branchName,webUrl,statusText,queuedDate,startDate,finishDate,buildType(id,name,projectName)")
+        @GET("httpAuth/app/rest/builds/id:{id}?fields=$BUILD_FIELDS")
         fun getBuild(@Header("Authorization") credentials: String, @Path("id") id: Int): Single<Build>
 
         @GET("httpAuth/app/rest/testOccurrences")
         fun getTests(@Header("Authorization") credentials: String, @Query("locator") locator: String): Single<TestsResponse>
 
-        @GET("httpAuth/app/rest/projects?fields=project(id,name,href)")
+        @GET("httpAuth/app/rest/projects?fields=project($PROJECT_FIELDS)")
         fun getProjects(@Header("Authorization") credentials: String): Single<ProjectsResponse>
+
+        companion object {
+            const val BUILD_FIELDS = "id,number,status,state,branchName,webUrl,statusText,queuedDate,startDate,finishDate,buildType(id,name,projectName)"
+            const val PROJECT_FIELDS = "id,name,href"
+        }
     }
 }
 
