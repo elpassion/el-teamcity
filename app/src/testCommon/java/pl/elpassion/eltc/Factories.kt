@@ -1,8 +1,5 @@
 package pl.elpassion.eltc
 
-import pl.elpassion.eltc.api.Build
-import pl.elpassion.eltc.api.BuildType
-import pl.elpassion.eltc.api.Project
 import pl.elpassion.eltc.builds.SelectableProject
 import java.util.*
 
