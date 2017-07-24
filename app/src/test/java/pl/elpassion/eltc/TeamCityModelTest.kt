@@ -39,21 +39,21 @@ class TeamCityModelTest {
 
     @Test
     fun `Start LoadingState on SubmitCredentials action`() {
-        model.perform(SubmitCredentials("http://teamcity:8111", "user:pass"))
+        model.perform(SubmitCredentials(TEAMCITY_ADDRESS, CREDENTIALS))
         observer.assertLastValue(LoadingState)
     }
 
     @Test
     fun `Display correct error on submitting unknown host`() {
         whenever(api.getBuilds()).thenError(UnknownHostException)
-        model.perform(SubmitCredentials("invalid", "user:pass"))
+        model.perform(SubmitCredentials("invalid", CREDENTIALS))
         observer.assertLastValue(LoginState(error = LoginState.Error.UNKNOWN_HOST))
     }
 
     @Test
     fun `Display invalid credentials error on unauthorized call to teamcity api`() {
         whenever(api.getBuilds()).thenError(InvalidCredentialsException)
-        model.perform(SubmitCredentials("http://teamcity:8111", "user:wrong_pass"))
+        model.perform(SubmitCredentials(TEAMCITY_ADDRESS, "user:wrong_pass"))
         observer.assertLastValue(LoginState(error = LoginState.Error.INVALID_CREDENTIALS))
     }
 
@@ -67,26 +67,26 @@ class TeamCityModelTest {
                 createProject(id = "Project2"))
         whenever(api.getBuilds()).thenJust(buildList)
         whenever(api.getProjects()).thenJust(projectList)
-        model.perform(SubmitCredentials("http://teamcity:8111", "user:pass"))
+        model.perform(SubmitCredentials(TEAMCITY_ADDRESS, CREDENTIALS))
         observer.assertLastValue(BuildsState(buildList, projectList))
     }
 
     @Test
     fun `Save credentials in repository on login`() {
-        model.perform(SubmitCredentials("http://teamcity:8111", "user:pass"))
-        verify(loginRepository).authData = AuthData("http://teamcity:8111", "user:pass")
+        model.perform(SubmitCredentials(TEAMCITY_ADDRESS, CREDENTIALS))
+        verify(loginRepository).authData = AuthData(TEAMCITY_ADDRESS, CREDENTIALS)
     }
 
     @Test
     fun `Set server address on login`() {
-        model.perform(SubmitCredentials("http://teamcity:8111", "user:pass"))
-        verify(api).setAddress("http://teamcity:8111")
+        model.perform(SubmitCredentials(TEAMCITY_ADDRESS, CREDENTIALS))
+        verify(api).setAddress(TEAMCITY_ADDRESS)
     }
 
     @Test
     fun `Clear credentials in repository on login error`() {
         whenever(api.getBuilds()).thenError(UnknownHostException)
-        model.perform(SubmitCredentials("http://teamcity:8111", "user:pass"))
+        model.perform(SubmitCredentials(TEAMCITY_ADDRESS, CREDENTIALS))
         verify(loginRepository).authData = null
     }
 
@@ -108,7 +108,7 @@ class TeamCityModelTest {
     fun `Set server address if auth data available in repository on app start`() {
         stubLoginRepositoryToReturnAuthData()
         model.perform(StartApp)
-        verify(api).setAddress("http://teamcity:8111")
+        verify(api).setAddress(TEAMCITY_ADDRESS)
     }
 
     @Test
@@ -220,12 +220,17 @@ class TeamCityModelTest {
     @Test
     fun `Display login without error on login error accepted`() {
         whenever(api.getBuilds()).thenError(UnknownHostException)
-        model.perform(SubmitCredentials("http://teamcity:8111", "user:pass"))
+        model.perform(SubmitCredentials(TEAMCITY_ADDRESS, CREDENTIALS))
         model.perform(AcceptLoginError)
         observer.assertLastValue(LoginState(error = null))
     }
 
     private fun stubLoginRepositoryToReturnAuthData() {
-        whenever(loginRepository.authData).thenReturn(AuthData("http://teamcity:8111", "user:pass"))
+        whenever(loginRepository.authData).thenReturn(AuthData(TEAMCITY_ADDRESS, CREDENTIALS))
+    }
+
+    companion object {
+        const val TEAMCITY_ADDRESS = "http://teamcity:8111"
+        const val CREDENTIALS = "user:pass"
     }
 }
