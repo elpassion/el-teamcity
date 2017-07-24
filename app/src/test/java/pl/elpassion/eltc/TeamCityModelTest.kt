@@ -86,7 +86,7 @@ class TeamCityModelTest {
     @Test
     fun `Set api credentials on login`() {
         model.perform(SubmitCredentials(TEAMCITY_ADDRESS, CREDENTIALS))
-        verify(api).credentials = CREDENTIALS
+        verify(api).credentials = "Basic $CREDENTIALS"
     }
 
     @Test
@@ -121,7 +121,7 @@ class TeamCityModelTest {
     fun `Set api credentials if auth data available in repository on app start`() {
         stubLoginRepositoryToReturnAuthData()
         model.perform(StartApp)
-        verify(api).credentials = CREDENTIALS
+        verify(api).credentials = "Basic $CREDENTIALS"
     }
 
     @Test
