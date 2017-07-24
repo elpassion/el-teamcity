@@ -98,6 +98,18 @@ class BuildsActivityTest {
     }
 
     @Test
+    fun Submit_selected_projects_list_on_dialog_confirm_action() {
+        states.onNext(SelectProjectsDialogState(listOf(
+                createSelectableProject(name = "Project 1"),
+                createSelectableProject(name = "Project 2", isSelected = true),
+                createSelectableProject(name = "Project 3"))))
+        onText(R.string.ok).click()
+        verify(model).perform(argThat {
+            this is SubmitProjects && projects == listOf(createProject(name = "Project 2"))
+        })
+    }
+
+    @Test
     fun Perform_logout_action() {
         states.onNext(BuildsState(emptyList(), emptyList()))
         Espresso.openContextualActionModeOverflowMenu()
