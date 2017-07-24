@@ -32,34 +32,37 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-    implementation "com.android.support:appcompat-v7:$android_support_version"
-    implementation "com.android.support:support-v4:$android_support_version"
-    implementation "com.android.support:design:$android_support_version"
-    implementation "com.android.support:recyclerview-v7:$android_support_version"
-    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
-    implementation "com.squareup.retrofit2:converter-moshi:$retrofit_version"
-    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version"
-    implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
+    implementation group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jre7', version: kotlin_version
+    implementation group: 'org.jetbrains.kotlin', name: 'kotlin-reflect', version: kotlin_version
+    implementation group: 'com.android.support', name: 'appcompat-v7', version: android_support_version
+    implementation group: 'com.android.support', name: 'support-v4', version: android_support_version
+    implementation group: 'com.android.support', name: 'design', version: android_support_version
+    implementation group: 'com.android.support', name: 'recyclerview-v7', version: android_support_version
+    implementation group: 'com.squareup.retrofit2', name: 'retrofit', version: retrofit_version
+    implementation group: 'com.squareup.retrofit2', name: 'converter-moshi', version: retrofit_version
+    implementation group: 'com.squareup.retrofit2', name: 'adapter-rxjava2', version: retrofit_version
+    implementation group: 'com.squareup.okhttp3', name: 'logging-interceptor', version: okhttp_version
     implementation group: 'io.reactivex.rxjava2', name: 'rxjava', version: rxjava2_version
-    implementation "io.reactivex.rxjava2:rxkotlin:$rxkotlin_version"
-    implementation "com.squareup.moshi:moshi-kotlin:$moshi_version"
-    implementation "com.squareup.moshi:moshi-adapters:$moshi_version"
+    implementation group: 'io.reactivex.rxjava2', name: 'rxkotlin', version: rxkotlin_version
+    implementation group: 'com.squareup.moshi', name: 'moshi-kotlin', version: moshi_version
+    implementation group: 'com.squareup.moshi', name: 'moshi-adapters', version: moshi_version
     implementation group: 'com.trello.rxlifecycle2', name: 'rxlifecycle-components', version: rx_lifecycle_version
     implementation group: 'com.trello.rxlifecycle2', name: 'rxlifecycle-kotlin', version: rx_lifecycle_version
-    implementation "com.elpassion.android.commons:recycler:$android_commons_version"
-    implementation "com.elpassion.android.commons:shared-preferences:$android_commons_version"
-    implementation "com.elpassion.android.commons:shared-preferences-moshi-converter-adapter:$android_commons_version"
-    implementation "org.ocpsoft.prettytime:prettytime:$pretty_time_version"
-    annotationProcessor "android.arch.lifecycle:compiler:$android_arch_version"
-    testImplementation "junit:junit:$junit_version"
-    testImplementation(group: 'com.nhaarman', name: 'mockito-kotlin-kt1.1', version: mockito_kotlin_version)
-    androidTestImplementation "com.elpassion.android.commons:espresso:$android_commons_version"
-    androidTestImplementation(group: 'com.nhaarman', name: 'mockito-kotlin-kt1.1', version: mockito_kotlin_version)
-    androidTestImplementation(group: 'org.mockito', name: 'mockito-android', version: mockito_android_version)
-    androidTestImplementation "com.android.support.test:runner:$runner_version"
-    androidTestImplementation("com.android.support.test.espresso:espresso-core:$espresso_version", {
+    implementation group: 'com.elpassion.android.commons', name: 'recycler', version: android_commons_version
+    implementation group: 'com.elpassion.android.commons', name: 'shared-preferences', version: android_commons_version
+    implementation group: 'com.elpassion.android.commons', name: 'shared-preferences-moshi-converter-adapter', version: android_commons_version
+    implementation group: 'org.ocpsoft.prettytime', name: 'prettytime', version: pretty_time_version
+
+    annotationProcessor group: 'android.arch.lifecycle', name: 'compiler', version: android_arch_version
+
+    testImplementation group: 'junit', name: 'junit', version: junit_version
+    testImplementation group: 'com.nhaarman', name: 'mockito-kotlin-kt1.1', version: mockito_kotlin_version
+
+    androidTestImplementation group: 'com.elpassion.android.commons', name: 'espresso', version: android_commons_version
+    androidTestImplementation group: 'com.nhaarman', name: 'mockito-kotlin-kt1.1', version: mockito_kotlin_version
+    androidTestImplementation group: 'org.mockito', name: 'mockito-android', version: mockito_android_version
+    androidTestImplementation group: 'com.android.support.test', name: 'runner', version: runner_version
+    androidTestImplementation(group: 'com.android.support.test.espresso', name: 'espresso-core', version: espresso_version, {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 }
