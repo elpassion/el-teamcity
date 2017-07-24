@@ -34,13 +34,16 @@ class SelectProjectsDialog(private val projects: List<SelectableProject>,
         projectsRecyclerView.setHasFixedSize(true)
         projectsRecyclerView.layoutManager = LinearLayoutManager(activity)
         projectsRecyclerView.adapter = basicAdapterWithLayoutAndBinder(
-                projects, R.layout.project_item, this::bindItem)
+                projects.filterVisibleProjects(), R.layout.project_item, this::bindItem)
         confirmButton.setOnClickListener { onProjectsSelected(selectedProjects); dismiss() }
     }
 
+    private fun List<SelectableProject>.filterVisibleProjects() =
+            filterNot { it.project.name == "<Root project>" }
+
     private fun bindItem(holder: ViewHolderBinder<SelectableProject>,
                          item: SelectableProject) = with(holder.itemView) {
-        projectName.text = item.project.name.let { if (it == "<Root project>") "All projects" else it }
+        projectName.text = item.project.name
         projectName.isChecked = item.isSelected
         projectName.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
