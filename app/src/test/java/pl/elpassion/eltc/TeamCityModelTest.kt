@@ -73,8 +73,6 @@ class TeamCityModelTest {
 
     @Test
     fun `Save credentials in repository on login`() {
-        whenever(api.getProjects()).thenJust(emptyList())
-        whenever(api.getBuilds()).thenJust(emptyList())
         model.perform(SubmitCredentials("http://teamcity:8111", "user:pass"))
         verify(loginRepository).authData = AuthData("http://teamcity:8111", "user:pass")
     }
@@ -115,7 +113,6 @@ class TeamCityModelTest {
 
     @Test
     fun `Display builds if auth data available in repository on app start`() {
-        whenever(api.getBuilds()).thenJust(emptyList())
         stubLoginRepositoryToReturnAuthData()
         model.perform(StartApp)
         verify(api).getBuilds()
