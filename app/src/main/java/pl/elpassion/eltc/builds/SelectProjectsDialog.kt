@@ -18,9 +18,6 @@ import pl.elpassion.eltc.R
 class SelectProjectsDialog(private val projects: List<SelectableProject>,
                            private val onProjectsSelected: (List<Project>) -> Unit) : DialogFragment() {
 
-    private val selectedProjects = projects
-            .filter { it.isSelected }.map { it.project }.toMutableList()
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.select_projects_dialog, container)
     }
@@ -35,7 +32,12 @@ class SelectProjectsDialog(private val projects: List<SelectableProject>,
         projectsRecyclerView.layoutManager = LinearLayoutManager(activity)
         projectsRecyclerView.adapter = basicAdapterWithLayoutAndBinder(
                 projects.filterVisibleProjects(), R.layout.project_item, this::bindItem)
-        confirmButton.setOnClickListener { onProjectsSelected(selectedProjects); dismiss() }
+        showAllButton.setOnClickListener {
+            projects.forEach { it.isSelected = false }
+            projectsRecyclerView.adapter.notifyDataSetChanged()
+            applySelection()
+        }
+        confirmButton.setOnClickListener { applySelection() }
     }
 
     private fun List<SelectableProject>.filterVisibleProjects() =
@@ -46,11 +48,12 @@ class SelectProjectsDialog(private val projects: List<SelectableProject>,
         projectName.text = item.project.name
         projectName.isChecked = item.isSelected
         projectName.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                selectedProjects.add(item.project)
-            } else {
-                selectedProjects.remove(item.project)
-            }
+            item.isSelected = isChecked
         }
+    }
+
+    private fun applySelection() {
+        onProjectsSelected(projects.filter { it.isSelected }.map { it.project }.toMutableList())
+        dismiss()
     }
 }
