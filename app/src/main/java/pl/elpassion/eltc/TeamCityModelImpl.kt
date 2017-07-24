@@ -28,12 +28,12 @@ class TeamCityModelImpl(private val api: TeamCityApi,
     override fun perform(action: UserAction) {
         when (action) {
             is StartApp -> startApp()
-            is SubmitCredentials -> performSubmitCredentials(action)
+            is SubmitCredentials -> submitCredentials(action)
             is AcceptLoginError -> goTo(LoginState())
             is RefreshList -> loadBuilds()
             is AutoRefresh -> performAutoRefresh(action.isEnabled)
-            is SelectProjects -> performSelectProjects()
-            is SubmitProjects -> performSubmitProjects(action.projects)
+            is SelectProjects -> selectProjects()
+            is SubmitProjects -> submitProjects(action.projects)
             is Logout -> logout()
         }
     }
@@ -46,9 +46,12 @@ class TeamCityModelImpl(private val api: TeamCityApi,
         loadBuilds()
     }
 
-    private fun performSubmitProjects(projects: List<Project>) {
-        buildsRepository.selectedProjects = projects
-        loadBuilds()
+    private fun submitCredentials(action: SubmitCredentials) = with(action) {
+        val authData = AuthData(address, credentials)
+        api.setAddress(address)
+        api.credentials = credentials
+        loginRepository.authData = authData
+        getBuildsAndProjects(authData)
     }
 
     private fun loadBuilds() {
@@ -57,32 +60,6 @@ class TeamCityModelImpl(private val api: TeamCityApi,
             getBuildsAndProjects(authData)
         } else {
             goTo(LoginState())
-        }
-    }
-
-    private fun performSubmitCredentials(action: SubmitCredentials) = with(action) {
-        val authData = AuthData(address, credentials)
-        api.setAddress(address)
-        api.credentials = credentials
-        loginRepository.authData = authData
-        getBuildsAndProjects(authData)
-    }
-
-    private fun performSelectProjects() {
-        state.firstElement().subscribe {
-            (it as? BuildsState)?.let {
-                val selectedProjects = buildsRepository.selectedProjects
-                goTo(SelectProjectsDialogState(it.projects.map {
-                    SelectableProject(it, isSelected = selectedProjects.contains(it))
-                }))
-            }
-        }
-    }
-
-    private fun performAutoRefresh(isEnabled: Boolean) {
-        refreshDisposable.clear()
-        if (isEnabled) {
-            refreshInterval.subscribe { perform(RefreshList) }.let { refreshDisposable.add(it) }
         }
     }
 
@@ -112,6 +89,29 @@ class TeamCityModelImpl(private val api: TeamCityApi,
                     })
                     .subscribe(onNext, onError)
         }
+    }
+
+    private fun performAutoRefresh(isEnabled: Boolean) {
+        refreshDisposable.clear()
+        if (isEnabled) {
+            refreshInterval.subscribe { perform(RefreshList) }.let { refreshDisposable.add(it) }
+        }
+    }
+
+    private fun selectProjects() {
+        state.firstElement().subscribe {
+            (it as? BuildsState)?.let {
+                val selectedProjects = buildsRepository.selectedProjects
+                goTo(SelectProjectsDialogState(it.projects.map {
+                    SelectableProject(it, isSelected = selectedProjects.contains(it))
+                }))
+            }
+        }
+    }
+
+    private fun submitProjects(projects: List<Project>) {
+        buildsRepository.selectedProjects = projects
+        loadBuilds()
     }
 
     private fun logout() {
