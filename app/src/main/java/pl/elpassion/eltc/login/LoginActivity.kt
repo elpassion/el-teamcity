@@ -25,21 +25,27 @@ class LoginActivity : BaseActivity() {
 
     override fun showState(state: AppState?) {
         when (state) {
-            is LoginState -> {
-                loginForm.show()
-                loginButton.isClickable = true
-                if (state.error != null) {
-                    loader.hide()
-                    coordinator.snack(state.error.message)
-                    model.perform(AcceptLoginError)
-                }
-            }
+            is LoginState -> showLogin(state)
             is LoadingState -> {
                 loginButton.isClickable = false
                 loader.show()
             }
             is BuildsState -> openBuildsScreen()
         }
+    }
+
+    private fun showLogin(state: LoginState) {
+        loginForm.show()
+        loginButton.isClickable = true
+        if (state.error != null) {
+            showLoginError(state.error)
+        }
+    }
+
+    private fun showLoginError(error: LoginState.Error) {
+        loader.hide()
+        coordinator.snack(error.message)
+        model.perform(AcceptLoginError)
     }
 
     private fun getCredentials(user: String, password: String): String {
