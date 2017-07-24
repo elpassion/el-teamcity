@@ -61,6 +61,7 @@ class TeamCityModelImpl(private val api: TeamCityApi,
 
     private fun performSubmitCredentials(action: SubmitCredentials) = with(action) {
         val authData = AuthData(address, credentials)
+        api.setAddress(address)
         loginRepository.authData = authData
         getBuildsAndProjects(authData)
     }

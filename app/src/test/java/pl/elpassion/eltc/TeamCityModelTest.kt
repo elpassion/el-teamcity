@@ -80,6 +80,12 @@ class TeamCityModelTest {
     }
 
     @Test
+    fun `Set server address on login`() {
+        model.perform(SubmitCredentials("http://teamcity:8111", "user:pass"))
+        verify(api).setAddress("http://teamcity:8111")
+    }
+
+    @Test
     fun `Clear credentials in repository on login error`() {
         whenever(api.getBuilds()).thenError(UnknownHostException)
         model.perform(SubmitCredentials("http://teamcity:8111", "user:pass"))
