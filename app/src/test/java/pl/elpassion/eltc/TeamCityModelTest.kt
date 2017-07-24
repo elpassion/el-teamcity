@@ -118,6 +118,13 @@ class TeamCityModelTest {
     }
 
     @Test
+    fun `Set api credentials if auth data available in repository on app start`() {
+        stubLoginRepositoryToReturnAuthData()
+        model.perform(StartApp)
+        verify(api).credentials = CREDENTIALS
+    }
+
+    @Test
     fun `Display builds if auth data available in repository on app start`() {
         stubLoginRepositoryToReturnAuthData()
         model.perform(StartApp)

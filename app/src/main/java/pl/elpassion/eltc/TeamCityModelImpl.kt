@@ -41,6 +41,7 @@ class TeamCityModelImpl(private val api: TeamCityApi,
     private fun startApp() {
         loginRepository.authData?.let {
             api.setAddress(it.address)
+            api.credentials = it.credentials
         }
         loadBuilds()
     }
