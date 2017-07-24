@@ -100,11 +100,13 @@ class TeamCityModelImpl(private val api: TeamCityApi,
         state.firstElement().subscribe {
             if (it is BuildsState) {
                 val selectedProjects = buildsRepository.selectedProjects
-                goTo(SelectProjectsDialogState(it.projects.map {
-                    SelectableProject(it, isSelected = selectedProjects.contains(it))
-                }))
+                goTo(SelectProjectsDialogState(it.projects.toSelectable(selectedProjects)))
             }
         }
+    }
+
+    private fun List<Project>.toSelectable(selectedProjects: List<Project>) = map {
+        SelectableProject(it, isSelected = selectedProjects.contains(it))
     }
 
     private fun submitProjects(projects: List<Project>) {
