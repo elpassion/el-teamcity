@@ -28,12 +28,14 @@ object TeamCityApiImpl : TeamCityApi {
 
     private var service by Delegates.notNull<Service>()
 
+    private const val BRANCH_LOCATOR = "branch:default:any"
+
     override fun setAddress(url: String) {
         service = newRetrofit(url).create(Service::class.java)
     }
 
     override fun getBuilds(): Single<List<Build>> =
-            service.getBuilds(credentials).mapApiErrors().map(BuildsResponse::build)
+            service.getBuilds(credentials, BRANCH_LOCATOR).mapApiErrors().map(BuildsResponse::build)
 
     override fun getBuildsForProjects(projectIds: List<String>): Single<List<Build>> =
             Single.zip<List<Build>, List<Build>>(projectIds.map {
@@ -43,7 +45,7 @@ object TeamCityApiImpl : TeamCityApi {
             })
 
     private fun getBuildsForProject(projectId: String) =
-            service.getBuilds(credentials, "project:(id:$projectId)").mapApiErrors().map(BuildsResponse::build)
+            service.getBuilds(credentials, "project:(id:$projectId),$BRANCH_LOCATOR").mapApiErrors().map(BuildsResponse::build)
 
     override fun getBuild(id: Int): Single<Build> =
             service.getBuild(credentials, id).mapApiErrors()
@@ -63,9 +65,6 @@ object TeamCityApiImpl : TeamCityApi {
     }
 
     private interface Service {
-
-        @GET("httpAuth/app/rest/builds?fields=build($BUILD_FIELDS)")
-        fun getBuilds(@Header("Authorization") credentials: String): Single<BuildsResponse>
 
         @GET("httpAuth/app/rest/builds?fields=build($BUILD_FIELDS)")
         fun getBuilds(@Header("Authorization") credentials: String, @Query("locator") locator: String): Single<BuildsResponse>
