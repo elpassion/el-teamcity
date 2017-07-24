@@ -79,11 +79,12 @@ class TeamCityModelImpl(private val api: TeamCityApi,
                 .subscribe(onNext, onError)
     }
 
-    private fun getBuilds() = if (buildsRepository.selectedProjects.isNotEmpty()) {
-        api.getBuildsForProjects(buildsRepository.selectedProjects.map { it.id })
-    } else {
-        api.getBuilds()
-    }
+    private fun getBuilds() = if (isAnyProjectSelected())
+        api.getBuildsForProjects(getSelectedProjectsIds()) else api.getBuilds()
+
+    private fun isAnyProjectSelected() = buildsRepository.selectedProjects.isNotEmpty()
+
+    private fun getSelectedProjectsIds() = buildsRepository.selectedProjects.map { it.id }
 
     private fun performAutoRefresh(isEnabled: Boolean) {
         refreshDisposable.clear()
