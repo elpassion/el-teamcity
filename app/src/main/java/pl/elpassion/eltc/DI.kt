@@ -13,7 +13,7 @@ object DI {
 
     var provideTeamCityModel: () -> TeamCityModel = { model }
 
-    var provideTeamCityApi = { TeamCityApiImpl(provideLoginRepository()) }
+    var provideTeamCityApi = { TeamCityApiImpl }
 
     var provideLoginRepository = { LoginRepositoryImpl(provideApplication()) }
 

@@ -4,7 +4,6 @@ import io.reactivex.Single
 import pl.elpassion.eltc.Build
 import pl.elpassion.eltc.Project
 import pl.elpassion.eltc.Test
-import pl.elpassion.eltc.login.LoginRepository
 import retrofit2.HttpException
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -14,6 +13,7 @@ import java.io.IOException
 import kotlin.properties.Delegates
 
 interface TeamCityApi {
+    var credentials: String
     fun setAddress(url: String)
     fun getBuilds(): Single<List<Build>>
     fun getBuildsForProjects(projectIds: List<String>): Single<List<Build>>
@@ -22,9 +22,9 @@ interface TeamCityApi {
     fun getProjects(): Single<List<Project>>
 }
 
-class TeamCityApiImpl(private val loginRepository: LoginRepository) : TeamCityApi {
+object TeamCityApiImpl : TeamCityApi {
 
-    private val credentials get() = "Basic ${loginRepository.authData?.credentials}"
+    override var credentials: String by Delegates.notNull()
 
     private var service by Delegates.notNull<Service>()
 
