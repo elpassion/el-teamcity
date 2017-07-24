@@ -62,21 +62,24 @@ class TeamCityModelImpl(private val api: TeamCityApi,
     }
 
     private fun getBuildsAndProjects() {
-        val onNext: (Pair<List<Build>, List<Project>>) -> Unit = { (builds, projects) ->
-            goTo(BuildsState(builds, projects))
-        }
-        val onError: (Throwable) -> Unit = { error ->
-            loginRepository.authData = null
-            if (error is TeamCityApiException) {
-                goTo(error.toState())
-            } else {
-                stateSubject.onError(error)
-            }
-        }
         goTo(LoadingState)
         Singles.zip(getBuilds(), api.getProjects(),
                 zipper = { builds, projects -> builds to projects })
-                .subscribe(onNext, onError)
+                .subscribe(onBuildsAndProjects, onError)
+    }
+
+    private val onBuildsAndProjects: (Pair<List<Build>, List<Project>>) -> Unit =
+            { (builds, projects) ->
+                goTo(BuildsState(builds, projects))
+            }
+
+    private val onError: (Throwable) -> Unit = { error ->
+        loginRepository.authData = null
+        if (error is TeamCityApiException) {
+            goTo(error.toState())
+        } else {
+            stateSubject.onError(error)
+        }
     }
 
     private fun getBuilds() = if (isAnyProjectSelected())
