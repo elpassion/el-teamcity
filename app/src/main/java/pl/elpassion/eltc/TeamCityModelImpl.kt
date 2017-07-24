@@ -98,7 +98,7 @@ class TeamCityModelImpl(private val api: TeamCityApi,
 
     private fun selectProjects() {
         state.firstElement().subscribe {
-            (it as? BuildsState)?.let {
+            if (it is BuildsState) {
                 val selectedProjects = buildsRepository.selectedProjects
                 goTo(SelectProjectsDialogState(it.projects.map {
                     SelectableProject(it, isSelected = selectedProjects.contains(it))
