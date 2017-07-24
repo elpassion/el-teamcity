@@ -75,18 +75,16 @@ class TeamCityModelImpl(private val api: TeamCityApi,
         }
         goTo(LoadingState)
         with(authData) {
-            Singles.zip(
-                    s1 = if (buildsRepository.selectedProjects.isNotEmpty()) {
-                        api.getBuildsForProjects(buildsRepository.selectedProjects.map { it.id })
-                    } else {
-                        api.getBuilds()
-                    },
-                    s2 = api.getProjects(),
-                    zipper = { builds, projects ->
-                        builds to projects
-                    })
+            Singles.zip(getBuilds(), api.getProjects(),
+                    zipper = { builds, projects -> builds to projects })
                     .subscribe(onNext, onError)
         }
+    }
+
+    private fun getBuilds() = if (buildsRepository.selectedProjects.isNotEmpty()) {
+        api.getBuildsForProjects(buildsRepository.selectedProjects.map { it.id })
+    } else {
+        api.getBuilds()
     }
 
     private fun performAutoRefresh(isEnabled: Boolean) {
