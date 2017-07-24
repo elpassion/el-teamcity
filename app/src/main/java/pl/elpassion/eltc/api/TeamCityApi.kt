@@ -11,8 +11,10 @@ import retrofit2.http.Header
 import retrofit2.http.Path
 import retrofit2.http.Query
 import java.io.IOException
+import kotlin.properties.Delegates
 
 interface TeamCityApi {
+    fun setBaseUrl(url: String)
     fun getBuilds(): Single<List<Build>>
     fun getBuildsForProjects(projectIds: List<String>): Single<List<Build>>
     fun getBuild(id: Int): Single<Build>
@@ -22,10 +24,13 @@ interface TeamCityApi {
 
 class TeamCityApiImpl(private val loginRepository: LoginRepository) : TeamCityApi {
 
-    private val URL = "http://192.168.1.155:8111"
     private val credentials get() = "Basic ${loginRepository.authData?.credentials}"
-    private var retrofit = createRetrofit(URL)
-    private val service = retrofit.create(Service::class.java)
+
+    private var service by Delegates.notNull<Service>()
+
+    override fun setBaseUrl(url: String) {
+        service = newRetrofit(url).create(Service::class.java)
+    }
 
     override fun getBuilds(): Single<List<Build>> =
             service.getBuilds(credentials).mapApiErrors().map(BuildsResponse::build)

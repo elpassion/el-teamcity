@@ -22,7 +22,7 @@ private val client = OkHttpClient.Builder()
         }
         .build()
 
-fun createRetrofit(url: String): Retrofit =
+fun newRetrofit(url: String): Retrofit =
         Retrofit.Builder().baseUrl(url)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.createAsync())
                 .addConverterFactory(MoshiConverterFactory.create(moshi))
