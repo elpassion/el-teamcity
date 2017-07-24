@@ -44,7 +44,7 @@ class TeamCityModelImpl(private val api: TeamCityApi,
         val authData = AuthData(address, credentials)
         setupApi(authData)
         loginRepository.authData = authData
-        getBuildsAndProjects(authData)
+        getBuildsAndProjects()
     }
 
     private fun setupApi(authData: AuthData) = with(authData) {
@@ -55,13 +55,13 @@ class TeamCityModelImpl(private val api: TeamCityApi,
     private fun loadBuilds() {
         val authData = loginRepository.authData
         if (authData != null) {
-            getBuildsAndProjects(authData)
+            getBuildsAndProjects()
         } else {
             goTo(LoginState())
         }
     }
 
-    private fun getBuildsAndProjects(authData: AuthData) {
+    private fun getBuildsAndProjects() {
         val onNext: (Pair<List<Build>, List<Project>>) -> Unit = { (builds, projects) ->
             goTo(BuildsState(builds, projects))
         }
@@ -74,11 +74,9 @@ class TeamCityModelImpl(private val api: TeamCityApi,
             }
         }
         goTo(LoadingState)
-        with(authData) {
-            Singles.zip(getBuilds(), api.getProjects(),
-                    zipper = { builds, projects -> builds to projects })
-                    .subscribe(onNext, onError)
-        }
+        Singles.zip(getBuilds(), api.getProjects(),
+                zipper = { builds, projects -> builds to projects })
+                .subscribe(onNext, onError)
     }
 
     private fun getBuilds() = if (buildsRepository.selectedProjects.isNotEmpty()) {
