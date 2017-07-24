@@ -84,6 +84,12 @@ class TeamCityModelTest {
     }
 
     @Test
+    fun `Set api credentials on login`() {
+        model.perform(SubmitCredentials(TEAMCITY_ADDRESS, CREDENTIALS))
+        verify(api).credentials = CREDENTIALS
+    }
+
+    @Test
     fun `Clear credentials in repository on login error`() {
         whenever(api.getBuilds()).thenError(UnknownHostException)
         model.perform(SubmitCredentials(TEAMCITY_ADDRESS, CREDENTIALS))
