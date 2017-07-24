@@ -32,12 +32,14 @@ class SelectProjectsDialog(private val projects: List<SelectableProject>,
         projectsRecyclerView.layoutManager = LinearLayoutManager(activity)
         projectsRecyclerView.adapter = basicAdapterWithLayoutAndBinder(
                 projects.filterVisibleProjects(), R.layout.project_item, this::bindItem)
-        showAllButton.setOnClickListener {
-            projects.forEach { it.isSelected = false }
-            projectsRecyclerView.adapter.notifyDataSetChanged()
-            applySelection()
-        }
+        showAllButton.setOnClickListener { applyClearedSelection() }
         confirmButton.setOnClickListener { applySelection() }
+    }
+
+    private fun applyClearedSelection() {
+        projects.forEach { it.isSelected = false }
+        projectsRecyclerView.adapter.notifyDataSetChanged()
+        applySelection()
     }
 
     private fun List<SelectableProject>.filterVisibleProjects() =
