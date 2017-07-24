@@ -25,17 +25,15 @@ class TeamCityModelImpl(private val api: TeamCityApi,
 
     private val refreshDisposable = CompositeDisposable()
 
-    override fun perform(action: UserAction) {
-        when (action) {
-            is StartApp -> startApp()
-            is SubmitCredentials -> submitCredentials(action)
-            is AcceptLoginError -> goTo(LoginState())
-            is RefreshList -> loadBuilds()
-            is AutoRefresh -> performAutoRefresh(action.isEnabled)
-            is SelectProjects -> selectProjects()
-            is SubmitProjects -> submitProjects(action.projects)
-            is Logout -> logout()
-        }
+    override fun perform(action: UserAction) = when (action) {
+        is StartApp -> startApp()
+        is SubmitCredentials -> submitCredentials(action)
+        is AcceptLoginError -> goTo(LoginState())
+        is RefreshList -> loadBuilds()
+        is AutoRefresh -> performAutoRefresh(action.isEnabled)
+        is SelectProjects -> selectProjects()
+        is SubmitProjects -> submitProjects(action.projects)
+        is Logout -> logout()
     }
 
     private fun startApp() {
