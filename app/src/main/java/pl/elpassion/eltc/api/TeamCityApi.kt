@@ -38,9 +38,7 @@ object TeamCityApiImpl : TeamCityApi {
             service.getBuilds(credentials, BRANCH_LOCATOR).mapApiErrors().map(BuildsResponse::build)
 
     override fun getBuildsForProjects(projectIds: List<String>): Single<List<Build>> =
-            Single.zip<List<Build>, List<Build>>(projectIds.map {
-                getBuildsForProject(it)
-            }, {
+            Single.zip(projectIds.map { getBuildsForProject(it) }, {
                 it.map { it as List<Build> }.flatten().sortedByDescending { it.finishDate }
             })
 
