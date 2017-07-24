@@ -14,7 +14,7 @@ import java.io.IOException
 import kotlin.properties.Delegates
 
 interface TeamCityApi {
-    fun setBaseUrl(url: String)
+    fun setAddress(url: String)
     fun getBuilds(): Single<List<Build>>
     fun getBuildsForProjects(projectIds: List<String>): Single<List<Build>>
     fun getBuild(id: Int): Single<Build>
@@ -28,7 +28,7 @@ class TeamCityApiImpl(private val loginRepository: LoginRepository) : TeamCityAp
 
     private var service by Delegates.notNull<Service>()
 
-    override fun setBaseUrl(url: String) {
+    override fun setAddress(url: String) {
         service = newRetrofit(url).create(Service::class.java)
     }
 

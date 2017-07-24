@@ -5,7 +5,7 @@
     <string name="address">Server address</string>
     <string name="user">User name</string>
     <string name="password">Password</string>
-    <string name="server_address_default">192.168.1.155:8111</string>
+    <string name="server_address_default">http://192.168.1.155:8111</string>
     <string name="auto_refresh">Auto refresh</string>
     <string name="select_projects">Select projects</string>
     <string name="login">Sign in</string>

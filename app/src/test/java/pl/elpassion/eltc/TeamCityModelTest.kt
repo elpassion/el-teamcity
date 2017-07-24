@@ -101,6 +101,13 @@ class TeamCityModelTest {
     }
 
     @Test
+    fun `Set server address if auth data available in repository on app start`() {
+        stubLoginRepositoryToReturnAuthData()
+        model.perform(StartApp)
+        verify(api).setAddress("http://teamcity:8111")
+    }
+
+    @Test
     fun `Display builds if auth data available in repository on app start`() {
         whenever(api.getBuilds()).thenJust(emptyList())
         stubLoginRepositoryToReturnAuthData()

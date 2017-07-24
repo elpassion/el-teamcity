@@ -27,7 +27,7 @@ class TeamCityModelImpl(private val api: TeamCityApi,
 
     override fun perform(action: UserAction) {
         when (action) {
-            is StartApp -> loadBuilds()
+            is StartApp -> startApp()
             is SubmitCredentials -> performSubmitCredentials(action)
             is AcceptLoginError -> goTo(LoginState())
             is RefreshList -> loadBuilds()
@@ -36,6 +36,13 @@ class TeamCityModelImpl(private val api: TeamCityApi,
             is SubmitProjects -> performSubmitProjects(action.projects)
             is Logout -> logout()
         }
+    }
+
+    private fun startApp() {
+        loginRepository.authData?.let {
+            api.setAddress(it.address)
+        }
+        loadBuilds()
     }
 
     private fun performSubmitProjects(projects: List<Project>) {
