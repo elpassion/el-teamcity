@@ -4,4 +4,6 @@ interface LoginRepository {
     var authData: AuthData?
 }
 
-data class AuthData(val address: String, val credentials: String)
+data class AuthData(val address: String, val credentials: String) {
+    val fullCredentials get() = "Basic $credentials"
+}
