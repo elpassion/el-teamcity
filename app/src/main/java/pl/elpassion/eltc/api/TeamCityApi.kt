@@ -4,6 +4,7 @@ import io.reactivex.Single
 import pl.elpassion.eltc.Build
 import pl.elpassion.eltc.Project
 import pl.elpassion.eltc.Test
+import pl.elpassion.eltc.util.zipSingles
 import retrofit2.HttpException
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -38,9 +39,7 @@ object TeamCityApiImpl : TeamCityApi {
             service.getBuilds(credentials, BRANCH_LOCATOR).mapApiErrors().map(BuildsResponse::build)
 
     override fun getBuildsForProjects(projectIds: List<String>): Single<List<Build>> =
-            Single.zip(projectIds.map { getBuildsForProject(it) }, {
-                it.map { it as List<Build> }.flatten().sortedByDescending { it.finishDate }
-            })
+            zipSingles(projectIds.map { getBuildsForProject(it) }, sortDescBy = { it.finishDate })
 
     private fun getBuildsForProject(projectId: String) =
             service.getBuilds(credentials, "project:(id:$projectId),$BRANCH_LOCATOR").mapApiErrors().map(BuildsResponse::build)
