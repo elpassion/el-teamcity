@@ -110,6 +110,16 @@ class BuildsActivityTest {
     }
 
     @Test
+    fun Refresh_list_on_dialog_dismiss() {
+        states.onNext(SelectProjectsDialogState(listOf(
+                createSelectableProject(name = "Project 1"),
+                createSelectableProject(name = "Project 2", isSelected = true),
+                createSelectableProject(name = "Project 3"))))
+        Espresso.pressBack()
+        verify(model).perform(argThat { this is RefreshList })
+    }
+
+    @Test
     fun Perform_logout_action() {
         states.onNext(BuildsState(emptyList(), emptyList()))
         Espresso.openContextualActionModeOverflowMenu()

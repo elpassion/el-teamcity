@@ -104,6 +104,8 @@ class BuildsActivity : BaseActivity() {
     private fun showSelectProjectsDialog(projects: List<SelectableProject>) {
         SelectProjectsDialog(projects, {
             model.perform(SubmitProjects(it))
+        }, {
+            model.perform(RefreshList)
         }).show(fragmentManager, "select_projects")
     }
 }

@@ -2,6 +2,7 @@ package pl.elpassion.eltc.builds
 
 import android.annotation.SuppressLint
 import android.app.DialogFragment
+import android.content.DialogInterface
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
@@ -16,7 +17,8 @@ import pl.elpassion.eltc.R
 
 @SuppressLint("ValidFragment")
 class SelectProjectsDialog(private val projects: List<SelectableProject>,
-                           private val onProjectsSelected: (List<Project>) -> Unit) : DialogFragment() {
+                           private val onProjectsSelected: (List<Project>) -> Unit,
+                           private val onDismiss: () -> Unit) : DialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.select_projects_dialog, container)
@@ -25,6 +27,11 @@ class SelectProjectsDialog(private val projects: List<SelectableProject>,
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
+    }
+
+    override fun onDismiss(dialog: DialogInterface?) {
+        super.onDismiss(dialog)
+        onDismiss()
     }
 
     private fun setupRecyclerView() {
