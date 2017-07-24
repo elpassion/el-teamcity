@@ -43,6 +43,7 @@ dependencies {
     implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version"
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
     implementation group: 'io.reactivex.rxjava2', name: 'rxjava', version: rxjava2_version
+    implementation "io.reactivex.rxjava2:rxkotlin:$rxkotlin_version"
     implementation "com.squareup.moshi:moshi-kotlin:$moshi_version"
     implementation "com.squareup.moshi:moshi-adapters:$moshi_version"
     implementation group: 'com.trello.rxlifecycle2', name: 'rxlifecycle-components', version: rx_lifecycle_version

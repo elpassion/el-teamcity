@@ -1,9 +1,8 @@
 package pl.elpassion.eltc
 
 import io.reactivex.Observable
-import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.functions.BiFunction
+import io.reactivex.rxkotlin.Singles
 import io.reactivex.subjects.BehaviorSubject
 import pl.elpassion.eltc.api.*
 import pl.elpassion.eltc.builds.BuildsRepository
@@ -76,14 +75,14 @@ class TeamCityModelImpl(private val api: TeamCityApi,
         }
         goTo(LoadingState)
         with(authData) {
-            Single.zip<List<Build>, List<Project>, Pair<List<Build>, List<Project>>>(
-                    if (buildsRepository.selectedProjects.isNotEmpty()) {
+            Singles.zip(
+                    s1 = if (buildsRepository.selectedProjects.isNotEmpty()) {
                         api.getBuildsForProjects(buildsRepository.selectedProjects.map { it.id })
                     } else {
                         api.getBuilds()
                     },
-                    api.getProjects(),
-                    BiFunction { builds, projects ->
+                    s2 = api.getProjects(),
+                    zipper = { builds, projects ->
                         builds to projects
                     })
                     .subscribe(onNext, onError)
