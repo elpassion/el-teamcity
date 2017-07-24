@@ -5,6 +5,6 @@
     <color name="colorPrimaryLight">#C5CAE9</color>
     <color name="colorAccent">#26A69A</color>
 
-    <color name="red">#E53935</color>
-    <color name="green">#43A047</color>
+    <color name="failure">#E53935</color>
+    <color name="success">#43A047</color>
 </resources>
