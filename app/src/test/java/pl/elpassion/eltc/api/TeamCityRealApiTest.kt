@@ -23,6 +23,7 @@ class TeamCityRealApiTest {
     @Before
     fun setup() {
         whenever(loginRepository.authData).thenReturn(AuthData(ADDRESS, CREDENTIALS))
+        teamCityApi.setAddress(ADDRESS)
     }
 
     @Test
