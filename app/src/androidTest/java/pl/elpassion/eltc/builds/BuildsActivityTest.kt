@@ -93,6 +93,12 @@ class BuildsActivityTest {
     }
 
     @Test
+    fun Do_not_display_build_name_for_queued_builds() {
+        states.onNext(BuildsState(listOf(createBuild(state = "queued")), emptyList()))
+        onId(R.id.buildName).isNotDisplayed()
+    }
+
+    @Test
     fun Hide_loader_on_new_data() {
         states.onNext(LoadingState)
         states.onNext(BuildsState(listOf(createBuild(number = 76)), emptyList()))

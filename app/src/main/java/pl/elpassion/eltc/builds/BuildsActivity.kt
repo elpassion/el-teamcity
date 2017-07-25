@@ -66,7 +66,12 @@ class BuildsActivity : BaseActivity() {
             branchName.text = item.branchName
             branchName.show()
         }
-        buildName.text = item.statusText
+        if (item.state == "queued") {
+            buildName.hide()
+        } else {
+            buildName.text = item.statusText
+            buildName.show()
+        }
         buildDetails.text = when (item.state) {
             "queued" -> "Build queued ${prettyTime.format(item.queuedDate)}"
             "running" -> "Build started ${prettyTime.format(item.startDate)}"

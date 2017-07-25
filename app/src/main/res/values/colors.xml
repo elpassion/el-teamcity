@@ -7,5 +7,5 @@
 
     <color name="failure">#E53935</color>
     <color name="success">#43A047</color>
-    <color name="queued">#5E35B1</color>
+    <color name="queued">#00ACC1</color>
 </resources>
