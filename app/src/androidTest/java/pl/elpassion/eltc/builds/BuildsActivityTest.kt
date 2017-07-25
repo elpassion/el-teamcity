@@ -52,6 +52,12 @@ class BuildsActivityTest {
     }
 
     @Test
+    fun Display_state_of_queued_build() {
+        states.onNext(BuildsState(listOf(createBuild(state = "queued")), emptyList()))
+        onTextStartingWith("Build queued").isDisplayed()
+    }
+
+    @Test
     fun Hide_loader_on_new_data() {
         states.onNext(LoadingState)
         states.onNext(BuildsState(listOf(createBuild(number = 76)), emptyList()))

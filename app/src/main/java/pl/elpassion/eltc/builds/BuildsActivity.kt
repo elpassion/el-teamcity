@@ -68,6 +68,7 @@ class BuildsActivity : BaseActivity() {
         buildNumber.text = "#${item.number}"
         buildName.text = item.statusText
         buildDetails.text = when (item.state) {
+            "queued" -> "Build queued ${prettyTime.format(item.queuedDate)}"
             "finished" -> "Build finished ${prettyTime.format(item.finishDate)}"
             else -> null
         }
@@ -93,14 +94,18 @@ class BuildsActivity : BaseActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-        R.id.select_projects -> { model.perform(SelectProjects); true }
+        R.id.select_projects -> {
+            model.perform(SelectProjects); true
+        }
         R.id.auto_refresh -> {
             val checked = !item.isChecked
             item.isChecked = checked
             model.perform(AutoRefresh(checked))
             true
         }
-        R.id.logout -> { model.perform(Logout); true }
+        R.id.logout -> {
+            model.perform(Logout); true
+        }
         else -> super.onOptionsItemSelected(item)
     }
 
