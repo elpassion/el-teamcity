@@ -58,8 +58,8 @@ class BuildsActivityTest {
     }
 
     @Test
-    fun Display_state_of_started_build() {
-        states.onNext(BuildsState(listOf(createBuild(state = "started")), emptyList()))
+    fun Display_state_of_running_build() {
+        states.onNext(BuildsState(listOf(createBuild(state = "running")), emptyList()))
         onTextStartingWith("Build started").isDisplayed()
     }
 
