@@ -63,7 +63,7 @@ class TeamCityModelImpl(private val api: TeamCityApi,
 
     private fun getBuildsAndProjects() {
         goTo(LoadingState)
-        Singles.zip(getBuilds(), api.getProjects(),
+        Singles.zip(getAllBuilds(), api.getProjects(),
                 zipper = { builds, projects -> builds to projects })
                 .subscribe(onBuildsAndProjects, onError)
     }
@@ -82,8 +82,14 @@ class TeamCityModelImpl(private val api: TeamCityApi,
         }
     }
 
-    private fun getBuilds() = if (isAnyProjectSelected())
-        api.getBuildsForProjects(getSelectedProjectsIds()) else api.getBuilds()
+    private fun getAllBuilds() = Singles.zip(
+            api.getQueuedBuilds(),
+            getFinishedBuilds(),
+            zipper = { queued, finished -> queued + finished })
+
+    private fun getFinishedBuilds() =
+            if (isAnyProjectSelected()) api.getBuildsForProjects(getSelectedProjectsIds())
+            else api.getBuilds()
 
     private fun isAnyProjectSelected() = buildsRepository.selectedProjects.isNotEmpty()
 

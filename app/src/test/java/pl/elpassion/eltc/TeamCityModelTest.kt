@@ -29,6 +29,7 @@ class TeamCityModelTest {
     fun setup() {
         whenever(api.getProjects()).thenNever()
         whenever(api.getBuilds()).thenNever()
+        whenever(api.getQueuedBuilds()).thenNever()
         model.state.subscribe(observer)
     }
 
@@ -66,9 +67,25 @@ class TeamCityModelTest {
                 createProject(id = "Project1"),
                 createProject(id = "Project2"))
         whenever(api.getBuilds()).thenJust(buildList)
+        whenever(api.getQueuedBuilds()).thenJust(emptyList())
         whenever(api.getProjects()).thenJust(projectList)
         model.perform(SubmitCredentials(TEAMCITY_ADDRESS, CREDENTIALS))
         observer.assertLastValue(BuildsState(buildList, projectList))
+    }
+
+    @Test
+    fun `Display queued and finished builds from api`() {
+        val queuedBuilds = listOf(
+                createBuild(id = 700),
+                createBuild(id = 701))
+        val finishedBuilds = listOf(
+                createBuild(id = 668),
+                createBuild(id = 669))
+        whenever(api.getQueuedBuilds()).thenJust(queuedBuilds)
+        whenever(api.getBuilds()).thenJust(finishedBuilds)
+        whenever(api.getProjects()).thenJust(emptyList())
+        model.perform(SubmitCredentials(TEAMCITY_ADDRESS, CREDENTIALS))
+        observer.assertLastValue(BuildsState(queuedBuilds + finishedBuilds, emptyList()))
     }
 
     @Test
@@ -157,6 +174,7 @@ class TeamCityModelTest {
                 createProject(id = "Project2"))
         whenever(api.getProjects()).thenJust(allProjects)
         whenever(api.getBuilds()).thenJust(emptyList())
+        whenever(api.getQueuedBuilds()).thenJust(emptyList())
         stubLoginRepositoryToReturnAuthData()
         model.perform(StartApp)
         model.perform(SelectProjects)
@@ -172,6 +190,7 @@ class TeamCityModelTest {
         val allProjects = listOf(project1, project2)
         whenever(api.getProjects()).thenJust(allProjects)
         whenever(api.getBuildsForProjects(any())).thenJust(emptyList())
+        whenever(api.getQueuedBuilds()).thenJust(emptyList())
         stubLoginRepositoryToReturnAuthData()
         whenever(buildsRepository.selectedProjects).thenReturn(selectedProjects)
         model.perform(StartApp)
@@ -193,6 +212,7 @@ class TeamCityModelTest {
         val allProjects = selectedProjects + listOf(createProject(id = "Project3"))
         whenever(api.getProjects()).thenJust(allProjects)
         whenever(api.getBuildsForProjects(any())).thenJust(listOf(allBuilds[0], allBuilds[1]))
+        whenever(api.getQueuedBuilds()).thenJust(emptyList())
         stubLoginRepositoryToReturnAuthData()
         whenever(buildsRepository.selectedProjects).thenReturn(selectedProjects)
         model.perform(StartApp)
