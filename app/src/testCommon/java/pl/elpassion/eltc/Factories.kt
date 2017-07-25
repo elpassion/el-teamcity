@@ -3,10 +3,13 @@ package pl.elpassion.eltc
 import pl.elpassion.eltc.builds.SelectableProject
 import java.util.*
 
-fun createBuild(id: Int = 1, number: Int = 7, state: String = "finished") = Build(
+fun createBuild(id: Int = 1,
+                number: Int = 7,
+                state: String = "finished",
+                status: String = "SUCCESS") = Build(
         id = id,
         number = number,
-        status = "SUCCESS",
+        status = status,
         state = state,
         branchName = "master",
         webUrl = "webUrl",

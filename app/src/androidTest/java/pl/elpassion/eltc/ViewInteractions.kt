@@ -1,11 +1,13 @@
 package pl.elpassion.eltc
 
+import android.support.annotation.DrawableRes
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.ViewInteraction
 import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.matcher.ViewMatchers
 import android.support.test.espresso.matcher.ViewMatchers.withEffectiveVisibility
 import android.support.test.espresso.matcher.ViewMatchers.withText
+import com.elpassion.android.commons.espresso.matchers.withImage
 import org.hamcrest.Matchers.startsWith
 import org.hamcrest.core.IsNot.not
 
@@ -17,3 +19,5 @@ fun ViewInteraction.isClickable(): ViewInteraction = check(matches(ViewMatchers.
 fun ViewInteraction.isNotClickable(): ViewInteraction = check(matches(not(ViewMatchers.isClickable())))
 
 fun onTextStartingWith(text: String): ViewInteraction = onView(withText(startsWith(text)))
+
+fun onImage(@DrawableRes imageId: Int): ViewInteraction = onView(withImage(imageId))

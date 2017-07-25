@@ -73,10 +73,11 @@ class BuildsActivity : BaseActivity() {
             "finished" -> "Build finished ${prettyTime.format(item.finishDate)}"
             else -> null
         }
-        buildStatusIcon.setImageResource(when (item.status) {
+        buildStatusBg.setImageResource(when (item.status) {
             "SUCCESS" -> R.drawable.build_success_icon
             else -> R.drawable.build_failure_icon
         })
+        buildStatusIcon.setImageResource(R.drawable.ic_success)
     }
 
     private fun openLoginScreen() {

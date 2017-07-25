@@ -64,6 +64,12 @@ class BuildsActivityTest {
     }
 
     @Test
+    fun Display_success_status_of_finished_build() {
+        states.onNext(BuildsState(listOf(createBuild(status = "SUCCESS")), emptyList()))
+        onImage(R.drawable.ic_success).isDisplayed()
+    }
+
+    @Test
     fun Hide_loader_on_new_data() {
         states.onNext(LoadingState)
         states.onNext(BuildsState(listOf(createBuild(number = 76)), emptyList()))
