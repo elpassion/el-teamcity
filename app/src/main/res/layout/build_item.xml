@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            tools:src="@drawable/build_success_icon" />
+            tools:src="@drawable/build_success_bg" />
 
         <ImageView
             android:id="@+id/buildStatusIcon"

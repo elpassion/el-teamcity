@@ -74,7 +74,7 @@ class BuildsActivity : BaseActivity() {
             else -> null
         }
         buildStatusBg.setImageResource(when (item.status) {
-            "SUCCESS" -> R.drawable.build_success_icon
+            "SUCCESS" -> R.drawable.build_success_bg
             else -> R.drawable.build_failure_icon
         })
         buildStatusIcon.setImageResource(R.drawable.ic_success)
