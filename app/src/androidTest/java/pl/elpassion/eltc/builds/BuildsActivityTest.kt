@@ -40,9 +40,9 @@ class BuildsActivityTest {
     }
 
     @Test
-    fun Display_builds_screen_with_provided_data() {
+    fun Display_build_number_if_available() {
         states.onNext(BuildsState(listOf(createBuild(number = 76)), emptyList()))
-        onText("#76").isDisplayed()
+        onTextStartingWith("#76").isDisplayed()
     }
 
     @Test

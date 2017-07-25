@@ -58,14 +58,14 @@ class BuildsActivity : BaseActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun bindItem(holder: ViewHolderBinder<Build>, item: Build) = with(holder.itemView) {
-        projectName.text = item.buildType.projectName
+        val projectNamePrefix = if(item.number != null) "#${item.number} " else ""
+        projectName.text = projectNamePrefix + item.buildType.projectName
         if (item.branchName.isNullOrBlank()) {
             branchName.hide()
         } else {
             branchName.text = item.branchName
             branchName.show()
         }
-        buildNumber.text = "#${item.number}"
         buildName.text = item.statusText
         buildDetails.text = when (item.state) {
             "queued" -> "Build queued ${prettyTime.format(item.queuedDate)}"

@@ -92,7 +92,7 @@ class LoginActivityTest {
     fun Display_builds_screen_with_provided_data() {
         states.onNext(BuildsState(listOf(createBuild(number = 76)), emptyList()))
         checkIntent(BuildsActivity::class.java)
-        onText("#76").isDisplayed()
+        onTextStartingWith("#76").isDisplayed()
     }
 
     @Test
