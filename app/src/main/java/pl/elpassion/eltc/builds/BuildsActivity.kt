@@ -58,8 +58,7 @@ class BuildsActivity : BaseActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun bindItem(holder: ViewHolderBinder<Build>, item: Build) = with(holder.itemView) {
-        val projectNamePrefix = if(item.number != null) "#${item.number} " else ""
-        projectName.text = projectNamePrefix + item.buildType.projectName
+        projectName.text = getProjectName(item)
         if (item.branchName.isNullOrBlank()) {
             branchName.hide()
         } else {
@@ -72,31 +71,41 @@ class BuildsActivity : BaseActivity() {
             buildName.text = item.statusText
             buildName.show()
         }
-        buildDetails.text = when (item.state) {
-            "queued" -> "Build queued ${prettyTime.format(item.queuedDate)}"
-            "running" -> "Build started ${prettyTime.format(item.startDate)}"
-            "finished" -> "Build finished ${prettyTime.format(item.finishDate)}"
-            else -> null
-        }
+        buildDetails.text = getBuildDetails(item)
         if (item.state == "running") {
             buildStatusBg.hide()
             buildStatusIcon.hide()
             buildProgressBar.show()
         } else {
             buildProgressBar.hide()
+            buildStatusBg.setImageResource(getBuildStatusBgResId(item))
             buildStatusBg.show()
-            buildStatusBg.setImageResource(when {
-                item.state == "queued" -> R.drawable.build_queued_bg
-                item.status == "SUCCESS" -> R.drawable.build_success_bg
-                else -> R.drawable.build_failure_bg
-            })
+            buildStatusIcon.setImageResource(getBuildStatusIconResId(item))
             buildStatusIcon.show()
-            buildStatusIcon.setImageResource(when {
-                item.state == "queued" -> R.drawable.ic_queued
-                item.status == "SUCCESS" -> R.drawable.ic_success
-                else -> R.drawable.ic_failure
-            })
         }
+    }
+
+    private fun getProjectName(item: Build) = getProjectNamePrefix(item) + item.buildType.projectName
+
+    private fun getProjectNamePrefix(item: Build) = if (item.number != null) "#${item.number} " else ""
+
+    private fun getBuildDetails(item: Build) = when (item.state) {
+        "queued" -> "Build queued ${prettyTime.format(item.queuedDate)}"
+        "running" -> "Build started ${prettyTime.format(item.startDate)}"
+        "finished" -> "Build finished ${prettyTime.format(item.finishDate)}"
+        else -> null
+    }
+
+    private fun getBuildStatusBgResId(item: Build) = when {
+        item.state == "queued" -> R.drawable.build_queued_bg
+        item.status == "SUCCESS" -> R.drawable.build_success_bg
+        else -> R.drawable.build_failure_bg
+    }
+
+    private fun getBuildStatusIconResId(item: Build): Int = when {
+        item.state == "queued" -> R.drawable.ic_queued
+        item.status == "SUCCESS" -> R.drawable.ic_success
+        else -> R.drawable.ic_failure
     }
 
     private fun openLoginScreen() {
