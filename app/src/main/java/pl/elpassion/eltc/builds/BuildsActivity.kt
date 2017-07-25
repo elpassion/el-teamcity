@@ -80,13 +80,15 @@ class BuildsActivity : BaseActivity() {
         } else {
             buildProgressBar.hide()
             buildStatusBg.show()
-            buildStatusBg.setImageResource(when (item.status) {
-                "SUCCESS" -> R.drawable.build_success_bg
+            buildStatusBg.setImageResource(when {
+                item.state == "queued" -> R.drawable.build_queued_bg
+                item.status == "SUCCESS" -> R.drawable.build_success_bg
                 else -> R.drawable.build_failure_bg
             })
             buildStatusIcon.show()
-            buildStatusIcon.setImageResource(when (item.status) {
-                "SUCCESS" -> R.drawable.ic_success
+            buildStatusIcon.setImageResource(when {
+                item.state == "queued" -> R.drawable.ic_queued
+                item.status == "SUCCESS" -> R.drawable.ic_success
                 else -> R.drawable.ic_failure
             })
         }
