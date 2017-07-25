@@ -58,6 +58,12 @@ class BuildsActivityTest {
     }
 
     @Test
+    fun Display_state_of_started_build() {
+        states.onNext(BuildsState(listOf(createBuild(state = "started")), emptyList()))
+        onTextStartingWith("Build started").isDisplayed()
+    }
+
+    @Test
     fun Hide_loader_on_new_data() {
         states.onNext(LoadingState)
         states.onNext(BuildsState(listOf(createBuild(number = 76)), emptyList()))

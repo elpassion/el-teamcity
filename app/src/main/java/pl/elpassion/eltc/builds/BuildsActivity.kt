@@ -69,6 +69,7 @@ class BuildsActivity : BaseActivity() {
         buildName.text = item.statusText
         buildDetails.text = when (item.state) {
             "queued" -> "Build queued ${prettyTime.format(item.queuedDate)}"
+            "running" -> "Build started ${prettyTime.format(item.startDate)}"
             "finished" -> "Build finished ${prettyTime.format(item.finishDate)}"
             else -> null
         }
