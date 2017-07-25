@@ -84,10 +84,10 @@ class TeamCityModelImpl(private val api: TeamCityApi,
 
     private fun getAllBuilds() = Singles.zip(
             api.getQueuedBuilds(),
-            getFinishedBuilds(),
+            getStartedBuilds(),
             zipper = { queued, finished -> queued + finished })
 
-    private fun getFinishedBuilds() =
+    private fun getStartedBuilds() =
             if (isAnyProjectSelected()) api.getBuildsForProjects(getSelectedProjectsIds())
             else api.getBuilds()
 

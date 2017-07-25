@@ -30,14 +30,14 @@ object TeamCityApiImpl : TeamCityApi {
 
     private var service by Delegates.notNull<Service>()
 
-    private const val BRANCH_LOCATOR = "branch:default:any"
+    private const val BUILDS_LOCATOR = "branch:default:any,running:any"
 
     override fun setAddress(url: String) {
         service = newRetrofit(url).create(Service::class.java)
     }
 
     override fun getBuilds(): Single<List<Build>> =
-            service.getBuilds(credentials, BRANCH_LOCATOR).mapApiErrors().map(BuildsResponse::build)
+            service.getBuilds(credentials, BUILDS_LOCATOR).mapApiErrors().map(BuildsResponse::build)
 
     override fun getQueuedBuilds(): Single<List<Build>> =
             service.getQueuedBuilds(credentials).mapApiErrors().map(BuildsResponse::build)
@@ -46,7 +46,7 @@ object TeamCityApiImpl : TeamCityApi {
             zipSingles(projectIds.map { getBuildsForProject(it) }, sortDescBy = { it.queuedDate })
 
     private fun getBuildsForProject(projectId: String) =
-            service.getBuilds(credentials, "project:(id:$projectId),$BRANCH_LOCATOR").mapApiErrors().map(BuildsResponse::build)
+            service.getBuilds(credentials, "project:(id:$projectId),$BUILDS_LOCATOR").mapApiErrors().map(BuildsResponse::build)
 
     override fun getBuild(id: Int): Single<Build> =
             service.getBuild(credentials, id).mapApiErrors()

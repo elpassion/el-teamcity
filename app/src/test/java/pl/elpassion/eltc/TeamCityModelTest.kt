@@ -74,18 +74,18 @@ class TeamCityModelTest {
     }
 
     @Test
-    fun `Display queued and finished builds from api`() {
+    fun `Display queued and started builds from api`() {
         val queuedBuilds = listOf(
                 createBuild(id = 700),
                 createBuild(id = 701))
-        val finishedBuilds = listOf(
+        val startedBuilds = listOf(
                 createBuild(id = 668),
                 createBuild(id = 669))
         whenever(api.getQueuedBuilds()).thenJust(queuedBuilds)
-        whenever(api.getBuilds()).thenJust(finishedBuilds)
+        whenever(api.getBuilds()).thenJust(startedBuilds)
         whenever(api.getProjects()).thenJust(emptyList())
         model.perform(SubmitCredentials(TEAMCITY_ADDRESS, CREDENTIALS))
-        observer.assertLastValue(BuildsState(queuedBuilds + finishedBuilds, emptyList()))
+        observer.assertLastValue(BuildsState(queuedBuilds + startedBuilds, emptyList()))
     }
 
     @Test
