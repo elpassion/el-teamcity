@@ -22,7 +22,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            tools:src="@drawable/ic_success"/>
+            tools:src="@drawable/ic_success" />
+
+        <ProgressBar
+            android:id="@+id/buildProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminateTint="@color/success"
+            android:visibility="gone" />
 
     </FrameLayout>
 
@@ -51,12 +59,12 @@
                 android:id="@+id/branchName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:background="@drawable/branch_background"
                 android:padding="2dp"
                 android:textColor="@android:color/black"
-                android:layout_marginStart="4dp"
                 android:textSize="10sp"
-                android:background="@drawable/branch_background"
-                tools:text="master"/>
+                tools:text="master" />
 
         </LinearLayout>
 
@@ -73,7 +81,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:singleLine="true"
-            tools:text="Build finished moments ago"/>
+            tools:text="Build finished moments ago" />
 
     </LinearLayout>
 

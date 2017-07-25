@@ -78,6 +78,14 @@ class BuildsActivityTest {
     }
 
     @Test
+    fun Display_progress_status_of_started_build() {
+        states.onNext(BuildsState(listOf(createBuild(state = "running")), emptyList()))
+        onId(R.id.buildStatusBg).isNotDisplayed()
+        onId(R.id.buildStatusIcon).isNotDisplayed()
+        onId(R.id.buildProgressBar).isDisplayed()
+    }
+
+    @Test
     fun Hide_loader_on_new_data() {
         states.onNext(LoadingState)
         states.onNext(BuildsState(listOf(createBuild(number = 76)), emptyList()))
