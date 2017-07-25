@@ -29,6 +29,13 @@ class TeamCityRealApiTest {
     }
 
     @Test
+    fun `Get queued builds after call to real TeamCity API`() {
+        teamCityApi
+                .getQueuedBuilds()
+                .getAndPrint()
+    }
+
+    @Test
     fun `Get builds of the specified project after call to real TeamCity API`() {
         teamCityApi
                 .getBuildsForProjects(projectIds = listOf("TeamcityAndroidClient"))

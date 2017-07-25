@@ -17,6 +17,7 @@ interface TeamCityApi {
     var credentials: String
     fun setAddress(url: String)
     fun getBuilds(): Single<List<Build>>
+    fun getQueuedBuilds(): Single<List<Build>>
     fun getBuildsForProjects(projectIds: List<String>): Single<List<Build>>
     fun getBuild(id: Int): Single<Build>
     fun getTests(buildId: Int): Single<List<Test>>
@@ -38,8 +39,11 @@ object TeamCityApiImpl : TeamCityApi {
     override fun getBuilds(): Single<List<Build>> =
             service.getBuilds(credentials, BRANCH_LOCATOR).mapApiErrors().map(BuildsResponse::build)
 
+    override fun getQueuedBuilds(): Single<List<Build>> =
+            service.getQueuedBuilds(credentials).mapApiErrors().map(BuildsResponse::build)
+
     override fun getBuildsForProjects(projectIds: List<String>): Single<List<Build>> =
-            zipSingles(projectIds.map { getBuildsForProject(it) }, sortDescBy = { it.finishDate })
+            zipSingles(projectIds.map { getBuildsForProject(it) }, sortDescBy = { it.queuedDate })
 
     private fun getBuildsForProject(projectId: String) =
             service.getBuilds(credentials, "project:(id:$projectId),$BRANCH_LOCATOR").mapApiErrors().map(BuildsResponse::build)
@@ -65,6 +69,9 @@ object TeamCityApiImpl : TeamCityApi {
 
         @GET("httpAuth/app/rest/builds?fields=build($BUILD_FIELDS)")
         fun getBuilds(@Header("Authorization") credentials: String, @Query("locator") locator: String): Single<BuildsResponse>
+
+        @GET("httpAuth/app/rest/buildQueue?fields=build($BUILD_FIELDS)")
+        fun getQueuedBuilds(@Header("Authorization") credentials: String): Single<BuildsResponse>
 
         @GET("httpAuth/app/rest/builds/id:{id}?fields=$BUILD_FIELDS")
         fun getBuild(@Header("Authorization") credentials: String, @Path("id") id: Int): Single<Build>

@@ -4,15 +4,15 @@ import java.util.*
 
 data class Build(
         val id: Int,
-        val number: Int,
-        val status: String,
+        val number: Int?,
+        val status: String?,
         val state: String,
         val branchName: String?,
         val webUrl: String,
-        val statusText: String,
+        val statusText: String?,
         val queuedDate: Date,
-        val startDate: Date,
-        val finishDate: Date,
+        val startDate: Date?,
+        val finishDate: Date?,
         val buildType: BuildType
 )
 
