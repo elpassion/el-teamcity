@@ -67,7 +67,10 @@ class BuildsActivity : BaseActivity() {
         }
         buildNumber.text = "#${item.number}"
         buildName.text = item.statusText
-        buildDetails.text = "Build ${item.state} ${prettyTime.format(item.finishDate)}"
+        buildDetails.text = when (item.state) {
+            "finished" -> "Build finished ${prettyTime.format(item.finishDate)}"
+            else -> null
+        }
         buildStatusIcon.setImageResource(when (item.status) {
             "SUCCESS" -> R.drawable.build_success_icon
             else -> R.drawable.build_failure_icon
