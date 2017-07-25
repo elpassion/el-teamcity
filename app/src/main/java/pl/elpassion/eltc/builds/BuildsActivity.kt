@@ -75,9 +75,12 @@ class BuildsActivity : BaseActivity() {
         }
         buildStatusBg.setImageResource(when (item.status) {
             "SUCCESS" -> R.drawable.build_success_bg
-            else -> R.drawable.build_failure_icon
+            else -> R.drawable.build_failure_bg
         })
-        buildStatusIcon.setImageResource(R.drawable.ic_success)
+        buildStatusIcon.setImageResource(when (item.status) {
+            "SUCCESS" -> R.drawable.ic_success
+            else -> R.drawable.ic_failure
+        })
     }
 
     private fun openLoginScreen() {
