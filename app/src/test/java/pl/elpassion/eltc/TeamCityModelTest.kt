@@ -247,6 +247,13 @@ class TeamCityModelTest {
     }
 
     @Test
+    fun `Load builds list on return to list`() {
+        stubLoginRepositoryToReturnAuthData()
+        model.perform(ReturnToList)
+        observer.assertLastValue(LoadingState)
+    }
+
+    @Test
     fun `Display login on logout`() {
         model.perform(Logout)
         observer.assertLastValue(LoginState())

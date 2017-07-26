@@ -33,6 +33,7 @@ class TeamCityModelImpl(private val api: TeamCityApi,
         is SelectProjects -> selectProjects()
         is SubmitProjects -> submitProjects(action.projects)
         is SelectBuild -> goTo(BuildDetailsState(action.build))
+        is ReturnToList -> loadBuilds()
         is Logout -> logout()
     }
 

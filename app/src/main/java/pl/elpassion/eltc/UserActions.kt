@@ -6,6 +6,7 @@ object StartApp : UserAction()
 object AcceptLoginError : UserAction()
 object RefreshList : UserAction()
 object SelectProjects : UserAction()
+object ReturnToList : UserAction()
 object Logout : UserAction()
 
 data class SubmitCredentials(
