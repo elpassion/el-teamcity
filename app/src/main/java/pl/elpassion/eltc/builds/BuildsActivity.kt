@@ -67,6 +67,7 @@ class BuildsActivity : BaseActivity() {
         bindBuildName(buildName, item)
         buildDetails.text = getBuildDetails(item)
         bindBuildStatus(buildStatusBg, buildStatusIcon, buildProgressBar, item)
+        setOnClickListener { model.perform(SelectBuild(item)) }
     }
 
     @SuppressLint("SetTextI18n")

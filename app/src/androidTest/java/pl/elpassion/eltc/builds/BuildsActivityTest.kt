@@ -173,6 +173,16 @@ class BuildsActivityTest {
     }
 
     @Test
+    fun Select_build_on_click() {
+        val selectedBuild = createBuild(number = "7")
+        states.onNext(BuildsState(listOf(selectedBuild), emptyList()))
+        onText("#7").click()
+        verify(model).perform(argThat {
+            this is SelectBuild && selectedBuild == selectedBuild
+        })
+    }
+
+    @Test
     fun Perform_logout_action() {
         states.onNext(BuildsState(emptyList(), emptyList()))
         Espresso.openContextualActionModeOverflowMenu()
