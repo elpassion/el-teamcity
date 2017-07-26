@@ -74,8 +74,7 @@ class TeamCityModelImpl(private val api: TeamCityApi,
             }
 
     private val onError: (Throwable) -> Unit = { error ->
-        loginRepository.authData = null
-        buildsRepository.selectedProjects = emptyList()
+        clearRepository()
         if (error is TeamCityApiException) {
             goTo(error.toState())
         } else {
@@ -122,9 +121,13 @@ class TeamCityModelImpl(private val api: TeamCityApi,
     }
 
     private fun logout() {
+        clearRepository()
+        goTo(LoginState())
+    }
+
+    private fun clearRepository() {
         loginRepository.authData = null
         buildsRepository.selectedProjects = emptyList()
-        goTo(LoginState())
     }
 
     private fun TeamCityApiException.toState() = LoginState(error = when (this) {
