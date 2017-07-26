@@ -145,6 +145,7 @@ class BuildsActivity : BaseActivity() {
 
     private fun openDetailsScreen() {
         startActivity(Intent(this, DetailsActivity::class.java))
+        finish()
     }
 
     private fun showBuilds(builds: List<Build>) {

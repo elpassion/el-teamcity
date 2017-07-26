@@ -7,6 +7,7 @@ import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.*
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -192,6 +193,7 @@ class BuildsActivityTest {
     fun Open_build_details() {
         states.onNext(BuildDetailsState(createBuild()))
         checkIntent(DetailsActivity::class.java)
+        assertTrue(activityRule.activity.isFinishing)
     }
 
     @Test
