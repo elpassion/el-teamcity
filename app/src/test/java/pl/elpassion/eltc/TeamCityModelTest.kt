@@ -114,6 +114,13 @@ class TeamCityModelTest {
     }
 
     @Test
+    fun `Clear selected projects in repository on login error`() {
+        whenever(api.getBuilds()).thenError(UnknownHostException)
+        model.perform(SubmitCredentials(TEAMCITY_ADDRESS, CREDENTIALS))
+        verify(buildsRepository).selectedProjects = emptyList()
+    }
+
+    @Test
     fun `Start loading if credentials are available in repository on app start`() {
         stubLoginRepositoryToReturnAuthData()
         model.perform(StartApp)
