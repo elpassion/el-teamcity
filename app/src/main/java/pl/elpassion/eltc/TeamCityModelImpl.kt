@@ -64,8 +64,7 @@ class TeamCityModelImpl(private val api: TeamCityApi,
 
     private fun getBuildsAndProjects() {
         goTo(LoadingState)
-        Singles.zip(getAllBuilds(), api.getProjects(),
-                zipper = { builds, projects -> builds to projects })
+        Singles.zip(getAllBuilds(), api.getProjects())
                 .subscribe(onBuildsAndProjects, onError)
     }
 
