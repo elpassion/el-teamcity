@@ -58,7 +58,13 @@ class BuildsActivity : BaseActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun bindItem(holder: ViewHolderBinder<Build>, item: Build) = with(holder.itemView) {
-        projectName.text = getProjectName(item)
+        if (item.number != null) {
+            buildNumber.text = "#${item.number}"
+            buildNumber.show()
+        } else {
+            buildNumber.hide()
+        }
+        projectName.text = item.buildType.projectName
         if (item.branchName.isNullOrBlank()) {
             branchName.hide()
         } else {
@@ -84,10 +90,6 @@ class BuildsActivity : BaseActivity() {
             buildStatusIcon.show()
         }
     }
-
-    private fun getProjectName(item: Build) = getProjectNamePrefix(item) + item.buildType.projectName
-
-    private fun getProjectNamePrefix(item: Build) = if (item.number != null) "#${item.number} " else ""
 
     private fun getBuildDetails(item: Build) = when (item.state) {
         "queued" -> "Build queued ${prettyTime.format(item.queuedDate)}"
