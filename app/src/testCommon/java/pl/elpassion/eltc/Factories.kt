@@ -4,7 +4,7 @@ import pl.elpassion.eltc.builds.SelectableProject
 import java.util.*
 
 fun createBuild(id: Int = 1,
-                number: Int = 7,
+                number: String = "7",
                 state: String = "finished",
                 status: String = "SUCCESS") = Build(
         id = id,

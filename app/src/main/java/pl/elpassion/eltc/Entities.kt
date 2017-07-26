@@ -4,7 +4,7 @@ import java.util.*
 
 data class Build(
         val id: Int,
-        val number: Int?,
+        val number: String?,
         val status: String?,
         val state: String,
         val branchName: String?,

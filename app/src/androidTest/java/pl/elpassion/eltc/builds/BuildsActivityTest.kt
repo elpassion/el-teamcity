@@ -41,7 +41,7 @@ class BuildsActivityTest {
 
     @Test
     fun Display_build_number_if_available() {
-        states.onNext(BuildsState(listOf(createBuild(number = 76)), emptyList()))
+        states.onNext(BuildsState(listOf(createBuild(number = "76")), emptyList()))
         onTextStartingWith("#76").isDisplayed()
     }
 
@@ -101,7 +101,7 @@ class BuildsActivityTest {
     @Test
     fun Hide_loader_on_new_data() {
         states.onNext(LoadingState)
-        states.onNext(BuildsState(listOf(createBuild(number = 76)), emptyList()))
+        states.onNext(BuildsState(listOf(createBuild(number = "76")), emptyList()))
         onId(R.id.loader).isNotDisplayed()
     }
 
