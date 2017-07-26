@@ -101,6 +101,7 @@ class BuildsActivity : BaseActivity() {
         if (item.state == "running") {
             bg.hide()
             icon.hide()
+            loader.progress = 0
             loader.show()
         } else {
             loader.hide()
