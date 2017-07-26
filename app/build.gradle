@@ -52,6 +52,9 @@ dependencies {
     implementation group: 'com.elpassion.android.commons', name: 'shared-preferences', version: android_commons_version
     implementation group: 'com.elpassion.android.commons', name: 'shared-preferences-moshi-converter-adapter', version: android_commons_version
     implementation group: 'org.ocpsoft.prettytime', name: 'prettytime', version: pretty_time_version
+    implementation(group: 'me.zhanghai.android.materialprogressbar', name: 'library', version: material_progressbar_version, {
+        exclude group: 'com.android.support'
+    })
 
     annotationProcessor group: 'android.arch.lifecycle', name: 'compiler', version: android_arch_version
 

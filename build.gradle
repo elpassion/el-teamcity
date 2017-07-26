@@ -17,6 +17,8 @@ buildscript {
     ext.android_commons_version = '0.0.20'
     ext.pretty_time_version = '3.2.7.Final'
     ext.rx_lifecycle_version = '2.1.0'
+    ext.material_progressbar_version = '1.4.1'
+    ext.multidex_version = '1.0.2'
     repositories {
         google()
         jcenter()
