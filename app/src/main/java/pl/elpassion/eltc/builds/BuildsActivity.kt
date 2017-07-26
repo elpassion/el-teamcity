@@ -18,6 +18,7 @@ import kotlinx.android.synthetic.main.build_item.view.*
 import kotlinx.android.synthetic.main.builds_activity.*
 import org.ocpsoft.prettytime.PrettyTime
 import pl.elpassion.eltc.*
+import pl.elpassion.eltc.details.DetailsActivity
 import pl.elpassion.eltc.login.LoginActivity
 import java.util.*
 
@@ -46,6 +47,7 @@ class BuildsActivity : BaseActivity() {
                 swipeToRefreshBuildsList.isRefreshing = false
                 showBuilds(state.builds)
             }
+            is BuildDetailsState -> openDetailsScreen()
             is SelectProjectsDialogState -> {
                 showSelectProjectsDialog(state.projects)
             }
@@ -135,6 +137,10 @@ class BuildsActivity : BaseActivity() {
     private fun openLoginScreen() {
         startActivity(Intent(this, LoginActivity::class.java))
         finish()
+    }
+
+    private fun openDetailsScreen() {
+        startActivity(Intent(this, DetailsActivity::class.java))
     }
 
     private fun showBuilds(builds: List<Build>) {

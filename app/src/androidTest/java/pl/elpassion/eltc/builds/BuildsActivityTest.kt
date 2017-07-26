@@ -15,6 +15,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import pl.elpassion.eltc.*
 import pl.elpassion.eltc.R
+import pl.elpassion.eltc.details.DetailsActivity
 
 @RunWith(AndroidJUnit4::class)
 class BuildsActivityTest {
@@ -180,6 +181,12 @@ class BuildsActivityTest {
         verify(model).perform(argThat {
             this is SelectBuild && selectedBuild == selectedBuild
         })
+    }
+
+    @Test
+    fun Open_build_details() {
+        states.onNext(BuildDetailsState(createBuild()))
+        checkIntent(DetailsActivity::class.java)
     }
 
     @Test
