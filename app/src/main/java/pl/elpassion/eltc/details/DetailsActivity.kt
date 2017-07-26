@@ -13,6 +13,11 @@ class DetailsActivity : BaseActivity() {
         initModel()
     }
 
+    override fun onBackPressed() {
+        model.perform(ReturnToList)
+        super.onBackPressed()
+    }
+
     override fun showState(state: AppState?) {
         if (state is BuildDetailsState) {
             showDetails(state.build)

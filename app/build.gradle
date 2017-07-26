@@ -61,11 +61,16 @@ dependencies {
     testImplementation group: 'junit', name: 'junit', version: junit_version
     testImplementation group: 'com.nhaarman', name: 'mockito-kotlin-kt1.1', version: mockito_kotlin_version
 
-    androidTestImplementation group: 'com.elpassion.android.commons', name: 'espresso', version: android_commons_version
+    androidTestImplementation(group: 'com.elpassion.android.commons', name: 'espresso', version: android_commons_version) {
+        exclude group: 'com.android.support.test.espresso'
+    }
     androidTestImplementation group: 'com.nhaarman', name: 'mockito-kotlin-kt1.1', version: mockito_kotlin_version
     androidTestImplementation group: 'org.mockito', name: 'mockito-android', version: mockito_android_version
     androidTestImplementation group: 'com.android.support.test', name: 'runner', version: runner_version
     androidTestImplementation(group: 'com.android.support.test.espresso', name: 'espresso-core', version: espresso_version, {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    androidTestImplementation(group: 'com.android.support.test.espresso', name: 'espresso-intents', version: espresso_version, {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 }
