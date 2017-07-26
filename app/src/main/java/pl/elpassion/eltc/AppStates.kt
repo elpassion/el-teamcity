@@ -5,7 +5,6 @@ import pl.elpassion.eltc.builds.SelectableProject
 sealed class AppState
 
 object InitialState : AppState()
-
 object LoadingState : AppState()
 
 data class LoginState(
