@@ -7,6 +7,9 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.ImageView
+import android.widget.ProgressBar
+import android.widget.TextView
 import com.elpassion.android.commons.recycler.adapters.basicAdapterWithLayoutAndBinder
 import com.elpassion.android.commons.recycler.basic.ViewHolderBinder
 import com.elpassion.android.view.hide
@@ -58,36 +61,53 @@ class BuildsActivity : BaseActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun bindItem(holder: ViewHolderBinder<Build>, item: Build) = with(holder.itemView) {
-        if (item.number != null) {
-            buildNumber.text = "#${item.number}"
-            buildNumber.show()
-        } else {
-            buildNumber.hide()
-        }
         projectName.text = item.buildType.projectName
-        if (item.branchName.isNullOrBlank()) {
-            branchName.hide()
-        } else {
-            branchName.text = item.branchName
-            branchName.show()
-        }
-        if (item.state == "queued") {
-            buildName.hide()
-        } else {
-            buildName.text = item.statusText
-            buildName.show()
-        }
+        bindBuildNumber(buildNumber, item.number)
+        bindBranchName(branchName, item.branchName)
+        bindBuildName(buildName, item)
         buildDetails.text = getBuildDetails(item)
-        if (item.state == "running") {
-            buildStatusBg.hide()
-            buildStatusIcon.hide()
-            buildProgressBar.show()
+        bindBuildStatus(buildStatusBg, buildStatusIcon, buildProgressBar, item)
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun bindBuildNumber(view: TextView, number: String?) {
+        if (number != null) {
+            view.text = "#$number"
+            view.show()
         } else {
-            buildProgressBar.hide()
-            buildStatusBg.setImageResource(getBuildStatusBgResId(item))
-            buildStatusBg.show()
-            buildStatusIcon.setImageResource(getBuildStatusIconResId(item))
-            buildStatusIcon.show()
+            view.hide()
+        }
+    }
+
+    private fun bindBranchName(view: TextView, branchName: String?) {
+        if (branchName.isNullOrBlank()) {
+            view.hide()
+        } else {
+            view.text = branchName
+            view.show()
+        }
+    }
+
+    private fun bindBuildName(view: TextView, item: Build) {
+        if (item.state == "queued") {
+            view.hide()
+        } else {
+            view.text = item.statusText
+            view.show()
+        }
+    }
+
+    private fun bindBuildStatus(bg: ImageView, icon: ImageView, loader: ProgressBar, item: Build) {
+        if (item.state == "running") {
+            bg.hide()
+            icon.hide()
+            loader.show()
+        } else {
+            loader.hide()
+            bg.setImageResource(getBuildStatusBgResId(item))
+            bg.show()
+            icon.setImageResource(getBuildStatusIconResId(item))
+            icon.show()
         }
     }
 
