@@ -4,10 +4,7 @@ import android.support.test.espresso.Espresso
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
 import com.elpassion.android.commons.espresso.*
-import com.nhaarman.mockito_kotlin.argThat
-import com.nhaarman.mockito_kotlin.doReturn
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockito_kotlin.*
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
 import org.junit.Rule
@@ -181,6 +178,14 @@ class BuildsActivityTest {
         verify(model).perform(argThat {
             this is SelectBuild && selectedBuild == selectedBuild
         })
+    }
+
+    @Test
+    fun Do_not_select_queued_build_on_click() {
+        val selectedBuild = createBuild(state = "queued")
+        states.onNext(BuildsState(listOf(selectedBuild), emptyList()))
+        onTextStartingWith("Build queued").click()
+        verify(model, never()).perform(argThat { this is SelectBuild })
     }
 
     @Test

@@ -28,7 +28,7 @@ class DetailsActivityTest {
     }
 
     @Test
-    fun Display_build_number_if_available() {
+    fun Display_build_number() {
         states.onNext(BuildDetailsState(createBuild(number = "76")))
         onText("#76").isDisplayed()
     }
