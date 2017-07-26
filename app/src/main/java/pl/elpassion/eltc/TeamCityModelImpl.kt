@@ -32,6 +32,7 @@ class TeamCityModelImpl(private val api: TeamCityApi,
         is AutoRefresh -> performAutoRefresh(action.isEnabled)
         is SelectProjects -> selectProjects()
         is SubmitProjects -> submitProjects(action.projects)
+        is SelectBuild -> goTo(BuildDetailsState(action.build))
         is Logout -> logout()
     }
 

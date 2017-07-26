@@ -240,6 +240,13 @@ class TeamCityModelTest {
     }
 
     @Test
+    fun `Display build details on build selected`() {
+        val build = createBuild(id = 7)
+        model.perform(SelectBuild(build))
+        observer.assertLastValue(BuildDetailsState(build))
+    }
+
+    @Test
     fun `Display login on logout`() {
         model.perform(Logout)
         observer.assertLastValue(LoginState())

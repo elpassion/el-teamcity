@@ -20,3 +20,7 @@ data class AutoRefresh(
 data class SubmitProjects(
         val projects: List<Project>
 ): UserAction()
+
+data class SelectBuild(
+        val build: Build
+): UserAction()
