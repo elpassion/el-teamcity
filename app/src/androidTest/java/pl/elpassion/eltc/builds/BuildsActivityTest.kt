@@ -2,35 +2,21 @@ package pl.elpassion.eltc.builds
 
 import android.support.test.espresso.Espresso
 import android.support.test.rule.ActivityTestRule
-import android.support.test.runner.AndroidJUnit4
 import com.elpassion.android.commons.espresso.*
-import com.nhaarman.mockito_kotlin.*
-import io.reactivex.subjects.BehaviorSubject
-import io.reactivex.subjects.Subject
+import com.nhaarman.mockito_kotlin.argThat
+import com.nhaarman.mockito_kotlin.never
+import com.nhaarman.mockito_kotlin.verify
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import pl.elpassion.eltc.*
 import pl.elpassion.eltc.R
 import pl.elpassion.eltc.details.DetailsActivity
 
-@RunWith(AndroidJUnit4::class)
-class BuildsActivityTest {
+class BuildsActivityTest : BaseActivityTest() {
 
     @JvmField @Rule
     val activityRule = ActivityTestRule(BuildsActivity::class.java)
-
-    @JvmField @Rule
-    val intents = InitIntentsRule()
-
-    val states: Subject<AppState> = BehaviorSubject.createDefault(InitialState)
-
-    val model: TeamCityModel = mock { on { state } doReturn states }
-
-    init {
-        DI.provideTeamCityModel = { model }
-    }
 
     @Test
     fun Display_loader_on_loading() {
