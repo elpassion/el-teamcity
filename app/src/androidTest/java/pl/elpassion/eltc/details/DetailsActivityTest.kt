@@ -31,6 +31,12 @@ class DetailsActivityTest : BaseActivityTest() {
     }
 
     @Test
+    fun Display_build_status_text() {
+        states.onNext(BuildDetailsState(createBuild(statusText = "Tests passed: 543")))
+        onText("Tests passed: 543").isDisplayed()
+    }
+
+    @Test
     fun Return_to_list_on_back_pressed() {
         states.onNext(BuildDetailsState(createBuild()))
         pressBackUnconditionally()
