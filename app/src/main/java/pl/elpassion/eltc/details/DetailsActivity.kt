@@ -35,4 +35,7 @@ class DetailsActivity : BaseActivity() {
 }
 
 private val Build.time: String
-    get() = "Started at: ${SimpleDateFormat("d MMM YY HH:mm:ss", Locale.US).format(startDate)}"
+    get() = "Started at: $startTime"
+
+private val Build.startTime: String?
+    get() = SimpleDateFormat("d MMM YY HH:mm:ss", Locale.US).format(startDate)
