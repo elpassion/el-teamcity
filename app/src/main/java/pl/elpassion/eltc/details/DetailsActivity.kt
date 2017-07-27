@@ -25,6 +25,7 @@ class DetailsActivity : BaseActivity() {
         when (state) {
             is BuildDetailsState -> showDetails(state.build)
             is LoadingState -> openBuildsScreen()
+            is WebBrowserState -> openWebBrowser(state.url)
         }
     }
 
