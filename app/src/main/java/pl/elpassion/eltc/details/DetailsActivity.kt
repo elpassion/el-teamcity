@@ -26,5 +26,6 @@ class DetailsActivity : BaseActivity() {
 
     private fun showDetails(build: Build) {
         toolbar.title = "#${build.number}"
+        projectName.text = build.buildType.projectName
     }
 }

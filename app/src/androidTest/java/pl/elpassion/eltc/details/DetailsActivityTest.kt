@@ -25,6 +25,12 @@ class DetailsActivityTest : BaseActivityTest() {
     }
 
     @Test
+    fun Display_build_project_name() {
+        states.onNext(BuildDetailsState(createBuild(projectName = "Project 1")))
+        onText("Project 1").isDisplayed()
+    }
+
+    @Test
     fun Return_to_list_on_back_pressed() {
         states.onNext(BuildDetailsState(createBuild()))
         pressBackUnconditionally()
