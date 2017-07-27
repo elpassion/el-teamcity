@@ -1,7 +1,6 @@
 package pl.elpassion.eltc.builds
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
@@ -18,8 +17,6 @@ import kotlinx.android.synthetic.main.build_item.view.*
 import kotlinx.android.synthetic.main.builds_activity.*
 import org.ocpsoft.prettytime.PrettyTime
 import pl.elpassion.eltc.*
-import pl.elpassion.eltc.details.DetailsActivity
-import pl.elpassion.eltc.login.LoginActivity
 import java.util.*
 
 class BuildsActivity : BaseActivity() {
@@ -136,16 +133,6 @@ class BuildsActivity : BaseActivity() {
         item.state == "queued" -> R.drawable.ic_queued
         item.status == "SUCCESS" -> R.drawable.ic_success
         else -> R.drawable.ic_failure
-    }
-
-    private fun openLoginScreen() {
-        startActivity(Intent(this, LoginActivity::class.java))
-        finish()
-    }
-
-    private fun openDetailsScreen() {
-        startActivity(Intent(this, DetailsActivity::class.java))
-        finish()
     }
 
     private fun showBuilds(builds: List<Build>) {
