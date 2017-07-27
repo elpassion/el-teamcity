@@ -35,7 +35,17 @@ class DetailsActivity : BaseActivity() {
 }
 
 private val Build.time: String
-    get() = "Started at: $startTime"
+    get() = if (finishDate != null) {
+        "Time: $totalTime"
+    } else {
+        "Started at: $startTime"
+    }
+
+private val Build.totalTime: String
+    get() = "$startTime - $finishTime"
 
 private val Build.startTime: String?
     get() = SimpleDateFormat("d MMM YY HH:mm:ss", Locale.US).format(startDate)
+
+private val Build.finishTime: String?
+    get() = SimpleDateFormat("HH:mm:ss", Locale.US).format(finishDate)

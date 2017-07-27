@@ -45,6 +45,14 @@ class DetailsActivityTest : BaseActivityTest() {
     }
 
     @Test
+    fun Display_time_of_finished_build() {
+        val startDate = Date(1501161085000)
+        val finishDate = Date(1501162510000)
+        states.onNext(BuildDetailsState(createBuild(startDate = startDate, finishDate = finishDate)))
+        onText("Time: 27 Jul 17 15:11:25 - 15:35:10").isDisplayed()
+    }
+
+    @Test
     fun Return_to_list_on_back_pressed() {
         states.onNext(BuildDetailsState(createBuild()))
         pressBackUnconditionally()
