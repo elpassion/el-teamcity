@@ -12,4 +12,5 @@
     <string name="logout">Logout</string>
     <string name="ok">OK</string>
     <string name="show_all">Show all</string>
+    <string name="open_in_browser">Open in browser</string>
 </resources>

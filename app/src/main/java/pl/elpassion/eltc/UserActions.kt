@@ -7,6 +7,7 @@ object AcceptLoginError : UserAction()
 object RefreshList : UserAction()
 object SelectProjects : UserAction()
 object ReturnToList : UserAction()
+object OpenInWebBrowser : UserAction()
 object Logout : UserAction()
 
 data class SubmitCredentials(
@@ -24,8 +25,4 @@ data class SubmitProjects(
 
 data class SelectBuild(
         val build: Build
-): UserAction()
-
-data class OpenInWebBrowser(
-        val url: String
 ): UserAction()

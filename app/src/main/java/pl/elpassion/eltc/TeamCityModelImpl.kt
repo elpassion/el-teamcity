@@ -34,7 +34,7 @@ class TeamCityModelImpl(private val api: TeamCityApi,
         is SubmitProjects -> submitProjects(action.projects)
         is SelectBuild -> goTo(BuildDetailsState(action.build))
         is ReturnToList -> loadBuilds()
-        is OpenInWebBrowser -> goTo(WebBrowserState(action.url))
+        is OpenInWebBrowser -> openWebBrowser()
         is Logout -> logout()
     }
 
@@ -120,6 +120,14 @@ class TeamCityModelImpl(private val api: TeamCityApi,
     private fun submitProjects(projects: List<Project>) {
         buildsRepository.selectedProjects = projects
         loadBuilds()
+    }
+
+    private fun openWebBrowser() {
+        state.firstElement().subscribe {
+            if (it is BuildDetailsState) {
+                goTo(WebBrowserState(it.build.webUrl))
+            }
+        }
     }
 
     private fun logout() {

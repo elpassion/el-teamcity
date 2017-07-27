@@ -1,6 +1,8 @@
 package pl.elpassion.eltc.details
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import kotlinx.android.synthetic.main.details_activity.*
 import pl.elpassion.eltc.*
 import java.text.SimpleDateFormat
@@ -31,6 +33,19 @@ class DetailsActivity : BaseActivity() {
         projectName.text = build.buildType.projectName
         buildStatusText.text = build.statusText
         buildTime.text = build.time
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.details_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.open_in_browser -> model.perform(OpenInWebBrowser)
+            else -> super.onOptionsItemSelected(item)
+        }
+        return true
     }
 }
 

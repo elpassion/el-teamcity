@@ -2,15 +2,14 @@ package pl.elpassion.eltc.details
 
 import android.support.test.espresso.Espresso.pressBackUnconditionally
 import android.support.test.rule.ActivityTestRule
-import com.elpassion.android.commons.espresso.checkIntent
-import com.elpassion.android.commons.espresso.isDisplayed
-import com.elpassion.android.commons.espresso.onText
+import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.argThat
 import com.nhaarman.mockito_kotlin.verify
 import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.eltc.*
+import pl.elpassion.eltc.R
 import pl.elpassion.eltc.builds.BuildsActivity
 import java.util.*
 
@@ -58,6 +57,13 @@ class DetailsActivityTest : BaseActivityTest() {
         val finishDate = Date(1501247484000)
         states.onNext(BuildDetailsState(createBuild(startDate = startDate, finishDate = finishDate)))
         onText("Time: 27 Jul 17 15:11:25 - 28 Jul 17 15:11:24").isDisplayed()
+    }
+
+    @Test
+    fun Open_build_in_web_browser() {
+        states.onNext(BuildDetailsState(createBuild()))
+        onId(R.id.open_in_browser).click()
+        verify(model).perform(argThat { this is OpenInWebBrowser })
     }
 
     @Test
