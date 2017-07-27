@@ -48,4 +48,8 @@ private val Build.startTime: String?
     get() = SimpleDateFormat("d MMM YY HH:mm:ss", Locale.US).format(startDate)
 
 private val Build.finishTime: String?
-    get() = SimpleDateFormat("HH:mm:ss", Locale.US).format(finishDate)
+    get() = if (startDate?.day == finishDate?.day) {
+        SimpleDateFormat("HH:mm:ss", Locale.US).format(finishDate)
+    } else {
+        SimpleDateFormat("d MMM YY HH:mm:ss", Locale.US).format(finishDate)
+    }
