@@ -3,6 +3,8 @@ package pl.elpassion.eltc.details
 import android.os.Bundle
 import kotlinx.android.synthetic.main.details_activity.*
 import pl.elpassion.eltc.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 class DetailsActivity : BaseActivity() {
 
@@ -28,5 +30,9 @@ class DetailsActivity : BaseActivity() {
         toolbar.title = "#${build.number}"
         projectName.text = build.buildType.projectName
         buildStatusText.text = build.statusText
+        buildTime.text = build.time
     }
 }
+
+private val Build.time: String
+    get() = "Started at: ${SimpleDateFormat("d MMM YY HH:mm:ss", Locale.US).format(startDate)}"

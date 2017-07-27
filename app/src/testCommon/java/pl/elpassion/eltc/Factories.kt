@@ -8,7 +8,9 @@ fun createBuild(id: Int = 1,
                 state: String = "finished",
                 status: String = "SUCCESS",
                 projectName: String = "Teamcity Android Client",
-                statusText: String = "Tests passed: 1") = Build(
+                statusText: String = "Tests passed: 1",
+                startDate: Date = Date(),
+                finishDate: Date? = Date()) = Build(
         id = id,
         number = number,
         status = status,
@@ -17,8 +19,8 @@ fun createBuild(id: Int = 1,
         webUrl = "webUrl",
         statusText = statusText,
         queuedDate = Date(),
-        startDate = Date(),
-        finishDate = Date(),
+        startDate = startDate,
+        finishDate = finishDate,
         buildType = createBuildType(projectName))
 
 fun createBuildType(projectName: String = "Teamcity Android Client") = BuildType(

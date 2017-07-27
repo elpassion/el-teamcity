@@ -12,6 +12,7 @@ import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.eltc.*
 import pl.elpassion.eltc.builds.BuildsActivity
+import java.util.*
 
 class DetailsActivityTest : BaseActivityTest() {
 
@@ -34,6 +35,13 @@ class DetailsActivityTest : BaseActivityTest() {
     fun Display_build_status_text() {
         states.onNext(BuildDetailsState(createBuild(statusText = "Tests passed: 543")))
         onText("Tests passed: 543").isDisplayed()
+    }
+
+    @Test
+    fun Display_time_of_not_finished_build() {
+        val startDate = Date(1501161085000)
+        states.onNext(BuildDetailsState(createBuild(startDate = startDate, finishDate = null)))
+        onText("Started at: 27 Jul 17 15:11:25").isDisplayed()
     }
 
     @Test
