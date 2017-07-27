@@ -25,3 +25,7 @@ data class SubmitProjects(
 data class SelectBuild(
         val build: Build
 ): UserAction()
+
+data class OpenInWebBrowser(
+        val url: String
+): UserAction()

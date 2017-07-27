@@ -247,6 +247,13 @@ class TeamCityModelTest {
     }
 
     @Test
+    fun `Display url in web browser on open in web browser action`() {
+        val url = "http://teamcity/buildUrl"
+        model.perform(OpenInWebBrowser(url))
+        observer.assertLastValue(WebBrowserState(url))
+    }
+
+    @Test
     fun `Load builds list on return to list`() {
         stubLoginRepositoryToReturnAuthData()
         model.perform(ReturnToList)

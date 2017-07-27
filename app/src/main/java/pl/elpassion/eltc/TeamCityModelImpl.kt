@@ -34,6 +34,7 @@ class TeamCityModelImpl(private val api: TeamCityApi,
         is SubmitProjects -> submitProjects(action.projects)
         is SelectBuild -> goTo(BuildDetailsState(action.build))
         is ReturnToList -> loadBuilds()
+        is OpenInWebBrowser -> goTo(WebBrowserState(action.url))
         is Logout -> logout()
     }
 

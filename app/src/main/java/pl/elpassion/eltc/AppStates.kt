@@ -32,3 +32,7 @@ data class SelectProjectsDialogState(
 data class BuildDetailsState(
         val build: Build
 ) : AppState()
+
+data class WebBrowserState(
+        val url: String
+) : AppState()
