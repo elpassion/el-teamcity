@@ -3,6 +3,7 @@ package pl.elpassion.eltc.details
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.TextView
 import com.elpassion.android.view.hide
 import com.elpassion.android.view.show
 import kotlinx.android.synthetic.main.details_activity.*
@@ -29,7 +30,10 @@ class DetailsActivity : BaseActivity() {
                 loader.show()
                 showBuild(state.build)
             }
-            is DetailsState -> loader.hide()
+            is DetailsState -> {
+                loader.hide()
+                showChanges(state.changes)
+            }
             is LoadingBuildsState -> openBuildsScreen()
             is WebBrowserState -> openWebBrowser(state.url)
         }
@@ -41,6 +45,14 @@ class DetailsActivity : BaseActivity() {
         buildStatusText.text = build.statusText
         buildTime.text = build.time
     }
+
+    private fun showChanges(changes: List<Change>) {
+        changesContainer.removeAllViews()
+        changes.forEach { changesContainer.addView(getChangeView(it)) }
+    }
+
+    private fun getChangeView(change: Change) =
+            TextView(this).apply { text = change.comment }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.details_menu, menu)

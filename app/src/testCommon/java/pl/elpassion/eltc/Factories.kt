@@ -29,13 +29,13 @@ fun createBuildType(projectName: String = "Teamcity Android Client") = BuildType
         name = "Build",
         projectName = projectName)
 
-fun createChange() = Change(
+fun createChange(comment: String) = Change(
         id = "1",
         version = "fds3fdsa23",
         username = "user",
         date = Date(),
         webUrl = "changeUrl",
-        comment = "Changes")
+        comment = comment)
 
 fun createSelectableProject(name: String, isSelected: Boolean = false) = SelectableProject(
         project = createProject(name = name),

@@ -105,6 +105,13 @@ class DetailsActivityTest : BaseActivityTest() {
     }
 
     @Test
+    fun Display_change_comment_on_details_loaded() {
+        val changes = listOf(createChange(comment = "Change 1 comment"))
+        states.onNext(DetailsState(createBuild(), changes))
+        onText("Change 1 comment").isDisplayed()
+    }
+
+    @Test
     fun Display_builds_screen_on_loading_builds() {
         states.onNext(LoadingBuildsState)
         checkIntent(BuildsActivity::class.java)
