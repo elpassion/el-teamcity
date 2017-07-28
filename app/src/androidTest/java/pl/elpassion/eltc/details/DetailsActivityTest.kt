@@ -1,9 +1,11 @@
 package pl.elpassion.eltc.details
 
+import android.app.Instrumentation
 import android.content.Intent
 import android.net.Uri
 import android.support.test.espresso.Espresso.pressBackUnconditionally
 import android.support.test.espresso.intent.Intents.intended
+import android.support.test.espresso.intent.Intents.intending
 import android.support.test.espresso.intent.matcher.IntentMatchers.hasAction
 import android.support.test.espresso.intent.matcher.IntentMatchers.hasData
 import android.support.test.rule.ActivityTestRule
@@ -12,7 +14,6 @@ import com.nhaarman.mockito_kotlin.argThat
 import com.nhaarman.mockito_kotlin.verify
 import org.hamcrest.Matchers.allOf
 import org.junit.Assert
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.eltc.*
@@ -73,12 +74,13 @@ class DetailsActivityTest : BaseActivityTest() {
         verify(model).perform(argThat { this is OpenInWebBrowser })
     }
 
-    @Ignore("Fix me")
     @Test
     fun Open_web_browser_with_proper_url() {
         val url = "http://teamcity/buildUrl"
+        val intent = allOf(hasAction(Intent.ACTION_VIEW), hasData(Uri.parse(url)))
+        intending(intent).respondWith(Instrumentation.ActivityResult(0, null))
         states.onNext(WebBrowserState(url = url))
-        intended(allOf(hasAction(Intent.ACTION_VIEW), hasData(Uri.parse(url))))
+        intended(intent)
     }
 
     @Test

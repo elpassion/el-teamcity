@@ -13,7 +13,7 @@ fun Activity.openBuildsScreen() = open(BuildsActivity::class.java)
 
 fun Activity.openDetailsScreen() = open(DetailsActivity::class.java)
 
-fun Activity.openWebBrowser(url: String) = open(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+fun Activity.openWebBrowser(url: String) = startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
 
 private fun <T : Activity> Activity.open(activity: Class<T>) = open(Intent(this, activity))
 
