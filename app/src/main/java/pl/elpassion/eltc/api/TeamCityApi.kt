@@ -2,6 +2,7 @@ package pl.elpassion.eltc.api
 
 import io.reactivex.Single
 import pl.elpassion.eltc.Build
+import pl.elpassion.eltc.Change
 import pl.elpassion.eltc.Project
 import pl.elpassion.eltc.Test
 import pl.elpassion.eltc.util.zipSingles
@@ -20,6 +21,7 @@ interface TeamCityApi {
     fun getQueuedBuilds(): Single<List<Build>>
     fun getBuildsForProjects(projectIds: List<String>): Single<List<Build>>
     fun getBuild(id: Int): Single<Build>
+    fun getChanges(buildId: Int): Single<List<Change>>
     fun getTests(buildId: Int): Single<List<Test>>
     fun getProjects(): Single<List<Project>>
 }
@@ -51,6 +53,9 @@ object TeamCityApiImpl : TeamCityApi {
     override fun getBuild(id: Int): Single<Build> =
             service.getBuild(credentials, id).mapApiErrors()
 
+    override fun getChanges(buildId: Int): Single<List<Change>> =
+            service.getChanges(credentials, "build:(id:$buildId)").mapApiErrors().map(ChangesResponse::change)
+
     override fun getTests(buildId: Int): Single<List<Test>> =
             service.getTests(credentials, "build:(id:$buildId)").mapApiErrors().map(TestsResponse::testOccurrence)
 
@@ -76,6 +81,9 @@ object TeamCityApiImpl : TeamCityApi {
         @GET("httpAuth/app/rest/builds/id:{id}?fields=$BUILD_FIELDS")
         fun getBuild(@Header("Authorization") credentials: String, @Path("id") id: Int): Single<Build>
 
+        @GET("httpAuth/app/rest/changes?fields=change($CHANGES_FIELDS)")
+        fun getChanges(@Header("Authorization") credentials: String, @Query("locator") locator: String): Single<ChangesResponse>
+
         @GET("httpAuth/app/rest/testOccurrences")
         fun getTests(@Header("Authorization") credentials: String, @Query("locator") locator: String): Single<TestsResponse>
 
@@ -84,12 +92,15 @@ object TeamCityApiImpl : TeamCityApi {
 
         companion object {
             const val BUILD_FIELDS = "id,number,status,state,branchName,webUrl,statusText,queuedDate,startDate,finishDate,buildType(id,name,projectName)"
+            const val CHANGES_FIELDS = "id,version,username,date,webUrl,comment"
             const val PROJECT_FIELDS = "id,name,href"
         }
     }
 }
 
 data class BuildsResponse(val build: List<Build>)
+
+data class ChangesResponse(val change: List<Change>)
 
 data class TestsResponse(val testOccurrence: List<Test>)
 

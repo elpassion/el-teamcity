@@ -22,6 +22,15 @@ data class BuildType(
         val projectName: String
 )
 
+data class Change(
+        val id: String,
+        val version: String,
+        val username: String,
+        val date: Date,
+        val webUrl: String,
+        val comment: String
+)
+
 data class Test(
         val id: String,
         val name: String,

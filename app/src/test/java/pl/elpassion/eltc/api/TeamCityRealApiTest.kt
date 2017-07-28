@@ -50,6 +50,13 @@ class TeamCityRealApiTest {
     }
 
     @Test
+    fun `Get changes included into the build after call to real TeamCity API`() {
+        teamCityApi
+                .getChanges(buildId = 668)
+                .getAndPrint()
+    }
+
+    @Test
     fun `Get all tests per build after call to real TeamCity API`() {
         teamCityApi
                 .getTests(buildId = 668)
