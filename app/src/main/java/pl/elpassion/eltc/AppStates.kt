@@ -33,6 +33,11 @@ data class LoadingDetailsState(
         val build: Build
 ) : AppState()
 
+data class DetailsState(
+        val build: Build,
+        val changes: List<Change>
+) : AppState()
+
 data class WebBrowserState(
         val url: String
 ) : AppState()

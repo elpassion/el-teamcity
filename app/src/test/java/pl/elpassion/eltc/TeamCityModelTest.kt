@@ -30,6 +30,7 @@ class TeamCityModelTest {
         whenever(api.getProjects()).thenNever()
         whenever(api.getBuilds()).thenNever()
         whenever(api.getQueuedBuilds()).thenNever()
+        whenever(api.getChanges(any())).thenNever()
         model.state.subscribe(observer)
     }
 
@@ -244,6 +245,15 @@ class TeamCityModelTest {
         val build = createBuild(id = 7)
         model.perform(SelectBuild(build))
         observer.assertLastValue(LoadingDetailsState(build))
+    }
+
+    @Test
+    fun `Display build details on changes loaded`() {
+        val build = createBuild(id = 7)
+        val changes = listOf(createChange())
+        whenever(api.getChanges(build.id)).thenJust(changes)
+        model.perform(SelectBuild(build))
+        observer.assertLastValue(DetailsState(build, changes))
     }
 
     @Test

@@ -32,7 +32,7 @@ class TeamCityModelImpl(private val api: TeamCityApi,
         is AutoRefresh -> performAutoRefresh(action.isEnabled)
         is SelectProjects -> selectProjects()
         is SubmitProjects -> submitProjects(action.projects)
-        is SelectBuild -> goTo(LoadingDetailsState(action.build))
+        is SelectBuild -> loadDetails(action.build)
         is ReturnToList -> loadBuilds()
         is OpenInWebBrowser -> openWebBrowser()
         is Logout -> logout()
@@ -120,6 +120,20 @@ class TeamCityModelImpl(private val api: TeamCityApi,
     private fun submitProjects(projects: List<Project>) {
         buildsRepository.selectedProjects = projects
         loadBuilds()
+    }
+
+    private fun loadDetails(build: Build) {
+        goTo(LoadingDetailsState(build))
+        api.getChanges(build.id)
+                .subscribe(onBuildDetails, onError)
+    }
+
+    private val onBuildDetails: (List<Change>) -> Unit = { changes ->
+        state.firstElement().subscribe {
+            if (it is LoadingDetailsState) {
+                goTo(DetailsState(it.build, changes))
+            }
+        }
     }
 
     private fun openWebBrowser() {
