@@ -3,6 +3,7 @@ package pl.elpassion.eltc.details
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import com.elpassion.android.view.hide
 import com.elpassion.android.view.show
 import kotlinx.android.synthetic.main.details_activity.*
 import pl.elpassion.eltc.*
@@ -28,6 +29,7 @@ class DetailsActivity : BaseActivity() {
                 loader.show()
                 showBuild(state.build)
             }
+            is DetailsState -> loader.hide()
             is LoadingBuildsState -> openBuildsScreen()
             is WebBrowserState -> openWebBrowser(state.url)
         }

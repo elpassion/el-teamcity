@@ -97,6 +97,14 @@ class DetailsActivityTest : BaseActivityTest() {
     }
 
     @Test
+    fun Hide_loader_on_details_loaded() {
+        val build = createBuild()
+        states.onNext(LoadingDetailsState(build))
+        states.onNext(DetailsState(build, emptyList()))
+        onId(R.id.loader).isNotDisplayed()
+    }
+
+    @Test
     fun Display_builds_screen_on_loading_builds() {
         states.onNext(LoadingBuildsState)
         checkIntent(BuildsActivity::class.java)
