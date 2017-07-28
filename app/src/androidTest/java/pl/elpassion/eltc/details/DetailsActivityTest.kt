@@ -126,6 +126,13 @@ class DetailsActivityTest : BaseActivityTest() {
     }
 
     @Test
+    fun Display_change_version_on_details_loaded() {
+        val changes = listOf(createChange(version = "f8dfs3mdsa93nfdakekfneak"))
+        states.onNext(DetailsState(createBuild(), changes))
+        onText("f8dfs3m").isDisplayed()
+    }
+
+    @Test
     fun Display_builds_screen_on_loading_builds() {
         states.onNext(LoadingBuildsState)
         checkIntent(BuildsActivity::class.java)

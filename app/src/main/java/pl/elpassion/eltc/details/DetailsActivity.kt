@@ -54,6 +54,7 @@ class DetailsActivity : BaseActivity() {
 
     private fun getChangeView(change: Change) =
             View.inflate(this, R.layout.change_item, null).apply {
+                version.text = change.version.take(7)
                 author.text = change.username
                 time.text = change.date.toTime()
                 comment.text = change.comment
