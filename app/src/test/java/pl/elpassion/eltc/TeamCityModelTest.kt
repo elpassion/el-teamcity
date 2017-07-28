@@ -42,7 +42,7 @@ class TeamCityModelTest {
     @Test
     fun `Start LoadingState on SubmitCredentials action`() {
         model.perform(SubmitCredentials(TEAMCITY_ADDRESS, CREDENTIALS))
-        observer.assertLastValue(LoadingState)
+        observer.assertLastValue(LoadingBuildsState)
     }
 
     @Test
@@ -125,7 +125,7 @@ class TeamCityModelTest {
     fun `Start loading if credentials are available in repository on app start`() {
         stubLoginRepositoryToReturnAuthData()
         model.perform(StartApp)
-        observer.assertLastValue(LoadingState)
+        observer.assertLastValue(LoadingBuildsState)
     }
 
     @Test
@@ -172,7 +172,7 @@ class TeamCityModelTest {
     fun `Start loading on refresh list`() {
         stubLoginRepositoryToReturnAuthData()
         model.perform(RefreshList)
-        observer.assertLastValue(LoadingState)
+        observer.assertLastValue(LoadingBuildsState)
     }
 
     @Test
@@ -268,7 +268,7 @@ class TeamCityModelTest {
     fun `Load builds list on return to list`() {
         stubLoginRepositoryToReturnAuthData()
         model.perform(ReturnToList)
-        observer.assertLastValue(LoadingState)
+        observer.assertLastValue(LoadingBuildsState)
     }
 
     @Test

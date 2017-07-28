@@ -19,8 +19,8 @@ class BuildsActivityTest : BaseActivityTest() {
     val activityRule = ActivityTestRule(BuildsActivity::class.java)
 
     @Test
-    fun Display_loader_on_loading() {
-        states.onNext(LoadingState)
+    fun Display_loader_on_loading_builds() {
+        states.onNext(LoadingBuildsState)
         onId(R.id.loader).isDisplayed()
     }
 
@@ -85,7 +85,7 @@ class BuildsActivityTest : BaseActivityTest() {
 
     @Test
     fun Hide_loader_on_new_data() {
-        states.onNext(LoadingState)
+        states.onNext(LoadingBuildsState)
         states.onNext(BuildsState(listOf(createBuild(number = "76")), emptyList()))
         onId(R.id.loader).isNotDisplayed()
     }

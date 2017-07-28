@@ -24,7 +24,7 @@ class LoginActivity : BaseActivity() {
     override fun showState(state: AppState?) {
         when (state) {
             is LoginState -> showLogin(state)
-            is LoadingState -> {
+            is LoadingBuildsState -> {
                 loginButton.isClickable = false
                 loader.show()
             }

@@ -91,8 +91,8 @@ class DetailsActivityTest : BaseActivityTest() {
     }
 
     @Test
-    fun Display_builds_screen_on_loading_builds_list() {
-        states.onNext(LoadingState)
+    fun Display_builds_screen_on_loading_builds() {
+        states.onNext(LoadingBuildsState)
         checkIntent(BuildsActivity::class.java)
         Assert.assertTrue(activityRule.activity.isFinishing)
     }

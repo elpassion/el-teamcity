@@ -40,14 +40,14 @@ class LoginActivityTest : BaseActivityTest() {
     }
 
     @Test
-    fun Display_loader_on_loading() {
-        states.onNext(LoadingState)
+    fun Display_loader_on_loading_builds() {
+        states.onNext(LoadingBuildsState)
         onId(R.id.loader).isDisplayed()
     }
 
     @Test
     fun Hide_loader_on_login_error() {
-        states.onNext(LoadingState)
+        states.onNext(LoadingBuildsState)
         states.onNext(LoginState(error = LoginState.Error.UNKNOWN_HOST))
         onId(R.id.loader).isNotDisplayed()
     }
@@ -78,14 +78,14 @@ class LoginActivityTest : BaseActivityTest() {
     }
 
     @Test
-    fun Disable_login_button_on_loading() {
-        states.onNext(LoadingState)
+    fun Disable_login_button_on_loading_builds() {
+        states.onNext(LoadingBuildsState)
         onText(R.string.login).isNotClickable()
     }
 
     @Test
-    fun Enable_login_button_on_loading_finished() {
-        states.onNext(LoadingState)
+    fun Enable_login_button_on_loading_builds_finished() {
+        states.onNext(LoadingBuildsState)
         states.onNext(LoginState(error = LoginState.Error.INVALID_CREDENTIALS))
         onText(R.string.login).isClickable()
     }

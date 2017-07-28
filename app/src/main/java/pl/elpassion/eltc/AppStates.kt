@@ -5,7 +5,7 @@ import pl.elpassion.eltc.builds.SelectableProject
 sealed class AppState
 
 object InitialState : AppState()
-object LoadingState : AppState()
+object LoadingBuildsState : AppState()
 
 data class LoginState(
         val host: String = "",

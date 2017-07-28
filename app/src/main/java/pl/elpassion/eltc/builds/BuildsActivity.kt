@@ -37,7 +37,7 @@ class BuildsActivity : BaseActivity() {
 
     override fun showState(state: AppState?) {
         when (state) {
-            is LoadingState -> loader.show()
+            is LoadingBuildsState -> loader.show()
             is LoginState -> openLoginScreen()
             is BuildsState -> {
                 loader.hide()

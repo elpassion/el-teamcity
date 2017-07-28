@@ -24,7 +24,7 @@ class DetailsActivity : BaseActivity() {
     override fun showState(state: AppState?) {
         when (state) {
             is LoadingDetailsState -> showBuild(state.build)
-            is LoadingState -> openBuildsScreen()
+            is LoadingBuildsState -> openBuildsScreen()
             is WebBrowserState -> openWebBrowser(state.url)
         }
     }
