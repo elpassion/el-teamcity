@@ -23,13 +23,13 @@ class DetailsActivity : BaseActivity() {
 
     override fun showState(state: AppState?) {
         when (state) {
-            is BuildDetailsState -> showDetails(state.build)
+            is LoadingDetailsState -> showBuild(state.build)
             is LoadingState -> openBuildsScreen()
             is WebBrowserState -> openWebBrowser(state.url)
         }
     }
 
-    private fun showDetails(build: Build) {
+    private fun showBuild(build: Build) {
         toolbar.title = "#${build.number}"
         projectName.text = build.buildType.projectName
         buildStatusText.text = build.statusText

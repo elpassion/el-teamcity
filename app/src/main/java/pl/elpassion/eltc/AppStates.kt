@@ -29,7 +29,7 @@ data class SelectProjectsDialogState(
         val projects: List<SelectableProject>
 ) : AppState()
 
-data class BuildDetailsState(
+data class LoadingDetailsState(
         val build: Build
 ) : AppState()
 

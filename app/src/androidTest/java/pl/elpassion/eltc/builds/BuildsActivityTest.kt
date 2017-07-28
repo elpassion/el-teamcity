@@ -177,7 +177,7 @@ class BuildsActivityTest : BaseActivityTest() {
 
     @Test
     fun Open_build_details() {
-        states.onNext(BuildDetailsState(createBuild()))
+        states.onNext(LoadingDetailsState(createBuild()))
         checkIntent(DetailsActivity::class.java)
         assertTrue(activityRule.activity.isFinishing)
     }

@@ -240,10 +240,10 @@ class TeamCityModelTest {
     }
 
     @Test
-    fun `Display build details on build selected`() {
+    fun `Load build details on build selected`() {
         val build = createBuild(id = 7)
         model.perform(SelectBuild(build))
-        observer.assertLastValue(BuildDetailsState(build))
+        observer.assertLastValue(LoadingDetailsState(build))
     }
 
     @Test

@@ -44,7 +44,7 @@ class BuildsActivity : BaseActivity() {
                 swipeToRefreshBuildsList.isRefreshing = false
                 showBuilds(state.builds)
             }
-            is BuildDetailsState -> openDetailsScreen()
+            is LoadingDetailsState -> openDetailsScreen()
             is SelectProjectsDialogState -> {
                 showSelectProjectsDialog(state.projects)
             }
