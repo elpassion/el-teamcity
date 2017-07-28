@@ -119,6 +119,13 @@ class DetailsActivityTest : BaseActivityTest() {
     }
 
     @Test
+    fun Display_change_time_on_details_loaded() {
+        val changes = listOf(createChange(date = Date(1501250150000)))
+        states.onNext(DetailsState(createBuild(), changes))
+        onText("28 Jul 17 15:55:50").isDisplayed()
+    }
+
+    @Test
     fun Display_builds_screen_on_loading_builds() {
         states.onNext(LoadingBuildsState)
         checkIntent(BuildsActivity::class.java)

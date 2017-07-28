@@ -55,6 +55,7 @@ class DetailsActivity : BaseActivity() {
     private fun getChangeView(change: Change) =
             View.inflate(this, R.layout.change_item, null).apply {
                 author.text = change.username
+                time.text = change.date.toTime()
                 comment.text = change.comment
             }
 
@@ -83,11 +84,13 @@ private val Build.totalTime: String
     get() = "$startTime - $finishTime"
 
 private val Build.startTime: String?
-    get() = SimpleDateFormat("d MMM YY HH:mm:ss", Locale.US).format(startDate)
+    get() = startDate?.toTime()
 
 private val Build.finishTime: String?
-    get() = if (startDate?.day == finishDate?.day) {
-        SimpleDateFormat("HH:mm:ss", Locale.US).format(finishDate)
-    } else {
-        SimpleDateFormat("d MMM YY HH:mm:ss", Locale.US).format(finishDate)
-    }
+    get() = if (didLastOneDay()) finishDate?.toTimeWithoutDate() else finishDate?.toTime()
+
+private fun Build.didLastOneDay() = startDate?.day == finishDate?.day
+
+private fun Date.toTime() = SimpleDateFormat("d MMM YY HH:mm:ss", Locale.US).format(this)
+
+private fun Date.toTimeWithoutDate() = SimpleDateFormat("HH:mm:ss", Locale.US).format(this)

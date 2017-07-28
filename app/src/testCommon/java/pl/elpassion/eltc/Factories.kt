@@ -30,11 +30,12 @@ fun createBuildType(projectName: String = "Teamcity Android Client") = BuildType
         projectName = projectName)
 
 fun createChange(comment: String = "Comment",
-                 username: String = "user") = Change(
+                 username: String = "user",
+                 date: Date = Date()) = Change(
         id = "1",
         version = "fds3fdsa23",
         username = username,
-        date = Date(),
+        date = date,
         webUrl = "changeUrl",
         comment = comment)
 
