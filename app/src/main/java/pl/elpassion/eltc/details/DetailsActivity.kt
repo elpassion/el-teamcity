@@ -3,6 +3,7 @@ package pl.elpassion.eltc.details
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import com.elpassion.android.view.show
 import kotlinx.android.synthetic.main.details_activity.*
 import pl.elpassion.eltc.*
 import java.text.SimpleDateFormat
@@ -23,7 +24,10 @@ class DetailsActivity : BaseActivity() {
 
     override fun showState(state: AppState?) {
         when (state) {
-            is LoadingDetailsState -> showBuild(state.build)
+            is LoadingDetailsState -> {
+                loader.show()
+                showBuild(state.build)
+            }
             is LoadingBuildsState -> openBuildsScreen()
             is WebBrowserState -> openWebBrowser(state.url)
         }

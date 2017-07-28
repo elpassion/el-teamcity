@@ -91,6 +91,12 @@ class DetailsActivityTest : BaseActivityTest() {
     }
 
     @Test
+    fun Display_loader_on_loading_details() {
+        states.onNext(LoadingDetailsState(createBuild()))
+        onId(R.id.loader).isDisplayed()
+    }
+
+    @Test
     fun Display_builds_screen_on_loading_builds() {
         states.onNext(LoadingBuildsState)
         checkIntent(BuildsActivity::class.java)
