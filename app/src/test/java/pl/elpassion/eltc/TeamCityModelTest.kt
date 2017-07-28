@@ -250,7 +250,7 @@ class TeamCityModelTest {
     @Test
     fun `Display build details on changes loaded`() {
         val build = createBuild(id = 7)
-        val changes = listOf(createChange("Changes"))
+        val changes = listOf(createChange("Changes", "user"))
         whenever(api.getChanges(build.id)).thenJust(changes)
         model.perform(SelectBuild(build))
         observer.assertLastValue(DetailsState(build, changes))

@@ -105,6 +105,13 @@ class DetailsActivityTest : BaseActivityTest() {
     }
 
     @Test
+    fun Display_change_author_on_details_loaded() {
+        val changes = listOf(createChange(username = "user1"))
+        states.onNext(DetailsState(createBuild(), changes))
+        onText("user1").isDisplayed()
+    }
+
+    @Test
     fun Display_change_comment_on_details_loaded() {
         val changes = listOf(createChange(comment = "Change 1 comment"))
         states.onNext(DetailsState(createBuild(), changes))

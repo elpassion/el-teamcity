@@ -3,9 +3,10 @@ package pl.elpassion.eltc.details
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.TextView
+import android.view.View
 import com.elpassion.android.view.hide
 import com.elpassion.android.view.show
+import kotlinx.android.synthetic.main.change_item.view.*
 import kotlinx.android.synthetic.main.details_activity.*
 import pl.elpassion.eltc.*
 import java.text.SimpleDateFormat
@@ -52,7 +53,10 @@ class DetailsActivity : BaseActivity() {
     }
 
     private fun getChangeView(change: Change) =
-            TextView(this).apply { text = change.comment }
+            View.inflate(this, R.layout.change_item, null).apply {
+                author.text = change.username
+                comment.text = change.comment
+            }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.details_menu, menu)
