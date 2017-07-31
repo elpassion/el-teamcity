@@ -31,7 +31,7 @@ data class Change(
         val comment: String
 )
 
-data class Test(
+data class TestDetails(
         val id: String,
         val name: String,
         val status: String,

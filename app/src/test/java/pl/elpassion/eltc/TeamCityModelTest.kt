@@ -31,6 +31,7 @@ class TeamCityModelTest {
         whenever(api.getBuilds()).thenNever()
         whenever(api.getQueuedBuilds()).thenNever()
         whenever(api.getChanges(any())).thenNever()
+        whenever(api.getTests(any())).thenNever()
         model.state.subscribe(observer)
     }
 
@@ -248,12 +249,14 @@ class TeamCityModelTest {
     }
 
     @Test
-    fun `Display build details on changes loaded`() {
+    fun `Display build details on changes and tests loaded`() {
         val build = createBuild(id = 7)
         val changes = listOf(createChange("Changes", "user"))
+        val tests = listOf(createTestDetails(name = "Test 1 name"))
         whenever(api.getChanges(build.id)).thenJust(changes)
+        whenever(api.getTests(build.id)).thenJust(tests)
         model.perform(SelectBuild(build))
-        observer.assertLastValue(DetailsState(build, changes))
+        observer.assertLastValue(DetailsState(build, changes, tests))
     }
 
     @Test

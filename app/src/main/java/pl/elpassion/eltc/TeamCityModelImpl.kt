@@ -124,14 +124,16 @@ class TeamCityModelImpl(private val api: TeamCityApi,
 
     private fun loadDetails(build: Build) {
         goTo(LoadingDetailsState(build))
-        api.getChanges(build.id)
+        Singles.zip(
+                api.getChanges(build.id),
+                api.getTests(build.id)) { changes, tests -> changes to tests }
                 .subscribe(onBuildDetails, onError)
     }
 
-    private val onBuildDetails: (List<Change>) -> Unit = { changes ->
+    private val onBuildDetails: (Pair<List<Change>, List<TestDetails>>) -> Unit = { (changes, tests) ->
         state.firstElement().subscribe {
             if (it is LoadingDetailsState) {
-                goTo(DetailsState(it.build, changes))
+                goTo(DetailsState(it.build, changes, tests))
             }
         }
     }

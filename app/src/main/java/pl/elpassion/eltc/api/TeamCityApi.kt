@@ -4,7 +4,7 @@ import io.reactivex.Single
 import pl.elpassion.eltc.Build
 import pl.elpassion.eltc.Change
 import pl.elpassion.eltc.Project
-import pl.elpassion.eltc.Test
+import pl.elpassion.eltc.TestDetails
 import pl.elpassion.eltc.util.zipSingles
 import retrofit2.HttpException
 import retrofit2.http.GET
@@ -22,7 +22,7 @@ interface TeamCityApi {
     fun getBuildsForProjects(projectIds: List<String>): Single<List<Build>>
     fun getBuild(id: Int): Single<Build>
     fun getChanges(buildId: Int): Single<List<Change>>
-    fun getTests(buildId: Int): Single<List<Test>>
+    fun getTests(buildId: Int): Single<List<TestDetails>>
     fun getProjects(): Single<List<Project>>
 }
 
@@ -56,7 +56,7 @@ object TeamCityApiImpl : TeamCityApi {
     override fun getChanges(buildId: Int): Single<List<Change>> =
             service.getChanges(credentials, "build:(id:$buildId)").mapApiErrors().map(ChangesResponse::change)
 
-    override fun getTests(buildId: Int): Single<List<Test>> =
+    override fun getTests(buildId: Int): Single<List<TestDetails>> =
             service.getTests(credentials, "build:(id:$buildId)").mapApiErrors().map(TestsResponse::testOccurrence)
 
     override fun getProjects(): Single<List<Project>> =
@@ -102,6 +102,6 @@ data class BuildsResponse(val build: List<Build>)
 
 data class ChangesResponse(val change: List<Change>)
 
-data class TestsResponse(val testOccurrence: List<Test>)
+data class TestsResponse(val testOccurrence: List<TestDetails>)
 
 data class ProjectsResponse(val project: List<Project>)

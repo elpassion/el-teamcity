@@ -40,6 +40,13 @@ fun createChange(comment: String = "Comment",
         webUrl = "changeUrl",
         comment = comment)
 
+fun createTestDetails(name: String = "Test name") = TestDetails(
+        id = "1",
+        name = name,
+        status = "SUCCESS",
+        duration = 100,
+        href = "href")
+
 fun createSelectableProject(name: String, isSelected: Boolean = false) = SelectableProject(
         project = createProject(name = name),
         isSelected = isSelected)
