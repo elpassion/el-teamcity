@@ -27,63 +27,6 @@ class DetailsActivityTest : BaseActivityTest() {
     val activityRule = ActivityTestRule(DetailsActivity::class.java)
 
     @Test
-    fun Display_build_number() {
-        states.onNext(LoadingDetailsState(createBuild(number = "76")))
-        onText("#76").isDisplayed()
-    }
-
-    @Test
-    fun Display_build_project_name() {
-        states.onNext(LoadingDetailsState(createBuild(projectName = "Project 1")))
-        onText("Project 1").isDisplayed()
-    }
-
-    @Test
-    fun Display_build_status_text() {
-        states.onNext(LoadingDetailsState(createBuild(statusText = "Tests passed: 543")))
-        onText("Tests passed: 543").isDisplayed()
-    }
-
-    @Test
-    fun Display_time_of_not_finished_build() {
-        val startDate = Date(1501161085000)
-        states.onNext(LoadingDetailsState(createBuild(startDate = startDate, finishDate = null)))
-        onText("Started at: 27 Jul 17 15:11:25").isDisplayed()
-    }
-
-    @Test
-    fun Display_time_of_finished_build() {
-        val startDate = Date(1501161085000)
-        val finishDate = Date(1501162510000)
-        states.onNext(LoadingDetailsState(createBuild(startDate = startDate, finishDate = finishDate)))
-        onText("Time: 27 Jul 17 15:11:25 - 15:35:10").isDisplayed()
-    }
-
-    @Test
-    fun Display_time_of_build_finished_in_next_day() {
-        val startDate = Date(1501161085000)
-        val finishDate = Date(1501247484000)
-        states.onNext(LoadingDetailsState(createBuild(startDate = startDate, finishDate = finishDate)))
-        onText("Time: 27 Jul 17 15:11:25 - 28 Jul 17 15:11:24").isDisplayed()
-    }
-
-    @Test
-    fun Open_build_in_web_browser() {
-        states.onNext(LoadingDetailsState(createBuild()))
-        onId(R.id.open_in_browser).click()
-        verify(model).perform(argThat { this is OpenInWebBrowser })
-    }
-
-    @Test
-    fun Open_web_browser_with_proper_url() {
-        val url = "http://teamcity/buildUrl"
-        val intent = allOf(hasAction(Intent.ACTION_VIEW), hasData(Uri.parse(url)))
-        intending(intent).respondWith(Instrumentation.ActivityResult(0, null))
-        states.onNext(WebBrowserState(url = url))
-        intended(intent)
-    }
-
-    @Test
     fun Return_to_list_on_back_pressed() {
         states.onNext(LoadingDetailsState(createBuild()))
         pressBackUnconditionally()
@@ -102,6 +45,63 @@ class DetailsActivityTest : BaseActivityTest() {
         states.onNext(LoadingDetailsState(build))
         states.onNext(DetailsState(build, emptyList()))
         onId(R.id.loader).isNotDisplayed()
+    }
+
+    @Test
+    fun Display_build_number() {
+        states.onNext(DetailsState(createBuild(number = "76"), emptyList()))
+        onText("#76").isDisplayed()
+    }
+
+    @Test
+    fun Display_build_project_name() {
+        states.onNext(DetailsState(createBuild(projectName = "Project 1"), emptyList()))
+        onText("Project 1").isDisplayed()
+    }
+
+    @Test
+    fun Display_build_status_text() {
+        states.onNext(DetailsState(createBuild(statusText = "Tests passed: 543"), emptyList()))
+        onText("Tests passed: 543").isDisplayed()
+    }
+
+    @Test
+    fun Display_time_of_not_finished_build() {
+        val startDate = Date(1501161085000)
+        states.onNext(DetailsState(createBuild(startDate = startDate, finishDate = null), emptyList()))
+        onText("Started at: 27 Jul 17 15:11:25").isDisplayed()
+    }
+
+    @Test
+    fun Display_time_of_finished_build() {
+        val startDate = Date(1501161085000)
+        val finishDate = Date(1501162510000)
+        states.onNext(DetailsState(createBuild(startDate = startDate, finishDate = finishDate), emptyList()))
+        onText("Time: 27 Jul 17 15:11:25 - 15:35:10").isDisplayed()
+    }
+
+    @Test
+    fun Display_time_of_build_finished_in_next_day() {
+        val startDate = Date(1501161085000)
+        val finishDate = Date(1501247484000)
+        states.onNext(DetailsState(createBuild(startDate = startDate, finishDate = finishDate), emptyList()))
+        onText("Time: 27 Jul 17 15:11:25 - 28 Jul 17 15:11:24").isDisplayed()
+    }
+
+    @Test
+    fun Open_build_in_web_browser() {
+        states.onNext(LoadingDetailsState(createBuild()))
+        onId(R.id.open_in_browser).click()
+        verify(model).perform(argThat { this is OpenInWebBrowser })
+    }
+
+    @Test
+    fun Open_web_browser_with_proper_url() {
+        val url = "http://teamcity/buildUrl"
+        val intent = allOf(hasAction(Intent.ACTION_VIEW), hasData(Uri.parse(url)))
+        intending(intent).respondWith(Instrumentation.ActivityResult(0, null))
+        states.onNext(WebBrowserState(url = url))
+        intended(intent)
     }
 
     @Test

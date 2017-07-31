@@ -29,10 +29,10 @@ class DetailsActivity : BaseActivity() {
         when (state) {
             is LoadingDetailsState -> {
                 loader.show()
-                showBuild(state.build)
             }
             is DetailsState -> {
                 loader.hide()
+                showBuild(state.build)
                 showChanges(state.changes)
             }
             is LoadingBuildsState -> openBuildsScreen()
