@@ -170,6 +170,13 @@ class DetailsActivityTest : BaseActivityTest() {
         onText(testName).isDisplayed()
     }
 
+    @Test
+    fun Display_success_status_of_passed_test() {
+        states.onNext(newDetailsState(tests = listOf(createTestDetails(status = "SUCCESS"))))
+        onImage(R.drawable.test_success_bg).isDisplayed()
+        onImage(R.drawable.ic_success).isDisplayed()
+    }
+
     private fun newDetailsState(build: Build = createBuild(),
                                 changes: List<Change> = emptyList(),
                                 tests: List<TestDetails> = emptyList()) =

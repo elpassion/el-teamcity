@@ -40,10 +40,11 @@ fun createChange(comment: String = "Comment",
         webUrl = "changeUrl",
         comment = comment)
 
-fun createTestDetails(name: String = "Test name") = TestDetails(
+fun createTestDetails(name: String = "Test name",
+                      status: String = "UNKNOWN") = TestDetails(
         id = "1",
         name = name,
-        status = "SUCCESS",
+        status = status,
         duration = 100,
         href = "href")
 

@@ -3,14 +3,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:minHeight="48dp"
     android:orientation="horizontal">
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="8dp">
+
+        <ImageView
+            android:id="@+id/buildStatusBg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/test_success_bg" />
+
+        <ImageView
+            android:id="@+id/buildStatusIcon"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_success" />
+
+    </FrameLayout>
 
     <TextView
         android:id="@+id/testName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ellipsize="marquee"
-        android:singleLine="true"
+        android:layout_gravity="center_vertical"
+        android:lines="2"
         android:textColor="@android:color/black"
         android:textSize="12sp"
         tools:text="Test name" />
