@@ -15,4 +15,13 @@ class TestNameExtractorTest {
             assertEquals("Display something to user", name)
         }
     }
+
+    @Test
+    fun `Extract test suite and name from android test name`() {
+        val fullName = "pl.elpassion.eltc.SampleTest.Display_something_to_user"
+        with(TestNameExtractor.extract(fullName)) {
+            assertEquals("pl.elpassion.eltc.SampleTest", suite)
+            assertEquals("Display something to user", name)
+        }
+    }
 }
