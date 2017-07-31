@@ -79,14 +79,16 @@ class DetailsActivity : BaseActivity() {
         testStatusIcon.setImageResource(getTestStatusIconResId(test))
     }
 
-    private fun getTestStatusBgResId(test: TestDetails) = when {
-        test.status == "SUCCESS" -> R.drawable.test_success_bg
-        else -> R.drawable.test_failure_bg
+    private fun getTestStatusBgResId(test: TestDetails) = when(test.status) {
+        "SUCCESS" -> R.drawable.test_success_bg
+        "FAILURE" -> R.drawable.test_failure_bg
+        else -> R.drawable.test_ignored_bg
     }
 
-    private fun getTestStatusIconResId(test: TestDetails) = when {
-        test.status == "SUCCESS" -> R.drawable.ic_success
-        else -> R.drawable.ic_failure
+    private fun getTestStatusIconResId(test: TestDetails) = when(test.status) {
+        "SUCCESS" -> R.drawable.ic_success
+        "FAILURE" -> R.drawable.ic_failure
+        else -> R.drawable.ic_ignored
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

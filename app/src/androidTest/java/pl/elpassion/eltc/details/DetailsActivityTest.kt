@@ -184,6 +184,13 @@ class DetailsActivityTest : BaseActivityTest() {
         onImage(R.drawable.ic_failure).isDisplayed()
     }
 
+    @Test
+    fun Display_ignored_status_of_ignored_test() {
+        states.onNext(newDetailsState(tests = listOf(createTestDetails(status = "UNKNOWN"))))
+        onImage(R.drawable.test_ignored_bg).isDisplayed()
+        onImage(R.drawable.ic_ignored).isDisplayed()
+    }
+
     private fun newDetailsState(build: Build = createBuild(),
                                 changes: List<Change> = emptyList(),
                                 tests: List<TestDetails> = emptyList()) =
