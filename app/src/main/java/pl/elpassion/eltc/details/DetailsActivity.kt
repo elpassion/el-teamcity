@@ -3,12 +3,12 @@ package pl.elpassion.eltc.details
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import com.elpassion.android.view.hide
 import com.elpassion.android.view.show
 import kotlinx.android.synthetic.main.change_item.view.*
 import kotlinx.android.synthetic.main.details_activity.*
 import pl.elpassion.eltc.*
+import pl.elpassion.eltc.util.inflate
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -51,16 +51,14 @@ class DetailsActivity : BaseActivity() {
         changes.forEach { changesContainer.addView(getChangeView(it)) }
     }
 
-    private fun getChangesHeaderView() =
-            View.inflate(this, R.layout.changes_header, null)
+    private fun getChangesHeaderView() = inflate(R.layout.changes_header)
 
-    private fun getChangeView(change: Change) =
-            View.inflate(this, R.layout.change_item, null).apply {
-                version.text = change.version.take(7)
-                author.text = change.username
-                time.text = change.date.toTime()
-                comment.text = change.comment
-            }
+    private fun getChangeView(change: Change) = inflate(R.layout.change_item).apply {
+        version.text = change.version.take(7)
+        author.text = change.username
+        time.text = change.date.toTime()
+        comment.text = change.comment
+    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.details_menu, menu)
