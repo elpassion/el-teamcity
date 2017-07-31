@@ -111,6 +111,12 @@ class DetailsActivityTest : BaseActivityTest() {
     }
 
     @Test
+    fun Do_not_display_changes_header_when_no_changes() {
+        states.onNext(DetailsState(createBuild(), emptyList()))
+        onText(R.string.changes).isNotDisplayed()
+    }
+
+    @Test
     fun Display_change_author_on_details_loaded() {
         val changes = listOf(createChange(username = "user1"))
         states.onNext(DetailsState(createBuild(), changes))

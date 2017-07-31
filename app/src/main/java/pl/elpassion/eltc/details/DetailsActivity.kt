@@ -47,8 +47,10 @@ class DetailsActivity : BaseActivity() {
 
     private fun showChanges(changes: List<Change>) {
         changesContainer.removeAllViews()
-        changesContainer.addView(getChangesHeaderView())
-        changes.forEach { changesContainer.addView(getChangeView(it)) }
+        if (changes.isNotEmpty()) {
+            changesContainer.addView(getChangesHeaderView())
+            changes.forEach { changesContainer.addView(getChangeView(it)) }
+        }
     }
 
     private fun getChangesHeaderView() = inflate(R.layout.changes_header)
