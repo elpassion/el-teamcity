@@ -32,7 +32,7 @@ class DetailsActivity : BaseActivity() {
                 loader.hide()
                 showBuild(state.build)
                 showChanges(state.changes)
-                showTests()
+                showTests(state.tests)
             }
             is LoadingBuildsState -> openBuildsScreen()
             is WebBrowserState -> openWebBrowser(state.url)
@@ -54,8 +54,10 @@ class DetailsActivity : BaseActivity() {
         }
     }
 
-    private fun showTests() {
-        testsContainer.addView(getTestsHeaderView())
+    private fun showTests(tests: List<TestDetails>) {
+        if (tests.isNotEmpty()) {
+            testsContainer.addView(getTestsHeaderView())
+        }
     }
 
     private fun getChangesHeaderView() = inflate(R.layout.changes_header)

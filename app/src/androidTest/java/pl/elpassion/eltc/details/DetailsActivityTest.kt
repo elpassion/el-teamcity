@@ -157,6 +157,12 @@ class DetailsActivityTest : BaseActivityTest() {
         onText(R.string.tests).isDisplayed()
     }
 
+    @Test
+    fun Do_not_display_tests_header_when_no_tests() {
+        states.onNext(newDetailsState(tests = emptyList()))
+        onText(R.string.tests).doesNotExist()
+    }
+
     private fun newDetailsState(build: Build = createBuild(),
                                 changes: List<Change> = emptyList(),
                                 tests: List<TestDetails> = emptyList()) =
