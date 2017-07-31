@@ -90,7 +90,7 @@ class DetailsActivityTest : BaseActivityTest() {
 
     @Test
     fun Open_build_in_web_browser() {
-        states.onNext(LoadingDetailsState(createBuild()))
+        states.onNext(DetailsState(createBuild(), emptyList()))
         onId(R.id.open_in_browser).click()
         verify(model).perform(argThat { this is OpenInWebBrowser })
     }

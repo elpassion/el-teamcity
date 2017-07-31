@@ -138,7 +138,7 @@ class TeamCityModelImpl(private val api: TeamCityApi,
 
     private fun openWebBrowser() {
         state.firstElement().subscribe {
-            if (it is LoadingDetailsState) {
+            if (it is DetailsState) {
                 goTo(WebBrowserState(it.build.webUrl))
             }
         }
