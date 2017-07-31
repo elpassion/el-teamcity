@@ -163,6 +163,13 @@ class DetailsActivityTest : BaseActivityTest() {
         onText(R.string.tests).doesNotExist()
     }
 
+    @Test
+    fun Display_test_name_on_details_loaded() {
+        val testName = "pl.elpassion.eltc.SampleTest.Display something"
+        states.onNext(newDetailsState(tests = listOf(createTestDetails(name = testName))))
+        onText(testName).isDisplayed()
+    }
+
     private fun newDetailsState(build: Build = createBuild(),
                                 changes: List<Change> = emptyList(),
                                 tests: List<TestDetails> = emptyList()) =

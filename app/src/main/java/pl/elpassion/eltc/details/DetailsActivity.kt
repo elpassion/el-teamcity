@@ -7,6 +7,7 @@ import com.elpassion.android.view.hide
 import com.elpassion.android.view.show
 import kotlinx.android.synthetic.main.change_item.view.*
 import kotlinx.android.synthetic.main.details_activity.*
+import kotlinx.android.synthetic.main.test_item.view.*
 import pl.elpassion.eltc.*
 import pl.elpassion.eltc.util.inflate
 import java.text.SimpleDateFormat
@@ -57,6 +58,7 @@ class DetailsActivity : BaseActivity() {
     private fun showTests(tests: List<TestDetails>) {
         if (tests.isNotEmpty()) {
             testsContainer.addView(getTestsHeaderView())
+            tests.forEach { testsContainer.addView(getTestView(it)) }
         }
     }
 
@@ -70,6 +72,10 @@ class DetailsActivity : BaseActivity() {
     }
 
     private fun getTestsHeaderView() = inflate(R.layout.tests_header)
+
+    private fun getTestView(test: TestDetails) = inflate(R.layout.test_item).apply {
+        testName.text = test.name
+    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.details_menu, menu)
