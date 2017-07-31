@@ -113,7 +113,7 @@ class DetailsActivityTest : BaseActivityTest() {
     @Test
     fun Do_not_display_changes_header_when_no_changes() {
         states.onNext(DetailsState(createBuild(), emptyList()))
-        onText(R.string.changes).isNotDisplayed()
+        onText(R.string.changes).doesNotExist()
     }
 
     @Test
