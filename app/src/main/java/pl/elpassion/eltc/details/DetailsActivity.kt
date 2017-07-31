@@ -75,6 +75,18 @@ class DetailsActivity : BaseActivity() {
 
     private fun getTestView(test: TestDetails) = inflate(R.layout.test_item).apply {
         testName.text = test.name
+        testStatusBg.setImageResource(getTestStatusBgResId(test))
+        testStatusIcon.setImageResource(getTestStatusIconResId(test))
+    }
+
+    private fun getTestStatusBgResId(test: TestDetails) = when {
+        test.status == "SUCCESS" -> R.drawable.test_success_bg
+        else -> R.drawable.test_failure_bg
+    }
+
+    private fun getTestStatusIconResId(test: TestDetails) = when {
+        test.status == "SUCCESS" -> R.drawable.ic_success
+        else -> R.drawable.ic_failure
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
