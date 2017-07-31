@@ -164,10 +164,17 @@ class DetailsActivityTest : BaseActivityTest() {
     }
 
     @Test
+    fun Display_test_suite_on_details_loaded() {
+        states.onNext(newDetailsState(tests = listOf(createTestDetails(
+                name = "pl.elpassion.eltc.SampleTest.Display something"))))
+        onText("pl.elpassion.eltc.SampleTest").isDisplayed()
+    }
+
+    @Test
     fun Display_test_name_on_details_loaded() {
-        val testName = "pl.elpassion.eltc.SampleTest.Display something"
-        states.onNext(newDetailsState(tests = listOf(createTestDetails(name = testName))))
-        onText(testName).isDisplayed()
+        states.onNext(newDetailsState(tests = listOf(createTestDetails(
+                name = "pl.elpassion.eltc.SampleTest.Display something"))))
+        onText("Display something").isDisplayed()
     }
 
     @Test

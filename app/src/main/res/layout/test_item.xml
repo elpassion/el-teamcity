@@ -29,14 +29,35 @@
 
     </FrameLayout>
 
-    <TextView
-        android:id="@+id/testName"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:lines="2"
-        android:textColor="@android:color/black"
-        android:textSize="12sp"
-        tools:text="Test name" />
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/testSuite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:textColor="@android:color/black"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            tools:text="Test suite" />
+
+        <TextView
+            android:id="@+id/testName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:textColor="@android:color/black"
+            android:textSize="12sp"
+            tools:text="Test name" />
+
+    </LinearLayout>
 
 </LinearLayout>

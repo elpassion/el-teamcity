@@ -5,11 +5,14 @@ import com.elpassion.android.commons.recycler.basic.ViewHolderBinder
 import kotlinx.android.synthetic.main.test_item.view.*
 import pl.elpassion.eltc.R
 import pl.elpassion.eltc.TestDetails
+import pl.elpassion.eltc.details.TestNameExtractor
 
 class TestDetailsViewHolder(itemView: View) : ViewHolderBinder<Any>(itemView) {
 
     override fun bind(item: Any) = with(item as TestDetails) {
-        itemView.testName.text = item.name
+        val (suite, name) = TestNameExtractor.extract(item.name)
+        itemView.testSuite.text = suite
+        itemView.testName.text = name
         itemView.testStatusBg.setImageResource(getTestStatusBgResId(item))
         itemView.testStatusIcon.setImageResource(getTestStatusIconResId(item))
     }
