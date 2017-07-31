@@ -1,25 +1,43 @@
 package pl.elpassion.eltc.details
 
 import android.os.Bundle
+import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
+import com.elpassion.android.commons.recycler.adapters.basicAdapterWithConstructors
 import com.elpassion.android.view.hide
 import com.elpassion.android.view.show
-import kotlinx.android.synthetic.main.change_item.view.*
 import kotlinx.android.synthetic.main.details_activity.*
-import kotlinx.android.synthetic.main.test_item.view.*
 import pl.elpassion.eltc.*
-import pl.elpassion.eltc.util.inflate
-import java.text.SimpleDateFormat
-import java.util.*
+import pl.elpassion.eltc.details.util.toTime
+import pl.elpassion.eltc.details.util.toTimeWithoutDate
+import pl.elpassion.eltc.details.viewholder.ChangeViewHolder
+import pl.elpassion.eltc.details.viewholder.SectionViewHolder
+import pl.elpassion.eltc.details.viewholder.TestDetailsViewHolder
 
 class DetailsActivity : BaseActivity() {
+
+    private val items = mutableListOf<Any>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.details_activity)
         setSupportActionBar(toolbar)
+        setupRecyclerView()
         initModel()
+    }
+
+    private fun setupRecyclerView() {
+        detailsRecyclerView.setHasFixedSize(true)
+        detailsRecyclerView.layoutManager = LinearLayoutManager(this)
+        detailsRecyclerView.adapter = basicAdapterWithConstructors(items) { position ->
+            when (items[position]) {
+                is DetailsSection -> R.layout.section_item to ::SectionViewHolder
+                is Change -> R.layout.change_item to ::ChangeViewHolder
+                is TestDetails -> R.layout.test_item to ::TestDetailsViewHolder
+                else -> throw IllegalStateException()
+            }
+        }
     }
 
     override fun onBackPressed() {
@@ -32,8 +50,7 @@ class DetailsActivity : BaseActivity() {
             is DetailsState -> {
                 loader.hide()
                 showBuild(state.build)
-                showChanges(state.changes)
-                showTests(state.tests)
+                showDetails(state.changes, state.tests)
             }
             is LoadingBuildsState -> openBuildsScreen()
             is WebBrowserState -> openWebBrowser(state.url)
@@ -47,48 +64,27 @@ class DetailsActivity : BaseActivity() {
         buildTime.text = build.time
     }
 
-    private fun showChanges(changes: List<Change>) = changesContainer.run {
-        removeAllViews()
+    private fun showDetails(changes: List<Change>, tests: List<TestDetails>) {
+        items.run {
+            clear()
+            addChanges(changes)
+            addTests(tests)
+        }
+        detailsRecyclerView.adapter.notifyDataSetChanged()
+    }
+
+    private fun MutableList<Any>.addChanges(changes: List<Change>) {
         if (changes.isNotEmpty()) {
-            addView(getChangesHeaderView())
-            changes.forEach { addView(getChangeView(it)) }
+            add(DetailsSection(getString(R.string.changes)))
+            addAll(changes)
         }
     }
 
-    private fun showTests(tests: List<TestDetails>) {
+    private fun MutableList<Any>.addTests(tests: List<TestDetails>) {
         if (tests.isNotEmpty()) {
-            testsContainer.addView(getTestsHeaderView())
-            tests.forEach { testsContainer.addView(getTestView(it)) }
+            add(DetailsSection(getString(R.string.tests)))
+            addAll(tests)
         }
-    }
-
-    private fun getChangesHeaderView() = inflate(R.layout.changes_header)
-
-    private fun getChangeView(change: Change) = inflate(R.layout.change_item).apply {
-        buildVersion.text = change.version.take(7)
-        buildAuthor.text = change.username
-        buildTime.text = change.date.toTime()
-        buildComment.text = change.comment
-    }
-
-    private fun getTestsHeaderView() = inflate(R.layout.tests_header)
-
-    private fun getTestView(test: TestDetails) = inflate(R.layout.test_item).apply {
-        testName.text = test.name
-        testStatusBg.setImageResource(getTestStatusBgResId(test))
-        testStatusIcon.setImageResource(getTestStatusIconResId(test))
-    }
-
-    private fun getTestStatusBgResId(test: TestDetails) = when(test.status) {
-        "SUCCESS" -> R.drawable.test_success_bg
-        "FAILURE" -> R.drawable.test_failure_bg
-        else -> R.drawable.test_ignored_bg
-    }
-
-    private fun getTestStatusIconResId(test: TestDetails) = when(test.status) {
-        "SUCCESS" -> R.drawable.ic_success
-        "FAILURE" -> R.drawable.ic_failure
-        else -> R.drawable.ic_ignored
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -118,7 +114,3 @@ private val Build.finishTime: String?
     get() = if (didLastOneDay()) finishDate?.toTimeWithoutDate() else finishDate?.toTime()
 
 private fun Build.didLastOneDay() = startDate?.day == finishDate?.day
-
-private fun Date.toTime() = SimpleDateFormat("d MMM YY HH:mm:ss", Locale.US).format(this)
-
-private fun Date.toTimeWithoutDate() = SimpleDateFormat("HH:mm:ss", Locale.US).format(this)
