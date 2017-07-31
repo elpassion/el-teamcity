@@ -27,9 +27,7 @@ class DetailsActivity : BaseActivity() {
 
     override fun showState(state: AppState?) {
         when (state) {
-            is LoadingDetailsState -> {
-                loader.show()
-            }
+            is LoadingDetailsState -> loader.show()
             is DetailsState -> {
                 loader.hide()
                 showBuild(state.build)
