@@ -47,8 +47,12 @@ class DetailsActivity : BaseActivity() {
 
     private fun showChanges(changes: List<Change>) {
         changesContainer.removeAllViews()
+        changesContainer.addView(getChangesHeaderView())
         changes.forEach { changesContainer.addView(getChangeView(it)) }
     }
+
+    private fun getChangesHeaderView() =
+            View.inflate(this, R.layout.changes_header, null)
 
     private fun getChangeView(change: Change) =
             View.inflate(this, R.layout.change_item, null).apply {

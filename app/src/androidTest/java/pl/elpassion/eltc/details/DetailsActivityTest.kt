@@ -105,6 +105,12 @@ class DetailsActivityTest : BaseActivityTest() {
     }
 
     @Test
+    fun Display_changes_header_if_changes_available() {
+        states.onNext(DetailsState(createBuild(), listOf(createChange())))
+        onText(R.string.changes).isDisplayed()
+    }
+
+    @Test
     fun Display_change_author_on_details_loaded() {
         val changes = listOf(createChange(username = "user1"))
         states.onNext(DetailsState(createBuild(), changes))
