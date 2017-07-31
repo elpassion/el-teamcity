@@ -73,11 +73,7 @@ class DetailsActivity : BaseActivity() {
 }
 
 private val Build.time: String
-    get() = if (finishDate != null) {
-        "Time: $totalTime"
-    } else {
-        "Started at: $startTime"
-    }
+    get() = if (finishDate != null) "Time: $totalTime" else "Started at: $startTime"
 
 private val Build.totalTime: String
     get() = "$startTime - $finishTime"
