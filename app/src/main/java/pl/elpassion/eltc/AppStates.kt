@@ -30,14 +30,18 @@ data class SelectProjectsDialogState(
 ) : AppState()
 
 data class LoadingDetailsState(
-        val build: Build
-) : AppState()
+        override val build: Build
+) : AppState(), WithBuild
 
 data class DetailsState(
-        val build: Build,
+        override val build: Build,
         val changes: List<Change>
-) : AppState()
+) : AppState(), WithBuild
 
 data class WebBrowserState(
         val url: String
 ) : AppState()
+
+interface WithBuild {
+    val build: Build
+}
