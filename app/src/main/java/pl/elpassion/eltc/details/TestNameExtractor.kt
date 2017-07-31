@@ -4,7 +4,7 @@ object TestNameExtractor {
 
     fun extract(fullName: String): Result {
         val name = fullName.takeLastWhile { it != '.' }.replace(oldChar = '_', newChar = ' ')
-        val suite = fullName.take(fullName.count() - name.count() - 1)
+        val suite = fullName.take(fullName.count() - name.count()).removeSuffix(".")
         return Result(suite, name)
     }
 
