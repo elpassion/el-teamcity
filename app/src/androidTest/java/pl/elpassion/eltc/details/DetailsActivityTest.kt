@@ -151,6 +151,14 @@ class DetailsActivityTest : BaseActivityTest() {
         Assert.assertTrue(activityRule.activity.isFinishing)
     }
 
-    private fun newDetailsState(build: Build = createBuild(), changes: List<Change> = emptyList()) =
-            DetailsState(build, changes)
+    @Test
+    fun Display_tests_header_if_tests_available() {
+        states.onNext(newDetailsState(tests = listOf(createTestDetails())))
+        onText(R.string.tests).isDisplayed()
+    }
+
+    private fun newDetailsState(build: Build = createBuild(),
+                                changes: List<Change> = emptyList(),
+                                tests: List<TestDetails> = emptyList()) =
+            DetailsState(build, changes, tests)
 }

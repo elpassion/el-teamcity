@@ -14,4 +14,5 @@
     <string name="show_all">Show all</string>
     <string name="open_in_browser">Open in browser</string>
     <string name="changes">Changes</string>
+    <string name="tests">Tests</string>
 </resources>

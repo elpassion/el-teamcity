@@ -32,6 +32,7 @@ class DetailsActivity : BaseActivity() {
                 loader.hide()
                 showBuild(state.build)
                 showChanges(state.changes)
+                showTests()
             }
             is LoadingBuildsState -> openBuildsScreen()
             is WebBrowserState -> openWebBrowser(state.url)
@@ -53,6 +54,10 @@ class DetailsActivity : BaseActivity() {
         }
     }
 
+    private fun showTests() {
+        testsContainer.addView(getTestsHeaderView())
+    }
+
     private fun getChangesHeaderView() = inflate(R.layout.changes_header)
 
     private fun getChangeView(change: Change) = inflate(R.layout.change_item).apply {
@@ -61,6 +66,8 @@ class DetailsActivity : BaseActivity() {
         time.text = change.date.toTime()
         comment.text = change.comment
     }
+
+    private fun getTestsHeaderView() = inflate(R.layout.tests_header)
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.details_menu, menu)
