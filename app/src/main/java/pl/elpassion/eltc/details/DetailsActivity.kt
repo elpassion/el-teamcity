@@ -45,11 +45,11 @@ class DetailsActivity : BaseActivity() {
         buildTime.text = build.time
     }
 
-    private fun showChanges(changes: List<Change>) {
-        changesContainer.removeAllViews()
+    private fun showChanges(changes: List<Change>) = changesContainer.run {
+        removeAllViews()
         if (changes.isNotEmpty()) {
-            changesContainer.addView(getChangesHeaderView())
-            changes.forEach { changesContainer.addView(getChangeView(it)) }
+            addView(getChangesHeaderView())
+            changes.forEach { addView(getChangeView(it)) }
         }
     }
 
