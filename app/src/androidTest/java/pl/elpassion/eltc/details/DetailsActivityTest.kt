@@ -43,32 +43,33 @@ class DetailsActivityTest : BaseActivityTest() {
     fun Hide_loader_on_details_loaded() {
         val build = createBuild()
         states.onNext(LoadingDetailsState(build))
-        states.onNext(DetailsState(build, emptyList()))
+        states.onNext(newDetailsState(build))
         onId(R.id.loader).isNotDisplayed()
     }
 
     @Test
     fun Display_build_number() {
-        states.onNext(DetailsState(createBuild(number = "76"), emptyList()))
+        states.onNext(newDetailsState(build = createBuild(number = "76")))
         onText("#76").isDisplayed()
     }
 
     @Test
     fun Display_build_project_name() {
-        states.onNext(DetailsState(createBuild(projectName = "Project 1"), emptyList()))
+        states.onNext(newDetailsState(build = createBuild(projectName = "Project 1")))
         onText("Project 1").isDisplayed()
     }
 
     @Test
     fun Display_build_status_text() {
-        states.onNext(DetailsState(createBuild(statusText = "Tests passed: 543"), emptyList()))
+        states.onNext(newDetailsState(build = createBuild(statusText = "Tests passed: 543")))
         onText("Tests passed: 543").isDisplayed()
     }
 
     @Test
     fun Display_time_of_not_finished_build() {
         val startDate = Date(1501161085000)
-        states.onNext(DetailsState(createBuild(startDate = startDate, finishDate = null), emptyList()))
+        states.onNext(newDetailsState(
+                build = createBuild(startDate = startDate, finishDate = null)))
         onText("Started at: 27 Jul 17 15:11:25").isDisplayed()
     }
 
@@ -76,7 +77,8 @@ class DetailsActivityTest : BaseActivityTest() {
     fun Display_time_of_finished_build() {
         val startDate = Date(1501161085000)
         val finishDate = Date(1501162510000)
-        states.onNext(DetailsState(createBuild(startDate = startDate, finishDate = finishDate), emptyList()))
+        states.onNext(newDetailsState(
+                build = createBuild(startDate = startDate, finishDate = finishDate)))
         onText("Time: 27 Jul 17 15:11:25 - 15:35:10").isDisplayed()
     }
 
@@ -84,13 +86,14 @@ class DetailsActivityTest : BaseActivityTest() {
     fun Display_time_of_build_finished_in_next_day() {
         val startDate = Date(1501161085000)
         val finishDate = Date(1501247484000)
-        states.onNext(DetailsState(createBuild(startDate = startDate, finishDate = finishDate), emptyList()))
+        states.onNext(newDetailsState(
+                build = createBuild(startDate = startDate, finishDate = finishDate)))
         onText("Time: 27 Jul 17 15:11:25 - 28 Jul 17 15:11:24").isDisplayed()
     }
 
     @Test
     fun Open_build_in_web_browser() {
-        states.onNext(DetailsState(createBuild(), emptyList()))
+        states.onNext(newDetailsState())
         onId(R.id.open_in_browser).click()
         verify(model).perform(argThat { this is OpenInWebBrowser })
     }
@@ -106,41 +109,38 @@ class DetailsActivityTest : BaseActivityTest() {
 
     @Test
     fun Display_changes_header_if_changes_available() {
-        states.onNext(DetailsState(createBuild(), listOf(createChange())))
+        states.onNext(newDetailsState(changes = listOf(createChange())))
         onText(R.string.changes).isDisplayed()
     }
 
     @Test
     fun Do_not_display_changes_header_when_no_changes() {
-        states.onNext(DetailsState(createBuild(), emptyList()))
+        states.onNext(newDetailsState())
         onText(R.string.changes).doesNotExist()
     }
 
     @Test
     fun Display_change_author_on_details_loaded() {
-        val changes = listOf(createChange(username = "user1"))
-        states.onNext(DetailsState(createBuild(), changes))
+        states.onNext(newDetailsState(changes = listOf(createChange(username = "user1"))))
         onText("user1").isDisplayed()
     }
 
     @Test
     fun Display_change_comment_on_details_loaded() {
-        val changes = listOf(createChange(comment = "Change 1 comment"))
-        states.onNext(DetailsState(createBuild(), changes))
+        states.onNext(newDetailsState(changes = listOf(createChange(comment = "Change 1 comment"))))
         onText("Change 1 comment").isDisplayed()
     }
 
     @Test
     fun Display_change_time_on_details_loaded() {
-        val changes = listOf(createChange(date = Date(1501250150000)))
-        states.onNext(DetailsState(createBuild(), changes))
+        states.onNext(newDetailsState(changes = listOf(createChange(date = Date(1501250150000)))))
         onText("28 Jul 17 15:55:50").isDisplayed()
     }
 
     @Test
     fun Display_change_version_on_details_loaded() {
-        val changes = listOf(createChange(version = "f8dfs3mdsa93nfdakekfneak"))
-        states.onNext(DetailsState(createBuild(), changes))
+        states.onNext(newDetailsState(
+                changes = listOf(createChange(version = "f8dfs3mdsa93nfdakekfneak"))))
         onText("f8dfs3m").isDisplayed()
     }
 
@@ -150,4 +150,7 @@ class DetailsActivityTest : BaseActivityTest() {
         checkIntent(BuildsActivity::class.java)
         Assert.assertTrue(activityRule.activity.isFinishing)
     }
+
+    private fun newDetailsState(build: Build = createBuild(), changes: List<Change> = emptyList()) =
+            DetailsState(build, changes)
 }
