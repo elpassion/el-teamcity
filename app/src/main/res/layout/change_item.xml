@@ -6,7 +6,7 @@
     android:orientation="horizontal">
 
     <TextView
-        android:id="@+id/version"
+        android:id="@+id/buildVersion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-medium"
@@ -29,7 +29,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/author"
+                android:id="@+id/buildAuthor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-medium"
@@ -38,7 +38,7 @@
                 tools:text="username" />
 
             <TextView
-                android:id="@+id/time"
+                android:id="@+id/buildTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="end"
@@ -51,7 +51,7 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/comment"
+            android:id="@+id/buildComment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:singleLine="true"

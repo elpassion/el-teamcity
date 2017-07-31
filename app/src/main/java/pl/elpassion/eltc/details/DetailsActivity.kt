@@ -65,10 +65,10 @@ class DetailsActivity : BaseActivity() {
     private fun getChangesHeaderView() = inflate(R.layout.changes_header)
 
     private fun getChangeView(change: Change) = inflate(R.layout.change_item).apply {
-        version.text = change.version.take(7)
-        author.text = change.username
-        time.text = change.date.toTime()
-        comment.text = change.comment
+        buildVersion.text = change.version.take(7)
+        buildAuthor.text = change.username
+        buildTime.text = change.date.toTime()
+        buildComment.text = change.comment
     }
 
     private fun getTestsHeaderView() = inflate(R.layout.tests_header)
