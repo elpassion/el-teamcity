@@ -204,6 +204,12 @@ class DetailsActivityTest : BaseActivityTest() {
         onText(R.string.ignored).isDisplayed()
     }
 
+    @Test
+    fun Do_not_display_ignored_tests_header_when_no_ignored_tests() {
+        states.onNext(newDetailsState(tests = listOf(createTestDetails(status = "SUCCESS"))))
+        onText(R.string.ignored).doesNotExist()
+    }
+
     private fun newDetailsState(build: Build = createBuild(),
                                 changes: List<Change> = emptyList(),
                                 tests: List<TestDetails> = emptyList()) =

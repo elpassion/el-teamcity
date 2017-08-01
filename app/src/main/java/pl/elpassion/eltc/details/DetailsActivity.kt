@@ -83,7 +83,9 @@ class DetailsActivity : BaseActivity() {
     private fun MutableList<Any>.addTests(tests: List<TestDetails>) {
         if (tests.isNotEmpty()) {
             add(DetailsSection(getString(R.string.tests)))
-            add(DetailsSection(getString(R.string.ignored)))
+            if (tests.any { it.status == "UNKNOWN" }) {
+                add(DetailsSection(getString(R.string.ignored)))
+            }
             addAll(tests)
         }
     }
