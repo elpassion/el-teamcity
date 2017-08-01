@@ -37,7 +37,16 @@ data class TestDetails(
         val status: String,
         val duration: Int?,
         val href: String
-)
+) : Comparable<TestDetails> {
+
+    override fun compareTo(other: TestDetails): Int = order.compareTo(other.order)
+
+    private val order get() = TestOrder.valueOf(status).order
+
+    private enum class TestOrder(val order: Int) {
+        FAILURE(0), UNKNOWN(1), SUCCESS(2)
+    }
+}
 
 data class Project(
         val id: String,

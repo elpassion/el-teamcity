@@ -133,7 +133,7 @@ class TeamCityModelImpl(private val api: TeamCityApi,
     private val onBuildDetails: (Pair<List<Change>, List<TestDetails>>) -> Unit = { (changes, tests) ->
         state.firstElement().subscribe {
             if (it is LoadingDetailsState) {
-                goTo(DetailsState(it.build, changes, tests.sortedBy(TestDetails::order)))
+                goTo(DetailsState(it.build, changes, tests.sorted()))
             }
         }
     }
@@ -162,5 +162,3 @@ class TeamCityModelImpl(private val api: TeamCityApi,
         is NetworkTimeoutException -> LoginState.Error.NETWORK_PROBLEM
     })
 }
-
-private val TestDetails.order get() = if (status == "UNKNOWN") 0 else 1
