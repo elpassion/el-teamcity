@@ -15,4 +15,5 @@
     <string name="open_in_browser">Open in browser</string>
     <string name="changes">Changes</string>
     <string name="tests">Tests</string>
+    <string name="ignored">Ignored</string>
 </resources>
