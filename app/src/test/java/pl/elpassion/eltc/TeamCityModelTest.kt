@@ -260,6 +260,17 @@ class TeamCityModelTest {
     }
 
     @Test
+    fun `Display ignored tests before passed tests`() {
+        val build = createBuild(id = 7)
+        val passedTest = createTestDetails(status = "SUCCESS")
+        val ignoredTest = createTestDetails(status = "UNKNOWN")
+        whenever(api.getChanges(build.id)).thenJust(emptyList())
+        whenever(api.getTests(build.id)).thenJust(listOf(passedTest, ignoredTest))
+        model.perform(SelectBuild(build))
+        observer.assertLastValue(DetailsState(build, emptyList(), listOf(ignoredTest, passedTest)))
+    }
+
+    @Test
     fun `Display url in web browser on open in web browser action`() {
         val url = "http://teamcity/buildUrl"
         model.perform(SelectBuild(createBuild(webUrl = url)))
