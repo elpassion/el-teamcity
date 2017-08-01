@@ -87,7 +87,9 @@ class DetailsActivity : BaseActivity() {
                 add(DetailsSection(getString(R.string.ignored)))
                 addAll(tests.filter { it.status == "UNKNOWN" })
             }
-            add(DetailsSection(getString(R.string.passed)))
+            if (tests.any { it.status == "SUCCESS" }) {
+                add(DetailsSection(getString(R.string.passed)))
+            }
             addAll(tests.filter { it.status != "UNKNOWN" })
         }
     }
