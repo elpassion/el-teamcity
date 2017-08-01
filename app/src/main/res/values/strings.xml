@@ -16,4 +16,5 @@
     <string name="changes">Changes</string>
     <string name="tests">Tests</string>
     <string name="ignored">Ignored</string>
+    <string name="passed">Passed</string>
 </resources>

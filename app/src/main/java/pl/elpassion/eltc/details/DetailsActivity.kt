@@ -85,8 +85,10 @@ class DetailsActivity : BaseActivity() {
             add(DetailsSection(getString(R.string.tests)))
             if (tests.any { it.status == "UNKNOWN" }) {
                 add(DetailsSection(getString(R.string.ignored)))
+                addAll(tests.filter { it.status == "UNKNOWN" })
             }
-            addAll(tests)
+            add(DetailsSection(getString(R.string.passed)))
+            addAll(tests.filter { it.status != "UNKNOWN" })
         }
     }
 
