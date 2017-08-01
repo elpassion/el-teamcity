@@ -171,7 +171,7 @@ class DetailsActivityTest : BaseActivityTest() {
     }
 
     @Test
-    fun Display_test_name_on_details_loaded() {
+    fun Display_test_case_on_details_loaded() {
         states.onNext(newDetailsState(tests = listOf(createTestDetails(
                 name = "pl.elpassion.eltc.SampleTest.Display something"))))
         onText("Display something").isDisplayed()
