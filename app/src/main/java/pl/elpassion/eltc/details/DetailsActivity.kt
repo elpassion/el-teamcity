@@ -89,8 +89,12 @@ class DetailsActivity : BaseActivity() {
             }
             if (tests.any { it.status == "SUCCESS" }) {
                 add(DetailsSection(getString(R.string.passed)))
+                addAll(tests.filter { it.status == "SUCCESS" })
             }
-            addAll(tests.filter { it.status != "UNKNOWN" })
+            if (tests.any { it.status == "FAILURE" }) {
+                add(DetailsSection(getString(R.string.failed)))
+                addAll(tests.filter { it.status == "FAILURE" })
+            }
         }
     }
 

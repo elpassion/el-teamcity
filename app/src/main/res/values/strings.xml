@@ -17,4 +17,5 @@
     <string name="tests">Tests</string>
     <string name="ignored">Ignored</string>
     <string name="passed">Passed</string>
+    <string name="failed">Failed</string>
 </resources>

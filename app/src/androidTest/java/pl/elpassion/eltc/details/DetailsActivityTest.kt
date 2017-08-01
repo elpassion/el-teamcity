@@ -222,6 +222,12 @@ class DetailsActivityTest : BaseActivityTest() {
         onText(R.string.passed).doesNotExist()
     }
 
+    @Test
+    fun Display_failed_tests_header_if_failed_tests_available() {
+        states.onNext(newDetailsState(tests = listOf(createTestDetails(status = "FAILURE"))))
+        onText(R.string.failed).isDisplayed()
+    }
+
     private fun newDetailsState(build: Build = createBuild(),
                                 changes: List<Change> = emptyList(),
                                 tests: List<TestDetails> = emptyList()) =
