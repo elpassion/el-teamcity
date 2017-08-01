@@ -3,10 +3,20 @@ package pl.elpassion.eltc.details
 object TestNameExtractor {
 
     fun extract(fullName: String): Result {
-        val name = fullName.takeLastWhile { it != '.' }.replace(oldChar = '_', newChar = ' ')
-        val suite = fullName.take(fullName.count() - name.count()).removeSuffix(".")
-        return Result(suite, name)
+        val testName = fullName.takeLastWhile { it != '.' }
+        val case = extractCase(testName)
+        val suite = extractSuite(fullName, testName)
+        return Result(suite, case)
     }
 
-    data class Result(val suite: String, val name: String)
+    private fun extractCase(testName: String) = testName
+            .replace(oldChar = '_', newChar = ' ')
+            .replace(Regex("((?!^)[A-Z])")) { " ${it.value.toLowerCase()}" }
+            .capitalize()
+
+    private fun extractSuite(fullName: String, testName: String) = fullName
+            .take(fullName.count() - testName.count())
+            .removeSuffix(".")
+
+    data class Result(val suite: String, val case: String)
 }
