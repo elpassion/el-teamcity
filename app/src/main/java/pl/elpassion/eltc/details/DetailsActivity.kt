@@ -14,6 +14,7 @@ import pl.elpassion.eltc.details.util.toTimeWithoutDate
 import pl.elpassion.eltc.details.viewholder.ChangeViewHolder
 import pl.elpassion.eltc.details.viewholder.SectionViewHolder
 import pl.elpassion.eltc.details.viewholder.TestDetailsViewHolder
+import pl.elpassion.eltc.details.viewholder.TestsSectionViewHolder
 
 class DetailsActivity : BaseActivity() {
 
@@ -33,6 +34,7 @@ class DetailsActivity : BaseActivity() {
         detailsRecyclerView.adapter = basicAdapterWithConstructors(items) { position ->
             when (items[position]) {
                 is DetailsSection -> R.layout.section_item to ::SectionViewHolder
+                is TestsSection -> R.layout.tests_section_item to ::TestsSectionViewHolder
                 is Change -> R.layout.change_item to ::ChangeViewHolder
                 is TestDetails -> R.layout.test_item to ::TestDetailsViewHolder
                 else -> throw IllegalStateException()
@@ -91,21 +93,21 @@ class DetailsActivity : BaseActivity() {
 
     private fun MutableList<Any>.addIgnoredTests(tests: List<TestDetails>) {
         if (tests.any(TestDetails::isIgnored)) {
-            add(DetailsSection(getString(R.string.ignored)))
+            add(TestsSection(getString(R.string.ignored)))
             addAll(tests.filter(TestDetails::isIgnored))
         }
     }
 
     private fun MutableList<Any>.addPassedTests(tests: List<TestDetails>) {
         if (tests.any(TestDetails::isPassed)) {
-            add(DetailsSection(getString(R.string.passed)))
+            add(TestsSection(getString(R.string.passed)))
             addAll(tests.filter(TestDetails::isPassed))
         }
     }
 
     private fun MutableList<Any>.addFailedTests(tests: List<TestDetails>) {
         if (tests.any(TestDetails::isFailed)) {
-            add(DetailsSection(getString(R.string.failed)))
+            add(TestsSection(getString(R.string.failed)))
             addAll(tests.filter(TestDetails::isFailed))
         }
     }
