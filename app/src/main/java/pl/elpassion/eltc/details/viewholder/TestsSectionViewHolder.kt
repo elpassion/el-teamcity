@@ -13,6 +13,7 @@ class TestsSectionViewHolder(itemView: View, private val onClick: (TestsSection)
         val icon = if (item.isExpanded) R.drawable.ic_expanded else R.drawable.ic_collapsed
         itemView.sectionIcon.setImageResource(icon)
         itemView.sectionName.text = item.name
+        itemView.sectionCount.text = item.count.toString()
         itemView.setOnClickListener { onClick(item) }
     }
 }

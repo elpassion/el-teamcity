@@ -130,22 +130,25 @@ class DetailsActivity : BaseActivity() {
 
     private fun MutableList<Any>.addFailedTests(tests: List<TestDetails>) {
         if (tests.any(TestDetails::isFailed)) {
-            add(TestsSection(getString(R.string.failed)))
-            addAll(tests.filter(TestDetails::isFailed))
+            val failedTests = tests.filter(TestDetails::isFailed)
+            add(TestsSection(getString(R.string.failed), count = failedTests.count()))
+            addAll(failedTests)
         }
     }
 
     private fun MutableList<Any>.addIgnoredTests(tests: List<TestDetails>) {
         if (tests.any(TestDetails::isIgnored)) {
-            add(TestsSection(getString(R.string.ignored), isExpanded = false))
-            addAll(tests.filter(TestDetails::isIgnored))
+            val ignoredTests = tests.filter(TestDetails::isIgnored)
+            add(TestsSection(getString(R.string.ignored), count = ignoredTests.count(), isExpanded = false))
+            addAll(ignoredTests)
         }
     }
 
     private fun MutableList<Any>.addPassedTests(tests: List<TestDetails>) {
         if (tests.any(TestDetails::isPassed)) {
-            add(TestsSection(getString(R.string.passed)))
-            addAll(tests.filter(TestDetails::isPassed))
+            val passedTests = tests.filter(TestDetails::isPassed)
+            add(TestsSection(getString(R.string.passed), count = passedTests.count()))
+            addAll(passedTests)
         }
     }
 

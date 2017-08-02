@@ -1,3 +1,5 @@
 package pl.elpassion.eltc.details
 
-data class TestsSection(val name: String, var isExpanded: Boolean = true)
+data class TestsSection(val name: String,
+                        val count: Int,
+                        var isExpanded: Boolean = true)

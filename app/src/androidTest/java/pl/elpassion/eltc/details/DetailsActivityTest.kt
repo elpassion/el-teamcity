@@ -242,6 +242,15 @@ class DetailsActivityTest : BaseActivityTest() {
         onText("Ignored test").doesNotExist()
     }
 
+    @Test
+    fun Display_tests_count_in_section() {
+        states.onNext(newDetailsState(tests = listOf(
+                createTestDetails(name = "Test1", status = "SUCCESS"),
+                createTestDetails(name = "Test2", status = "SUCCESS"),
+                createTestDetails(name = "Test3", status = "SUCCESS"))))
+        onText("3").isDisplayed()
+    }
+
     private fun newDetailsState(build: Build = createBuild(),
                                 changes: List<Change> = emptyList(),
                                 tests: List<TestDetails> = emptyList()) =
