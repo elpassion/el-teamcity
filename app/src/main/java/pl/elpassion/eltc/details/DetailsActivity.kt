@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import com.elpassion.android.commons.recycler.adapters.basicAdapterWithConstructors
 import com.elpassion.android.view.hide
 import com.elpassion.android.view.show
@@ -18,7 +19,8 @@ import pl.elpassion.eltc.details.viewholder.TestsSectionViewHolder
 
 class DetailsActivity : BaseActivity() {
 
-    private val items = mutableListOf<Any>()
+    private val allItems = mutableListOf<Any>()
+    private val visibleItems = mutableListOf<Any>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,15 +33,46 @@ class DetailsActivity : BaseActivity() {
     private fun setupRecyclerView() {
         detailsRecyclerView.setHasFixedSize(true)
         detailsRecyclerView.layoutManager = LinearLayoutManager(this)
-        detailsRecyclerView.adapter = basicAdapterWithConstructors(items) { position ->
-            when (items[position]) {
+        detailsRecyclerView.adapter = basicAdapterWithConstructors(visibleItems) { position ->
+            when (visibleItems[position]) {
                 is DetailsSection -> R.layout.section_item to ::SectionViewHolder
-                is TestsSection -> R.layout.tests_section_item to ::TestsSectionViewHolder
+                is TestsSection -> R.layout.tests_section_item to getTestsSectionViewHolder()
                 is Change -> R.layout.change_item to ::ChangeViewHolder
                 is TestDetails -> R.layout.test_item to ::TestDetailsViewHolder
                 else -> throw IllegalStateException()
             }
         }
+    }
+
+    private fun getTestsSectionViewHolder() = { itemView: View ->
+        TestsSectionViewHolder(itemView, onSectionClick)
+    }
+
+    private val onSectionClick: (TestsSection) -> Unit = { section ->
+        switchTests(section, predicate = { it.matchesSection(section.name) })
+    }
+
+    private fun TestDetails.matchesSection(name: String) = when (name) {
+        getString(R.string.failed) -> isFailed
+        getString(R.string.ignored) -> isIgnored
+        getString(R.string.passed) -> isPassed
+        else -> throw IllegalStateException()
+    }
+
+    private fun switchTests(section: TestsSection, predicate: (TestDetails) -> Boolean) {
+        val tests = allItems.filterIsInstance<TestDetails>().filter(predicate)
+        val sectionIndex = visibleItems.indexOf(section)
+        val positionStart = sectionIndex + 1
+        if (section.isExpanded) {
+            visibleItems.removeAll(tests)
+            detailsRecyclerView.adapter.notifyItemRangeRemoved(positionStart, tests.count())
+            section.isExpanded = false
+        } else {
+            visibleItems.addAll(positionStart, tests)
+            detailsRecyclerView.adapter.notifyItemRangeInserted(positionStart, tests.count())
+            section.isExpanded = true
+        }
+        detailsRecyclerView.adapter.notifyItemChanged(sectionIndex)
     }
 
     override fun onBackPressed() {
@@ -67,10 +100,14 @@ class DetailsActivity : BaseActivity() {
     }
 
     private fun showDetails(changes: List<Change>, tests: List<TestDetails>) {
-        items.run {
+        allItems.run {
             clear()
             addChanges(changes)
             addTests(tests)
+        }
+        visibleItems.run {
+            clear()
+            addAll(allItems)
         }
         detailsRecyclerView.adapter.notifyDataSetChanged()
     }
