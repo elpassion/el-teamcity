@@ -122,9 +122,16 @@ class DetailsActivity : BaseActivity() {
     private fun MutableList<Any>.addTests(tests: List<TestDetails>) {
         if (tests.isNotEmpty()) {
             add(DetailsSection(getString(R.string.tests)))
+            addFailedTests(tests)
             addIgnoredTests(tests)
             addPassedTests(tests)
-            addFailedTests(tests)
+        }
+    }
+
+    private fun MutableList<Any>.addFailedTests(tests: List<TestDetails>) {
+        if (tests.any(TestDetails::isFailed)) {
+            add(TestsSection(getString(R.string.failed)))
+            addAll(tests.filter(TestDetails::isFailed))
         }
     }
 
@@ -139,13 +146,6 @@ class DetailsActivity : BaseActivity() {
         if (tests.any(TestDetails::isPassed)) {
             add(TestsSection(getString(R.string.passed)))
             addAll(tests.filter(TestDetails::isPassed))
-        }
-    }
-
-    private fun MutableList<Any>.addFailedTests(tests: List<TestDetails>) {
-        if (tests.any(TestDetails::isFailed)) {
-            add(TestsSection(getString(R.string.failed)))
-            addAll(tests.filter(TestDetails::isFailed))
         }
     }
 
