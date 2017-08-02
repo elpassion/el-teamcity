@@ -39,9 +39,13 @@ data class TestDetails(
         val href: String
 ) : Comparable<TestDetails> {
 
-    override fun compareTo(other: TestDetails): Int = order.compareTo(other.order)
+    val isIgnored get() = status == "UNKNOWN"
+    val isPassed get() = status == "SUCCESS"
+    val isFailed get() = status == "FAILURE"
 
     private val order get() = TestOrder.valueOf(status).order
+
+    override fun compareTo(other: TestDetails): Int = order.compareTo(other.order)
 
     private enum class TestOrder(val order: Int) {
         FAILURE(0), UNKNOWN(1), SUCCESS(2)

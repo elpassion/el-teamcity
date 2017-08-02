@@ -83,18 +83,30 @@ class DetailsActivity : BaseActivity() {
     private fun MutableList<Any>.addTests(tests: List<TestDetails>) {
         if (tests.isNotEmpty()) {
             add(DetailsSection(getString(R.string.tests)))
-            if (tests.any { it.status == "UNKNOWN" }) {
-                add(DetailsSection(getString(R.string.ignored)))
-                addAll(tests.filter { it.status == "UNKNOWN" })
-            }
-            if (tests.any { it.status == "SUCCESS" }) {
-                add(DetailsSection(getString(R.string.passed)))
-                addAll(tests.filter { it.status == "SUCCESS" })
-            }
-            if (tests.any { it.status == "FAILURE" }) {
-                add(DetailsSection(getString(R.string.failed)))
-                addAll(tests.filter { it.status == "FAILURE" })
-            }
+            addIgnoredTests(tests)
+            addPassedTests(tests)
+            addFailedTests(tests)
+        }
+    }
+
+    private fun MutableList<Any>.addIgnoredTests(tests: List<TestDetails>) {
+        if (tests.any(TestDetails::isIgnored)) {
+            add(DetailsSection(getString(R.string.ignored)))
+            addAll(tests.filter(TestDetails::isIgnored))
+        }
+    }
+
+    private fun MutableList<Any>.addPassedTests(tests: List<TestDetails>) {
+        if (tests.any(TestDetails::isPassed)) {
+            add(DetailsSection(getString(R.string.passed)))
+            addAll(tests.filter(TestDetails::isPassed))
+        }
+    }
+
+    private fun MutableList<Any>.addFailedTests(tests: List<TestDetails>) {
+        if (tests.any(TestDetails::isFailed)) {
+            add(DetailsSection(getString(R.string.failed)))
+            addAll(tests.filter(TestDetails::isFailed))
         }
     }
 
