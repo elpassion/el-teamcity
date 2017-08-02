@@ -194,6 +194,7 @@ class DetailsActivityTest : BaseActivityTest() {
     @Test
     fun Display_ignored_status_of_ignored_test() {
         states.onNext(newDetailsState(tests = listOf(createTestDetails(status = "UNKNOWN"))))
+        onText(R.string.ignored).click()
         onImage(R.drawable.test_ignored_bg).isDisplayed()
         onImage(R.drawable.ic_ignored).isDisplayed()
     }
@@ -232,6 +233,13 @@ class DetailsActivityTest : BaseActivityTest() {
     fun Do_not_display_failed_tests_header_when_no_failed_tests() {
         states.onNext(newDetailsState(tests = listOf(createTestDetails(status = "SUCCESS"))))
         onText(R.string.failed).doesNotExist()
+    }
+
+    @Test
+    fun Collapse_ignored_tests_on_details_loaded() {
+        states.onNext(newDetailsState(tests = listOf(
+                createTestDetails(name = "Ignored test", status = "UNKNOWN"))))
+        onText("Ignored test").doesNotExist()
     }
 
     private fun newDetailsState(build: Build = createBuild(),

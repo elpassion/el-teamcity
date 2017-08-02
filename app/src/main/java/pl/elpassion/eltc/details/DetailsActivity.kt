@@ -107,7 +107,7 @@ class DetailsActivity : BaseActivity() {
         }
         visibleItems.run {
             clear()
-            addAll(allItems)
+            addAll(allItems.filterNot { it is TestDetails && it.isIgnored })
         }
         detailsRecyclerView.adapter.notifyDataSetChanged()
     }
@@ -137,7 +137,7 @@ class DetailsActivity : BaseActivity() {
 
     private fun MutableList<Any>.addIgnoredTests(tests: List<TestDetails>) {
         if (tests.any(TestDetails::isIgnored)) {
-            add(TestsSection(getString(R.string.ignored)))
+            add(TestsSection(getString(R.string.ignored), isExpanded = false))
             addAll(tests.filter(TestDetails::isIgnored))
         }
     }

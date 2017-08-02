@@ -41,7 +41,7 @@ fun createChange(comment: String = "Comment",
         comment = comment)
 
 fun createTestDetails(name: String = "Test name",
-                      status: String = "UNKNOWN") = TestDetails(
+                      status: String = "SUCCESS") = TestDetails(
         id = "1",
         name = name,
         status = status,
