@@ -57,7 +57,7 @@ object TeamCityApiImpl : TeamCityApi {
             service.getChanges(credentials, "build:(id:$buildId)").mapApiErrors().map(ChangesResponse::change)
 
     override fun getTests(buildId: Int): Single<List<TestDetails>> =
-            service.getTests(credentials, "build:(id:$buildId)").mapApiErrors().map(TestsResponse::testOccurrence)
+            service.getTests(credentials, "build:(id:$buildId)").mapApiErrors().map { it.testOccurrence ?: emptyList() }
 
     override fun getProjects(): Single<List<Project>> =
             service.getProjects(credentials).mapApiErrors().map(ProjectsResponse::project)
@@ -102,6 +102,6 @@ data class BuildsResponse(val build: List<Build>)
 
 data class ChangesResponse(val change: List<Change>)
 
-data class TestsResponse(val testOccurrence: List<TestDetails>)
+data class TestsResponse(val testOccurrence: List<TestDetails>?)
 
 data class ProjectsResponse(val project: List<Project>)
