@@ -55,10 +55,10 @@ class BuildsActivity : BaseActivity() {
     }
 
     private fun setupRecyclerView() {
-        buildsListRecyclerView.setHasFixedSize(true)
-        buildsListRecyclerView.layoutManager = LinearLayoutManager(this)
-        buildsListRecyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
-        buildsListRecyclerView.adapter = basicAdapterWithLayoutAndBinder(builds, R.layout.build_item, this::bindItem)
+        buildsRecyclerView.setHasFixedSize(true)
+        buildsRecyclerView.layoutManager = LinearLayoutManager(this)
+        buildsRecyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+        buildsRecyclerView.adapter = basicAdapterWithLayoutAndBinder(builds, R.layout.build_item, this::bindItem)
     }
 
     @SuppressLint("SetTextI18n")
@@ -141,7 +141,7 @@ class BuildsActivity : BaseActivity() {
 
     private fun showBuilds(builds: List<Build>) {
         this.builds.run { clear(); addAll(builds) }
-        buildsListRecyclerView.adapter.notifyDataSetChanged()
+        buildsRecyclerView.adapter.notifyDataSetChanged()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
