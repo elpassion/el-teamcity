@@ -1,12 +1,15 @@
 package pl.elpassion.eltc
 
 import android.app.Activity
+import android.app.ActivityOptions
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import pl.elpassion.eltc.builds.BuildsActivity
 import pl.elpassion.eltc.details.DetailsActivity
 import pl.elpassion.eltc.login.LoginActivity
+import android.util.Pair as TPair
 
 fun Activity.openLoginScreen() = open(LoginActivity::class.java)
 
@@ -26,4 +29,9 @@ private fun Activity.open(intent: Intent, bundle: Bundle? = null) {
         startActivity(intent)
     }
     finish()
+}
+
+fun Activity.newTransitionAnimation(vararg views: View): ActivityOptions {
+    val pairs = views.map { TPair(it, it.transitionName) }.toTypedArray()
+    return ActivityOptions.makeSceneTransitionAnimation(this, *pairs)
 }

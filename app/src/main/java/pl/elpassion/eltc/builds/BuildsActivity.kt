@@ -71,11 +71,7 @@ class BuildsActivity : BaseActivity() {
         bindBuildStatus(buildStatusBg, buildStatusIcon, buildProgressBar, item)
         setOnClickListener {
             if (item.state != "queued") {
-                options = ActivityOptions.makeSceneTransitionAnimation(this@BuildsActivity,
-                        TPair(buildNumber, buildNumber.transitionName),
-                        TPair(buildName, buildName.transitionName),
-                        TPair(projectName, projectName.transitionName),
-                        TPair(buildDetails, buildDetails.transitionName))
+                options = newTransitionAnimation(buildNumber, buildName, projectName, buildDetails)
                 model.perform(SelectBuild(item))
             }
         }
