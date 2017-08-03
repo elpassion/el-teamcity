@@ -11,11 +11,13 @@
         android:id="@+id/buildVersion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-medium"
         android:singleLine="true"
         android:layout_gravity="center_vertical"
         android:layout_marginEnd="8dp"
         android:textColor="@color/colorPrimaryDark"
+        android:fontFamily="monospace"
+        android:textStyle="bold"
+        android:textSize="12sp"
         tools:text="g2d4gd3" />
 
     <LinearLayout
