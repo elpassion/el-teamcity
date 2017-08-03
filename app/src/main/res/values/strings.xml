@@ -18,4 +18,10 @@
     <string name="ignored">Ignored</string>
     <string name="passed">Passed</string>
     <string name="failed">Failed</string>
+
+    <!-- Transitions -->
+    <string name="build_number_transition">build number transition</string>
+    <string name="build_name_transition">build name transition</string>
+    <string name="project_name_transition">project name transition</string>
+    <string name="build_details_transition">build details transition</string>
 </resources>

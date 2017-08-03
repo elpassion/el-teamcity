@@ -16,6 +16,7 @@ import pl.elpassion.eltc.details.viewholder.ChangeViewHolder
 import pl.elpassion.eltc.details.viewholder.SectionViewHolder
 import pl.elpassion.eltc.details.viewholder.TestDetailsViewHolder
 import pl.elpassion.eltc.details.viewholder.TestsSectionViewHolder
+import pl.elpassion.eltc.util.textView
 
 class DetailsActivity : BaseActivity() {
 
@@ -26,6 +27,7 @@ class DetailsActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.details_activity)
         setSupportActionBar(toolbar)
+        toolbar.textView.transitionName = getString(R.string.build_number_transition)
         setupRecyclerView()
         initModel()
     }

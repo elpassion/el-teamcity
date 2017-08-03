@@ -1,6 +1,7 @@
 package pl.elpassion.eltc.builds
 
 import android.annotation.SuppressLint
+import android.app.ActivityOptions
 import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
@@ -18,11 +19,13 @@ import kotlinx.android.synthetic.main.builds_activity.*
 import org.ocpsoft.prettytime.PrettyTime
 import pl.elpassion.eltc.*
 import java.util.*
+import android.util.Pair as TPair
 
 class BuildsActivity : BaseActivity() {
 
     private val builds = mutableListOf<Build>()
     private val prettyTime = PrettyTime(Locale.US)
+    private var options: ActivityOptions? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +47,7 @@ class BuildsActivity : BaseActivity() {
                 swipeToRefreshBuildsList.isRefreshing = false
                 showBuilds(state.builds)
             }
-            is LoadingDetailsState -> openDetailsScreen()
+            is LoadingDetailsState -> openDetailsScreen(options?.toBundle())
             is SelectProjectsDialogState -> {
                 showSelectProjectsDialog(state.projects)
             }
@@ -68,6 +71,11 @@ class BuildsActivity : BaseActivity() {
         bindBuildStatus(buildStatusBg, buildStatusIcon, buildProgressBar, item)
         setOnClickListener {
             if (item.state != "queued") {
+                options = ActivityOptions.makeSceneTransitionAnimation(this@BuildsActivity,
+                        TPair(buildNumber, buildNumber.transitionName),
+                        TPair(buildName, buildName.transitionName),
+                        TPair(projectName, projectName.transitionName),
+                        TPair(buildDetails, buildDetails.transitionName))
                 model.perform(SelectBuild(item))
             }
         }

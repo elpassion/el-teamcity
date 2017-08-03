@@ -51,6 +51,7 @@
             android:ellipsize="marquee"
             android:singleLine="true"
             android:textColor="@android:color/black"
+            android:transitionName="@string/build_number_transition"
             tools:text="#144" />
 
         <LinearLayout
@@ -67,6 +68,7 @@
                 android:singleLine="true"
                 android:textColor="@android:color/black"
                 android:textStyle="bold"
+                android:transitionName="@string/project_name_transition"
                 tools:text="Project name" />
 
             <TextView
@@ -90,6 +92,7 @@
             android:ellipsize="marquee"
             android:singleLine="true"
             android:textColor="@android:color/black"
+            android:transitionName="@string/build_name_transition"
             tools:text="Build name" />
 
         <TextView
@@ -98,6 +101,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="marquee"
             android:singleLine="true"
+            android:transitionName="@string/build_details_transition"
             tools:text="Build finished moments ago" />
 
     </LinearLayout>
