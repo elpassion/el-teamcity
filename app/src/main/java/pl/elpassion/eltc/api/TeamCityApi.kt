@@ -33,6 +33,7 @@ object TeamCityApiImpl : TeamCityApi {
     private var service by Delegates.notNull<Service>()
 
     private const val BUILDS_LOCATOR = "branch:default:any,running:any"
+    private const val TESTS_LOCATOR = "count:1000"
 
     override fun setAddress(url: String) {
         service = newRetrofit(url).create(Service::class.java)
@@ -57,7 +58,7 @@ object TeamCityApiImpl : TeamCityApi {
             service.getChanges(credentials, "build:(id:$buildId)").mapApiErrors().map(ChangesResponse::change)
 
     override fun getTests(buildId: Int): Single<List<TestDetails>> =
-            service.getTests(credentials, "build:(id:$buildId)").mapApiErrors().map { it.testOccurrence ?: emptyList() }
+            service.getTests(credentials, "build:(id:$buildId),$TESTS_LOCATOR").mapApiErrors().map { it.testOccurrence ?: emptyList() }
 
     override fun getProjects(): Single<List<Project>> =
             service.getProjects(credentials).mapApiErrors().map(ProjectsResponse::project)
