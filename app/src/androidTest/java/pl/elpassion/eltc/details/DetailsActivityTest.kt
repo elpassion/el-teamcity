@@ -39,6 +39,13 @@ class DetailsActivityTest : BaseActivityTest() {
     }
 
     @Test
+    fun Return_to_list_on_back_arrow_click() {
+        states.onNext(LoadingDetailsState(createBuild()))
+        onToolbarBackArrow().click()
+        verify(model).perform(argThat { this is ReturnToList })
+    }
+
+    @Test
     fun Display_loader_on_loading_details() {
         states.onNext(LoadingDetailsState(createBuild()))
         onId(R.id.loader).isDisplayed()

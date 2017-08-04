@@ -162,6 +162,7 @@ class DetailsActivity : BaseActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            android.R.id.home -> model.perform(ReturnToList)
             R.id.open_in_browser -> model.perform(OpenInWebBrowser)
             else -> super.onOptionsItemSelected(item)
         }
