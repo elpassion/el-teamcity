@@ -141,7 +141,7 @@ class TeamCityModelImpl(private val api: TeamCityApi,
     private fun openWebBrowser() {
         state.firstElement().subscribe {
             if (it is WithBuild) {
-                goTo(WebBrowserState(it.build.webUrl))
+                goTo(WebBrowserState(it.build))
             }
         }
     }

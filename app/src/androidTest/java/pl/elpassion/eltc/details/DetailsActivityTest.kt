@@ -99,11 +99,11 @@ class DetailsActivityTest : BaseActivityTest() {
     }
 
     @Test
-    fun Open_web_browser_with_proper_url() {
-        val url = "http://teamcity/buildUrl"
-        val intent = allOf(hasAction(Intent.ACTION_VIEW), hasData(Uri.parse(url)))
+    fun Open_web_browser_with_build_url() {
+        val build = createBuild(webUrl = "http://teamcity/buildUrl")
+        val intent = allOf(hasAction(Intent.ACTION_VIEW), hasData(Uri.parse(build.webUrl)))
         intending(intent).respondWith(Instrumentation.ActivityResult(0, null))
-        states.onNext(WebBrowserState(url = url))
+        states.onNext(WebBrowserState(build))
         intended(intent)
     }
 

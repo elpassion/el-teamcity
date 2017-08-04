@@ -40,8 +40,8 @@ data class DetailsState(
 ) : AppState(), WithBuild
 
 data class WebBrowserState(
-        val url: String
-) : AppState()
+        override val build: Build
+) : AppState(), WithBuild
 
 interface WithBuild {
     val build: Build

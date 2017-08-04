@@ -90,7 +90,7 @@ class DetailsActivity : BaseActivity() {
                 showDetails(state.changes, state.tests)
             }
             is LoadingBuildsState -> openBuildsScreen()
-            is WebBrowserState -> openWebBrowser(state.url)
+            is WebBrowserState -> openWebBrowser(state.build.webUrl)
         }
     }
 
