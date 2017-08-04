@@ -34,6 +34,7 @@ object TeamCityApiImpl : TeamCityApi {
 
     private const val BUILDS_LOCATOR = "branch:default:any,running:any"
     private const val TESTS_LOCATOR = "count:1000"
+    private const val UNAUTHORIZED_ERROR = 401
 
     override fun setAddress(url: String) {
         service = newRetrofit(url).create(Service::class.java)
@@ -65,7 +66,7 @@ object TeamCityApiImpl : TeamCityApi {
 
     private fun <T> Single<T>.mapApiErrors() = onErrorResumeNext {
         Single.error(when {
-            it is HttpException && it.code() == 401 -> InvalidCredentialsException // FIXME: this condition is not precise enough
+            it is HttpException && it.code() == UNAUTHORIZED_ERROR -> InvalidCredentialsException
             it is IOException -> NetworkTimeoutException
             else -> it
         })
