@@ -27,6 +27,7 @@ class DetailsActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.details_activity)
         setSupportActionBar(toolbar)
+        showBackArrowInToolbar()
         toolbar.textView.transitionName = getString(R.string.build_number_transition)
         setupRecyclerView()
         initModel()

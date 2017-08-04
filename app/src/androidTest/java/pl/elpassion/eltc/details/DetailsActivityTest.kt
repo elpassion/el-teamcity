@@ -27,6 +27,11 @@ class DetailsActivityTest : BaseActivityTest() {
     val activityRule = ActivityTestRule(DetailsActivity::class.java)
 
     @Test
+    fun Display_back_arrow_in_toolbar() {
+        onToolbarBackArrow().isDisplayed()
+    }
+
+    @Test
     fun Return_to_list_on_back_pressed() {
         states.onNext(LoadingDetailsState(createBuild()))
         pressBackUnconditionally()

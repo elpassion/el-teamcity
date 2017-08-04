@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.customtabs.CustomTabsIntent
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AppCompatActivity
 import android.view.View
 import pl.elpassion.eltc.builds.BuildsActivity
 import pl.elpassion.eltc.details.DetailsActivity
@@ -41,3 +42,5 @@ fun Activity.newTransitionAnimation(vararg views: View): ActivityOptions {
     val pairs = views.map { TPair(it, it.transitionName) }.toTypedArray()
     return ActivityOptions.makeSceneTransitionAnimation(this, *pairs)
 }
+
+fun AppCompatActivity.showBackArrowInToolbar() = supportActionBar?.setDisplayHomeAsUpEnabled(true)
