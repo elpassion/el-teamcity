@@ -6,6 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.support.customtabs.CustomTabsIntent
+import android.support.v4.content.ContextCompat
 import android.view.View
 import pl.elpassion.eltc.builds.BuildsActivity
 import pl.elpassion.eltc.details.DetailsActivity
@@ -19,7 +20,10 @@ fun Activity.openBuildsScreen() = open(BuildsActivity::class.java)
 fun Activity.openDetailsScreen(bundle: Bundle?) = open(DetailsActivity::class.java, bundle)
 
 fun Activity.openWebBrowser(url: String) =
-        CustomTabsIntent.Builder().build().launchUrl(this, Uri.parse(url))
+        CustomTabsIntent.Builder()
+                .setToolbarColor(ContextCompat.getColor(this, R.color.colorPrimary))
+                .build()
+                .launchUrl(this, Uri.parse(url))
 
 private fun <T : Activity> Activity.open(activity: Class<T>, bundle: Bundle? = null) =
         open(Intent(this, activity), bundle)
