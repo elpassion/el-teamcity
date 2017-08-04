@@ -6,6 +6,7 @@ import io.reactivex.Single
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test
+import java.util.*
 
 @Ignore
 class TeamCityRealApiTest {
@@ -32,6 +33,18 @@ class TeamCityRealApiTest {
     fun `Get queued builds after call to real TeamCity API`() {
         teamCityApi
                 .getQueuedBuilds()
+                .getAndPrint()
+    }
+
+    @Test
+    fun `Get finished builds after specified date after call to real TeamCity API`() {
+        val calendar = Calendar.getInstance().apply {
+            set(Calendar.YEAR, 2017)
+            set(Calendar.MONTH, Calendar.AUGUST)
+            set(Calendar.DAY_OF_MONTH, 1)
+        }
+        teamCityApi
+                .getFinishedBuilds(afterDate = calendar.time)
                 .getAndPrint()
     }
 

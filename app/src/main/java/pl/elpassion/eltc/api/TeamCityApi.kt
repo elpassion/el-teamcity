@@ -12,6 +12,8 @@ import retrofit2.http.Header
 import retrofit2.http.Path
 import retrofit2.http.Query
 import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
 import kotlin.properties.Delegates
 
 interface TeamCityApi {
@@ -19,6 +21,7 @@ interface TeamCityApi {
     fun setAddress(url: String)
     fun getBuilds(): Single<List<Build>>
     fun getQueuedBuilds(): Single<List<Build>>
+    fun getFinishedBuilds(afterDate: Date): Single<List<Build>>
     fun getBuildsForProjects(projectIds: List<String>): Single<List<Build>>
     fun getBuild(id: Int): Single<Build>
     fun getChanges(buildId: Int): Single<List<Change>>
@@ -45,6 +48,9 @@ object TeamCityApiImpl : TeamCityApi {
 
     override fun getQueuedBuilds(): Single<List<Build>> =
             service.getQueuedBuilds(credentials).mapApiErrors().map(BuildsResponse::build)
+
+    override fun getFinishedBuilds(afterDate: Date): Single<List<Build>> =
+            service.getFinishedBuilds(credentials, "finishDate:(date:${afterDate.format()},condition:after)").mapApiErrors().map(BuildsResponse::build)
 
     override fun getBuildsForProjects(projectIds: List<String>): Single<List<Build>> =
             zipSingles(projectIds.map { getBuildsForProject(it) }, sortDescBy = { it.queuedDate })
@@ -80,6 +86,9 @@ object TeamCityApiImpl : TeamCityApi {
         @GET("httpAuth/app/rest/buildQueue?fields=build($BUILD_FIELDS)")
         fun getQueuedBuilds(@Header("Authorization") credentials: String): Single<BuildsResponse>
 
+        @GET("httpAuth/app/rest/builds?fields=build($BUILD_FIELDS)")
+        fun getFinishedBuilds(@Header("Authorization") credentials: String, @Query("locator") locator: String): Single<BuildsResponse>
+
         @GET("httpAuth/app/rest/builds/id:{id}?fields=$BUILD_FIELDS")
         fun getBuild(@Header("Authorization") credentials: String, @Path("id") id: Int): Single<Build>
 
@@ -99,6 +108,8 @@ object TeamCityApiImpl : TeamCityApi {
         }
     }
 }
+
+private fun Date.format() = SimpleDateFormat("yyyyMMdd'T'HHmmssZ", Locale.US).format(this)
 
 data class BuildsResponse(val build: List<Build>)
 
