@@ -38,6 +38,7 @@ dependencies {
     implementation group: 'com.android.support', name: 'support-v4', version: android_support_version
     implementation group: 'com.android.support', name: 'design', version: android_support_version
     implementation group: 'com.android.support', name: 'recyclerview-v7', version: android_support_version
+    implementation group: 'com.android.support', name: 'customtabs', version: android_support_version
     implementation group: 'com.squareup.retrofit2', name: 'retrofit', version: retrofit_version
     implementation group: 'com.squareup.retrofit2', name: 'converter-moshi', version: retrofit_version
     implementation group: 'com.squareup.retrofit2', name: 'adapter-rxjava2', version: retrofit_version
