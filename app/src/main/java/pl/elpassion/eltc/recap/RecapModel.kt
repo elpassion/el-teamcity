@@ -6,12 +6,14 @@ import java.util.*
 
 class RecapModel(private val repository: RecapRepository,
                  private val api: TeamCityApi,
-                 private val notifier: RecapNotifier) {
+                 private val notifier: RecapNotifier,
+                 private val onFinish: () -> Unit) {
 
     fun onStart() {
         val lastFinishDate = repository.lastFinishDate
         if (lastFinishDate == null) {
             repository.lastFinishDate = Date()
+            onFinish()
         } else {
             getFinishedBuilds(lastFinishDate)
         }

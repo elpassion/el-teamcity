@@ -17,7 +17,8 @@ class RecapModelTest {
     private val repository = mock<RecapRepository>()
     private val api = mock<TeamCityApi>()
     private val notifier = mock<RecapNotifier>()
-    private val model = RecapModel(repository, api, notifier)
+    private val onFinish = mock<() -> Unit>()
+    private val model = RecapModel(repository, api, notifier, onFinish)
 
     @Before
     fun setup() {
@@ -116,5 +117,12 @@ class RecapModelTest {
                 createBuild(finishDate = Date(1502103410000), status = "SUCCESS")))
         model.onStart()
         verify(notifier, never()).showFailureNotification(any())
+    }
+
+    @Test
+    fun `Invoke finish on first start`() {
+        whenever(repository.lastFinishDate).thenReturn(null)
+        model.onStart()
+        verify(onFinish).invoke()
     }
 }
