@@ -34,7 +34,7 @@ class RecapModelTest {
     fun `Not set last finish date to new date on subsequent start`() {
         whenever(repository.lastFinishDate).thenReturn(Date())
         model.onStart()
-        verify(repository, never()).lastFinishDate = any()
+        verify(repository, never()).lastFinishDate = anyOrNull()
     }
 
     @Test
@@ -86,6 +86,15 @@ class RecapModelTest {
         whenever(repository.lastFinishDate).thenReturn(lastFinishDate)
         whenever(api.getFinishedBuilds(lastFinishDate)).thenError(RuntimeException())
         model.onStart()
-        verify(repository, never()).lastFinishDate = any()
+        verify(repository, never()).lastFinishDate = anyOrNull()
+    }
+
+    @Test
+    fun `Not update last finish date on empty result`() {
+        val lastFinishDate = Date(1502103373000)
+        whenever(repository.lastFinishDate).thenReturn(lastFinishDate)
+        whenever(api.getFinishedBuilds(lastFinishDate)).thenJust(listOf(createBuild(finishDate = null)))
+        model.onStart()
+        verify(repository, never()).lastFinishDate = anyOrNull()
     }
 }

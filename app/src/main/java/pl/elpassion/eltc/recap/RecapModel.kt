@@ -22,8 +22,10 @@ class RecapModel(private val repository: RecapRepository,
     }
 
     private val onFinishedBuilds: (List<Build>) -> Unit = { builds ->
-        repository.lastFinishDate = builds.map { it.finishDate }.filterNotNull()
-                .maxBy { it.time }
+        val newFinishDate = builds.map { it.finishDate }.filterNotNull().maxBy { it.time }
+        if (newFinishDate != null) {
+            repository.lastFinishDate = newFinishDate
+        }
     }
 
     private val onError: (Throwable) -> Unit = { }
