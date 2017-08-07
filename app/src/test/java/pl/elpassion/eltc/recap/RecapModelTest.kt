@@ -5,6 +5,7 @@ package pl.elpassion.eltc.recap
 import com.nhaarman.mockito_kotlin.*
 import io.reactivex.Scheduler
 import io.reactivex.schedulers.Schedulers.trampoline
+import io.reactivex.schedulers.TestScheduler
 import io.reactivex.subjects.SingleSubject
 import org.junit.Before
 import org.junit.Test
@@ -149,6 +150,17 @@ class RecapModelTest {
         whenever(repository.lastFinishDate).thenReturn(Date(1502103373000))
         createModel().onStart()
         apiSubject.onSuccess(listOf(createBuild(finishDate = Date(1502103410000))))
+        verify(onFinish).invoke()
+    }
+
+    @Test
+    fun `Subscribe on given scheduler`() {
+        val subscribeOn = TestScheduler()
+        whenever(repository.lastFinishDate).thenReturn(Date(1502103373000))
+        createModel(subscribeOnScheduler = subscribeOn).onStart()
+        apiSubject.onSuccess(emptyList())
+        verify(onFinish, never()).invoke()
+        subscribeOn.triggerActions()
         verify(onFinish).invoke()
     }
 
