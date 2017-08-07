@@ -125,4 +125,12 @@ class RecapModelTest {
         model.onStart()
         verify(onFinish).invoke()
     }
+
+    @Test
+    fun `Do not invoke finish on subsequent start before result from api`() {
+        val lastFinishDate = Date(1502103373000)
+        whenever(repository.lastFinishDate).thenReturn(lastFinishDate)
+        model.onStart()
+        verify(onFinish, never()).invoke()
+    }
 }
