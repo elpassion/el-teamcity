@@ -175,6 +175,17 @@ class RecapModelTest {
         verify(onFinish).invoke()
     }
 
+    @Test
+    fun `Clear disposable on stop`() {
+        whenever(repository.lastFinishDate).thenReturn(Date(1502103373000))
+        createModel().run {
+            onStart()
+            onStop()
+        }
+        apiSubject.onError(RuntimeException())
+        verify(onFinish, never()).invoke()
+    }
+
     private fun createModel(subscribeOnScheduler: Scheduler = trampoline(),
                             observeOnScheduler: Scheduler = trampoline()) =
             RecapModel(repository, api, notifier, onFinish,

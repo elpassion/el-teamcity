@@ -1,5 +1,7 @@
 package pl.elpassion.eltc.recap
 
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
 import pl.elpassion.eltc.Build
 import pl.elpassion.eltc.api.TeamCityApi
 import pl.elpassion.eltc.util.SchedulersSupplier
@@ -11,6 +13,8 @@ class RecapModel(private val repository: RecapRepository,
                  private val onFinish: () -> Unit,
                  private val schedulers: SchedulersSupplier) {
 
+    private val compositeDisposable = CompositeDisposable()
+
     fun onStart() {
         val lastFinishDate = repository.lastFinishDate
         if (lastFinishDate == null) {
@@ -21,11 +25,16 @@ class RecapModel(private val repository: RecapRepository,
         }
     }
 
+    fun onStop() {
+        compositeDisposable.clear()
+    }
+
     private fun getFinishedBuilds(lastFinishDate: Date) {
         api.getFinishedBuilds(lastFinishDate)
                 .subscribeOn(schedulers.backgroundScheduler)
                 .observeOn(schedulers.uiScheduler)
                 .subscribe(onFinishedBuilds, onError)
+                .addTo(compositeDisposable)
     }
 
     private val onFinishedBuilds: (List<Build>) -> Unit = { builds ->
