@@ -7,6 +7,7 @@ import org.junit.Before
 import org.junit.Test
 import pl.elpassion.eltc.api.TeamCityApi
 import pl.elpassion.eltc.createBuild
+import pl.elpassion.eltc.thenError
 import pl.elpassion.eltc.thenJust
 import pl.elpassion.eltc.thenNever
 import java.util.*
@@ -77,5 +78,14 @@ class RecapModelTest {
                 createBuild(finishDate = newFinishDates[2])))
         model.onStart()
         verify(repository).lastFinishDate = newFinishDates[1]
+    }
+
+    @Test
+    fun `Not update last finish date on api error`() {
+        val lastFinishDate = Date(1502103373000)
+        whenever(repository.lastFinishDate).thenReturn(lastFinishDate)
+        whenever(api.getFinishedBuilds(lastFinishDate)).thenError(RuntimeException())
+        model.onStart()
+        verify(repository, never()).lastFinishDate = any()
     }
 }

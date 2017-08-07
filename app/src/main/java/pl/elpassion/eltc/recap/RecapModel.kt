@@ -18,11 +18,13 @@ class RecapModel(private val repository: RecapRepository,
 
     private fun getFinishedBuilds(lastFinishDate: Date) {
         api.getFinishedBuilds(lastFinishDate)
-                .subscribe(onFinishedBuilds)
+                .subscribe(onFinishedBuilds, onError)
     }
 
     private val onFinishedBuilds: (List<Build>) -> Unit = { builds ->
         repository.lastFinishDate = builds.map { it.finishDate }.filterNotNull()
                 .maxBy { it.time }
     }
+
+    private val onError: (Throwable) -> Unit = { }
 }
