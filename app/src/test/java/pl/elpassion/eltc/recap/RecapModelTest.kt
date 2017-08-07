@@ -32,7 +32,7 @@ class RecapModelTest {
     }
 
     @Test
-    fun `Not set last finish date to new date on subsequent start`() {
+    fun `Do not set last finish date to new date on subsequent start`() {
         whenever(repository.lastFinishDate).thenReturn(Date())
         model.onStart()
         verify(repository, never()).lastFinishDate = anyOrNull()
@@ -51,7 +51,7 @@ class RecapModelTest {
     }
 
     @Test
-    fun `Not call api to get finished builds on first start`() {
+    fun `Do not call api to get finished builds on first start`() {
         whenever(repository.lastFinishDate).thenReturn(null)
         model.onStart()
         verify(api, never()).getFinishedBuilds(any())
@@ -82,7 +82,7 @@ class RecapModelTest {
     }
 
     @Test
-    fun `Not update last finish date on api error`() {
+    fun `Do not update last finish date on api error`() {
         val lastFinishDate = Date(1502103373000)
         whenever(repository.lastFinishDate).thenReturn(lastFinishDate)
         whenever(api.getFinishedBuilds(lastFinishDate)).thenError(RuntimeException())
@@ -91,7 +91,7 @@ class RecapModelTest {
     }
 
     @Test
-    fun `Not update last finish date on empty result`() {
+    fun `Do not update last finish date on empty result`() {
         val lastFinishDate = Date(1502103373000)
         whenever(repository.lastFinishDate).thenReturn(lastFinishDate)
         whenever(api.getFinishedBuilds(lastFinishDate)).thenJust(listOf(createBuild(finishDate = null)))
