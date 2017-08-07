@@ -3,8 +3,12 @@
 package pl.elpassion.eltc.recap
 
 import com.nhaarman.mockito_kotlin.*
+import org.junit.Before
 import org.junit.Test
 import pl.elpassion.eltc.api.TeamCityApi
+import pl.elpassion.eltc.createBuild
+import pl.elpassion.eltc.thenJust
+import pl.elpassion.eltc.thenNever
 import java.util.*
 
 class RecapModelTest {
@@ -12,6 +16,11 @@ class RecapModelTest {
     private val repository = mock<RecapRepository>()
     private val api = mock<TeamCityApi>()
     private val model = RecapModel(repository, api)
+
+    @Before
+    fun setup() {
+        whenever(api.getFinishedBuilds(any())).thenNever()
+    }
 
     @Test
     fun `Set last finish date to initial date on first start`() {
@@ -44,5 +53,16 @@ class RecapModelTest {
         whenever(repository.lastFinishDate).thenReturn(null)
         model.onStart()
         verify(api, never()).getFinishedBuilds(any())
+    }
+
+    @Test
+    fun `Update last finish date with new value from finished builds on api result`() {
+        val lastFinishDate = Date(1502103373000)
+        val newFinishDate = Date(1502103410000)
+        whenever(repository.lastFinishDate).thenReturn(lastFinishDate)
+        whenever(api.getFinishedBuilds(lastFinishDate)).thenJust(listOf(
+                createBuild(finishDate = newFinishDate)))
+        model.onStart()
+        verify(repository).lastFinishDate = newFinishDate
     }
 }

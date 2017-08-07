@@ -12,6 +12,9 @@ class RecapModel(private val repository: RecapRepository,
             repository.lastFinishDate = Date()
         } else {
             api.getFinishedBuilds(lastFinishDate)
+                    .subscribe { builds ->
+                        repository.lastFinishDate = builds.first().finishDate
+                    }
         }
     }
 }
