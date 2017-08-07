@@ -38,6 +38,8 @@ class RecapModel(private val repository: RecapRepository,
 
     private fun notifyAboutFailures(builds: List<Build>) {
         val failedBuilds = builds.filter { it.status == "FAILURE" }
-        notifier.showFailureNotification(failedBuilds)
+        if (failedBuilds.isNotEmpty()) {
+            notifier.showFailureNotification(failedBuilds)
+        }
     }
 }

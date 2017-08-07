@@ -108,4 +108,13 @@ class RecapModelTest {
         model.onStart()
         verify(notifier).showFailureNotification(listOf(failedBuild))
     }
+
+    @Test
+    fun `Do not show notification when no failures on api result`() {
+        whenever(repository.lastFinishDate).thenReturn(Date(1502103373000))
+        whenever(api.getFinishedBuilds(Date(1502103373000))).thenJust(listOf(
+                createBuild(finishDate = Date(1502103410000), status = "SUCCESS")))
+        model.onStart()
+        verify(notifier, never()).showFailureNotification(any())
+    }
 }
