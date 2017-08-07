@@ -133,4 +133,13 @@ class RecapModelTest {
         model.onStart()
         verify(onFinish, never()).invoke()
     }
+
+    @Test
+    fun `Invoke finish on api error`() {
+        val lastFinishDate = Date(1502103373000)
+        whenever(repository.lastFinishDate).thenReturn(lastFinishDate)
+        whenever(api.getFinishedBuilds(lastFinishDate)).thenError(RuntimeException())
+        model.onStart()
+        verify(onFinish).invoke()
+    }
 }

@@ -32,7 +32,7 @@ class RecapModel(private val repository: RecapRepository,
         }
     }
 
-    private val onError: (Throwable) -> Unit = { }
+    private val onError: (Throwable) -> Unit = { onFinish() }
 
     private val List<Build>.lastFinishDate get() = finishDates.maxBy { it.time }
 
