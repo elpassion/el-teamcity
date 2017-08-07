@@ -142,4 +142,13 @@ class RecapModelTest {
         model.onStart()
         verify(onFinish).invoke()
     }
+
+    @Test
+    fun `Invoke finish on successful api result`() {
+        whenever(repository.lastFinishDate).thenReturn(Date(1502103373000))
+        whenever(api.getFinishedBuilds(Date(1502103373000))).thenJust(listOf(
+                createBuild(finishDate = Date(1502103410000))))
+        model.onStart()
+        verify(onFinish).invoke()
+    }
 }

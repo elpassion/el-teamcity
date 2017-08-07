@@ -30,6 +30,7 @@ class RecapModel(private val repository: RecapRepository,
             notifyAboutFailures(builds)
             repository.lastFinishDate = finishDate
         }
+        onFinish()
     }
 
     private val onError: (Throwable) -> Unit = { onFinish() }
