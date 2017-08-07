@@ -28,7 +28,7 @@ class RecapModelTest {
     }
 
     @Test
-    fun `Call api to get finished build after last finish date`() {
+    fun `Call api to get finished builds after last finish date`() {
         val calendar = Calendar.getInstance().apply {
             set(Calendar.YEAR, 2017)
             set(Calendar.MONTH, Calendar.AUGUST)
@@ -37,5 +37,12 @@ class RecapModelTest {
         whenever(repository.lastFinishDate).thenReturn(calendar.time)
         model.onStart()
         verify(api).getFinishedBuilds(calendar.time)
+    }
+
+    @Test
+    fun `Not call api to get finished builds on first start`() {
+        whenever(repository.lastFinishDate).thenReturn(null)
+        model.onStart()
+        verify(api, never()).getFinishedBuilds(any())
     }
 }
