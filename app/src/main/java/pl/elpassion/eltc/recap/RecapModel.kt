@@ -1,5 +1,6 @@
 package pl.elpassion.eltc.recap
 
+import pl.elpassion.eltc.Build
 import pl.elpassion.eltc.api.TeamCityApi
 import java.util.*
 
@@ -17,9 +18,11 @@ class RecapModel(private val repository: RecapRepository,
 
     private fun getFinishedBuilds(lastFinishDate: Date) {
         api.getFinishedBuilds(lastFinishDate)
-                .subscribe { builds ->
-                    repository.lastFinishDate = builds.map { it.finishDate }.filterNotNull()
-                            .maxBy { it.time }
-                }
+                .subscribe(onFinishedBuilds)
+    }
+
+    private val onFinishedBuilds: (List<Build>) -> Unit = { builds ->
+        repository.lastFinishDate = builds.map { it.finishDate }.filterNotNull()
+                .maxBy { it.time }
     }
 }
