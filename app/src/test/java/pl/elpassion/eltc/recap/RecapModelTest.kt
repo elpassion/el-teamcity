@@ -16,7 +16,8 @@ class RecapModelTest {
 
     private val repository = mock<RecapRepository>()
     private val api = mock<TeamCityApi>()
-    private val model = RecapModel(repository, api)
+    private val notifier = mock<RecapNotifier>()
+    private val model = RecapModel(repository, api, notifier)
 
     @Before
     fun setup() {
@@ -96,5 +97,15 @@ class RecapModelTest {
         whenever(api.getFinishedBuilds(lastFinishDate)).thenJust(listOf(createBuild(finishDate = null)))
         model.onStart()
         verify(repository, never()).lastFinishDate = anyOrNull()
+    }
+
+    @Test
+    fun `Show notification with failed builds on api result`() {
+        val successfulBuild = createBuild(finishDate = Date(1502103410000), status = "SUCCESS")
+        val failedBuild = createBuild(finishDate = Date(1502103410001), status = "FAILURE")
+        whenever(repository.lastFinishDate).thenReturn(Date(1502103373000))
+        whenever(api.getFinishedBuilds(Date(1502103373000))).thenJust(listOf(successfulBuild, failedBuild))
+        model.onStart()
+        verify(notifier).showFailureNotification(listOf(failedBuild))
     }
 }
