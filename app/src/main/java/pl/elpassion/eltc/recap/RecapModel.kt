@@ -5,6 +5,8 @@ import java.util.*
 class RecapModel(private val repository: RecapRepository) {
 
     fun onStart() {
-        repository.lastFinishDate = Date()
+        if (repository.lastFinishDate == null) {
+            repository.lastFinishDate = Date()
+        }
     }
 }

@@ -2,11 +2,9 @@
 
 package pl.elpassion.eltc.recap
 
-import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockito_kotlin.*
 import org.junit.Test
+import java.util.*
 
 class RecapModelTest {
 
@@ -18,5 +16,12 @@ class RecapModelTest {
         whenever(repository.lastFinishDate).thenReturn(null)
         model.onStart()
         verify(repository).lastFinishDate = any()
+    }
+
+    @Test
+    fun `Not set last finish date to new date on subsequent start`() {
+        whenever(repository.lastFinishDate).thenReturn(Date())
+        model.onStart()
+        verify(repository, never()).lastFinishDate = any()
     }
 }
