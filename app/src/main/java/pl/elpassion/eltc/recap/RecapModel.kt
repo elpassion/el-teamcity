@@ -13,7 +13,8 @@ class RecapModel(private val repository: RecapRepository,
         } else {
             api.getFinishedBuilds(lastFinishDate)
                     .subscribe { builds ->
-                        repository.lastFinishDate = builds.first().finishDate
+                        repository.lastFinishDate = builds.map { it.finishDate }.filterNotNull()
+                                .maxBy { it.time }
                     }
         }
     }

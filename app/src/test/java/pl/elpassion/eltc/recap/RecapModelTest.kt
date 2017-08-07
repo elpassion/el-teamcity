@@ -65,4 +65,17 @@ class RecapModelTest {
         model.onStart()
         verify(repository).lastFinishDate = newFinishDate
     }
+
+    @Test
+    fun `Update last finish date with max value from finished builds on api result`() {
+        val lastFinishDate = Date(1502103373000)
+        val newFinishDates = listOf(Date(1502103410000), Date(1502103410002), Date(1502103410001))
+        whenever(repository.lastFinishDate).thenReturn(lastFinishDate)
+        whenever(api.getFinishedBuilds(lastFinishDate)).thenJust(listOf(
+                createBuild(finishDate = newFinishDates[0]),
+                createBuild(finishDate = newFinishDates[1]),
+                createBuild(finishDate = newFinishDates[2])))
+        model.onStart()
+        verify(repository).lastFinishDate = newFinishDates[1]
+    }
 }
