@@ -3,6 +3,8 @@
 package pl.elpassion.eltc.recap
 
 import com.nhaarman.mockito_kotlin.*
+import io.reactivex.Scheduler
+import io.reactivex.schedulers.Schedulers.trampoline
 import org.junit.Before
 import org.junit.Test
 import pl.elpassion.eltc.api.TeamCityApi
@@ -10,6 +12,7 @@ import pl.elpassion.eltc.createBuild
 import pl.elpassion.eltc.thenError
 import pl.elpassion.eltc.thenJust
 import pl.elpassion.eltc.thenNever
+import pl.elpassion.eltc.util.SchedulersSupplier
 import java.util.*
 
 class RecapModelTest {
@@ -18,7 +21,6 @@ class RecapModelTest {
     private val api = mock<TeamCityApi>()
     private val notifier = mock<RecapNotifier>()
     private val onFinish = mock<() -> Unit>()
-    private val model = RecapModel(repository, api, notifier, onFinish)
 
     @Before
     fun setup() {
@@ -28,14 +30,14 @@ class RecapModelTest {
     @Test
     fun `Set last finish date to initial date on first start`() {
         whenever(repository.lastFinishDate).thenReturn(null)
-        model.onStart()
+        createModel().onStart()
         verify(repository).lastFinishDate = any()
     }
 
     @Test
     fun `Do not set last finish date to new date on subsequent start`() {
         whenever(repository.lastFinishDate).thenReturn(Date())
-        model.onStart()
+        createModel().onStart()
         verify(repository, never()).lastFinishDate = anyOrNull()
     }
 
@@ -47,14 +49,14 @@ class RecapModelTest {
             set(Calendar.DAY_OF_MONTH, 1)
         }
         whenever(repository.lastFinishDate).thenReturn(calendar.time)
-        model.onStart()
+        createModel().onStart()
         verify(api).getFinishedBuilds(calendar.time)
     }
 
     @Test
     fun `Do not call api to get finished builds on first start`() {
         whenever(repository.lastFinishDate).thenReturn(null)
-        model.onStart()
+        createModel().onStart()
         verify(api, never()).getFinishedBuilds(any())
     }
 
@@ -65,7 +67,7 @@ class RecapModelTest {
         whenever(repository.lastFinishDate).thenReturn(lastFinishDate)
         whenever(api.getFinishedBuilds(lastFinishDate)).thenJust(listOf(
                 createBuild(finishDate = newFinishDate)))
-        model.onStart()
+        createModel().onStart()
         verify(repository).lastFinishDate = newFinishDate
     }
 
@@ -78,7 +80,7 @@ class RecapModelTest {
                 createBuild(finishDate = newFinishDates[0]),
                 createBuild(finishDate = newFinishDates[1]),
                 createBuild(finishDate = newFinishDates[2])))
-        model.onStart()
+        createModel().onStart()
         verify(repository).lastFinishDate = newFinishDates[1]
     }
 
@@ -87,7 +89,7 @@ class RecapModelTest {
         val lastFinishDate = Date(1502103373000)
         whenever(repository.lastFinishDate).thenReturn(lastFinishDate)
         whenever(api.getFinishedBuilds(lastFinishDate)).thenError(RuntimeException())
-        model.onStart()
+        createModel().onStart()
         verify(repository, never()).lastFinishDate = anyOrNull()
     }
 
@@ -96,7 +98,7 @@ class RecapModelTest {
         val lastFinishDate = Date(1502103373000)
         whenever(repository.lastFinishDate).thenReturn(lastFinishDate)
         whenever(api.getFinishedBuilds(lastFinishDate)).thenJust(listOf(createBuild(finishDate = null)))
-        model.onStart()
+        createModel().onStart()
         verify(repository, never()).lastFinishDate = anyOrNull()
     }
 
@@ -106,7 +108,7 @@ class RecapModelTest {
         val failedBuild = createBuild(finishDate = Date(1502103410001), status = "FAILURE")
         whenever(repository.lastFinishDate).thenReturn(Date(1502103373000))
         whenever(api.getFinishedBuilds(Date(1502103373000))).thenJust(listOf(successfulBuild, failedBuild))
-        model.onStart()
+        createModel().onStart()
         verify(notifier).showFailureNotification(listOf(failedBuild))
     }
 
@@ -115,14 +117,14 @@ class RecapModelTest {
         whenever(repository.lastFinishDate).thenReturn(Date(1502103373000))
         whenever(api.getFinishedBuilds(Date(1502103373000))).thenJust(listOf(
                 createBuild(finishDate = Date(1502103410000), status = "SUCCESS")))
-        model.onStart()
+        createModel().onStart()
         verify(notifier, never()).showFailureNotification(any())
     }
 
     @Test
     fun `Invoke finish on first start`() {
         whenever(repository.lastFinishDate).thenReturn(null)
-        model.onStart()
+        createModel().onStart()
         verify(onFinish).invoke()
     }
 
@@ -130,7 +132,7 @@ class RecapModelTest {
     fun `Do not invoke finish on subsequent start before result from api`() {
         val lastFinishDate = Date(1502103373000)
         whenever(repository.lastFinishDate).thenReturn(lastFinishDate)
-        model.onStart()
+        createModel().onStart()
         verify(onFinish, never()).invoke()
     }
 
@@ -139,7 +141,7 @@ class RecapModelTest {
         val lastFinishDate = Date(1502103373000)
         whenever(repository.lastFinishDate).thenReturn(lastFinishDate)
         whenever(api.getFinishedBuilds(lastFinishDate)).thenError(RuntimeException())
-        model.onStart()
+        createModel().onStart()
         verify(onFinish).invoke()
     }
 
@@ -148,7 +150,12 @@ class RecapModelTest {
         whenever(repository.lastFinishDate).thenReturn(Date(1502103373000))
         whenever(api.getFinishedBuilds(Date(1502103373000))).thenJust(listOf(
                 createBuild(finishDate = Date(1502103410000))))
-        model.onStart()
+        createModel().onStart()
         verify(onFinish).invoke()
     }
+
+    private fun createModel(subscribeOnScheduler: Scheduler = trampoline(),
+                            observeOnScheduler: Scheduler = trampoline()) =
+            RecapModel(repository, api, notifier, onFinish,
+                    SchedulersSupplier(subscribeOnScheduler, observeOnScheduler))
 }
