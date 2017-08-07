@@ -11,11 +11,15 @@ class RecapModel(private val repository: RecapRepository,
         if (lastFinishDate == null) {
             repository.lastFinishDate = Date()
         } else {
-            api.getFinishedBuilds(lastFinishDate)
-                    .subscribe { builds ->
-                        repository.lastFinishDate = builds.map { it.finishDate }.filterNotNull()
-                                .maxBy { it.time }
-                    }
+            getFinishedBuilds(lastFinishDate)
         }
+    }
+
+    private fun getFinishedBuilds(lastFinishDate: Date) {
+        api.getFinishedBuilds(lastFinishDate)
+                .subscribe { builds ->
+                    repository.lastFinishDate = builds.map { it.finishDate }.filterNotNull()
+                            .maxBy { it.time }
+                }
     }
 }
