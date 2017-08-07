@@ -32,6 +32,7 @@ class RecapModel(private val repository: RecapRepository,
     private fun getFinishedBuilds(lastFinishDate: Date) {
         api.getFinishedBuilds(lastFinishDate)
                 .subscribeOn(schedulers.backgroundScheduler)
+                .observeOn(schedulers.uiScheduler)
                 .subscribe(onFinishedBuilds, onError)
                 .addTo(compositeDisposable)
     }

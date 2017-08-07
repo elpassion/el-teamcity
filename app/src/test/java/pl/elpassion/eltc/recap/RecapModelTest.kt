@@ -164,6 +164,17 @@ class RecapModelTest {
         verify(onFinish).invoke()
     }
 
+    @Test
+    fun `Observe on given scheduler`() {
+        val observeOn = TestScheduler()
+        whenever(repository.lastFinishDate).thenReturn(Date(1502103373000))
+        createModel(observeOnScheduler = observeOn).onStart()
+        apiSubject.onSuccess(emptyList())
+        verify(onFinish, never()).invoke()
+        observeOn.triggerActions()
+        verify(onFinish).invoke()
+    }
+
     private fun createModel(subscribeOnScheduler: Scheduler = trampoline(),
                             observeOnScheduler: Scheduler = trampoline()) =
             RecapModel(repository, api, notifier, onFinish,
