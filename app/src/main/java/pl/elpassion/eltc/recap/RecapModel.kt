@@ -1,12 +1,17 @@
 package pl.elpassion.eltc.recap
 
+import pl.elpassion.eltc.api.TeamCityApi
 import java.util.*
 
-class RecapModel(private val repository: RecapRepository) {
+class RecapModel(private val repository: RecapRepository,
+                 private val api: TeamCityApi) {
 
     fun onStart() {
-        if (repository.lastFinishDate == null) {
+        val lastFinishDate = repository.lastFinishDate
+        if (lastFinishDate == null) {
             repository.lastFinishDate = Date()
+        } else {
+            api.getFinishedBuilds(lastFinishDate)
         }
     }
 }
