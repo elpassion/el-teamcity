@@ -9,18 +9,21 @@ import pl.elpassion.eltc.util.SchedulersSupplier
 
 class RecapService : JobService() {
 
+    private var parameters: JobParameters? = null
+
     private val controller by lazy {
         RecapController(
                 repository = DI.Recap.provideRepository(),
                 api = DI.provideTeamCityApi(),
                 notifier = DI.Recap.provideNotifier(),
-                onFinish = { jobFinished(null, true) },
+                onFinish = { jobFinished(parameters, true) },
                 schedulers = SchedulersSupplier(
                         backgroundScheduler = Schedulers.io(),
                         uiScheduler = AndroidSchedulers.mainThread()))
     }
 
     override fun onStartJob(parameters: JobParameters?): Boolean {
+        this.parameters = parameters
         controller.onStart()
         return true
     }

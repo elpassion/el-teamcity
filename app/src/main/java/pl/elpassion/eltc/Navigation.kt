@@ -2,6 +2,10 @@ package pl.elpassion.eltc
 
 import android.app.Activity
 import android.app.ActivityOptions
+import android.app.job.JobInfo
+import android.app.job.JobScheduler
+import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -12,6 +16,7 @@ import android.view.View
 import pl.elpassion.eltc.builds.BuildsActivity
 import pl.elpassion.eltc.details.DetailsActivity
 import pl.elpassion.eltc.login.LoginActivity
+import pl.elpassion.eltc.recap.RecapService
 import android.util.Pair as TPair
 
 fun Activity.openLoginScreen() = open(LoginActivity::class.java)
@@ -44,3 +49,12 @@ fun Activity.newTransitionAnimation(vararg views: View): ActivityOptions {
 }
 
 fun AppCompatActivity.showBackArrowInToolbar() = supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+fun Activity.scheduleRecapService() {
+    val jobScheduler = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
+    val jobInfo = JobInfo.Builder(1, ComponentName(packageName, RecapService::class.java.name))
+            .setPeriodic(5000 * 60)
+            .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+            .build()
+    jobScheduler.schedule(jobInfo)
+}

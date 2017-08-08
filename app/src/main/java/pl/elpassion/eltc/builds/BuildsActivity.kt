@@ -36,6 +36,7 @@ class BuildsActivity : BaseActivity() {
         swipeToRefreshBuildsList.setOnRefreshListener {
             model.perform(RefreshList)
         }
+        scheduleRecapService()
     }
 
     override fun showState(state: AppState?) {
