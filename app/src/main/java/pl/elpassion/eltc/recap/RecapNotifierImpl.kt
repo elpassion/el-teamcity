@@ -20,7 +20,7 @@ class RecapNotifierImpl(private val application: Application) : RecapNotifier {
         val resultIntent = PendingIntent.getActivity(application,
                 0, Intent(application, BuildsActivity::class.java), 0)
         val notification = NotificationCompat.Builder(application)
-                .setSmallIcon(R.drawable.ic_failure)
+                .setSmallIcon(R.drawable.ic_failure_recap)
                 .setContentTitle(application.getString(R.string.teamcity_recap))
                 .setContentText(message)
                 .setContentIntent(resultIntent)
