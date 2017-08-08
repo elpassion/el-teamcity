@@ -51,10 +51,13 @@ fun Activity.newTransitionAnimation(vararg views: View): ActivityOptions {
 fun AppCompatActivity.showBackArrowInToolbar() = supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
 fun Activity.scheduleRecapService() {
-    val jobScheduler = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
     val jobInfo = JobInfo.Builder(1, ComponentName(packageName, RecapService::class.java.name))
             .setPeriodic(5000 * 60)
             .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
             .build()
-    jobScheduler.schedule(jobInfo)
+    getJobScheduler().schedule(jobInfo)
 }
+
+fun Activity.cancelRecapService() = getJobScheduler().cancelAll()
+
+private fun Activity.getJobScheduler() = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler

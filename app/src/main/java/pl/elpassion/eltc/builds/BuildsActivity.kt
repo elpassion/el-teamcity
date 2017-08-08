@@ -42,7 +42,10 @@ class BuildsActivity : BaseActivity() {
     override fun showState(state: AppState?) {
         when (state) {
             is LoadingBuildsState -> loader.show()
-            is LoginState -> openLoginScreen()
+            is LoginState -> {
+                cancelRecapService()
+                openLoginScreen()
+            }
             is BuildsState -> {
                 loader.hide()
                 swipeToRefreshBuildsList.isRefreshing = false
