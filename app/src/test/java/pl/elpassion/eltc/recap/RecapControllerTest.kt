@@ -22,7 +22,7 @@ import java.util.*
 class RecapControllerTest {
 
     private val ADDRESS = "http://teamcity"
-    private val CREDENTIALS = "Basic credentials"
+    private val CREDENTIALS = "credentials"
     private val loginRepository = mock<LoginRepository>()
     private val recapRepository = mock<RecapRepository>()
     private val api = mock<TeamCityApi>()
@@ -56,6 +56,13 @@ class RecapControllerTest {
         whenever(recapRepository.lastFinishDate).thenReturn(Date(1502103373000))
         createController().onStart()
         verify(api).setAddress(ADDRESS)
+    }
+
+    @Test
+    fun `Set credentials on start if auth data available`() {
+        whenever(recapRepository.lastFinishDate).thenReturn(Date(1502103373000))
+        createController().onStart()
+        verify(api).credentials = "Basic $CREDENTIALS"
     }
 
     @Test

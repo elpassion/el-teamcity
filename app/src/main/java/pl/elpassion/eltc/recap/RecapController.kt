@@ -33,9 +33,10 @@ class RecapController(private val loginRepository: LoginRepository,
     }
 
     private fun tryToFetchData(lastFinishDate: Date) {
-        val address = loginRepository.authData?.address
-        if (address != null) {
-            api.setAddress(address)
+        val authData = loginRepository.authData
+        if (authData != null) {
+            api.setAddress(authData.address)
+            api.credentials = authData.fullCredentials
             getFinishedBuilds(lastFinishDate)
         } else {
             onFinish()
