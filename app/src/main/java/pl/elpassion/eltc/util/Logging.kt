@@ -2,4 +2,12 @@ package pl.elpassion.eltc.util
 
 import android.util.Log
 
-fun Any.log(message: Any?) = Log.w(javaClass.simpleName, message.toString())
+typealias Logger = (String?, String) -> Unit
+
+val androidLogger: Logger = { tag, message -> Log.v(tag, message) }
+
+val testLogger: Logger = { _, message -> println(message) }
+
+var logger: Logger = androidLogger
+
+fun Any.log(message: Any) = logger(javaClass.simpleName, message.toString())

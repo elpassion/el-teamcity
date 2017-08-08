@@ -13,6 +13,8 @@ import pl.elpassion.eltc.Build
 import pl.elpassion.eltc.api.TeamCityApi
 import pl.elpassion.eltc.createBuild
 import pl.elpassion.eltc.util.SchedulersSupplier
+import pl.elpassion.eltc.util.logger
+import pl.elpassion.eltc.util.testLogger
 import java.util.*
 
 class RecapControllerTest {
@@ -25,6 +27,7 @@ class RecapControllerTest {
 
     @Before
     fun setup() {
+        logger = testLogger
         whenever(api.getFinishedBuilds(any())).thenReturn(apiSubject)
     }
 
