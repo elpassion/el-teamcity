@@ -18,6 +18,7 @@
     <string name="ignored">Ignored</string>
     <string name="passed">Passed</string>
     <string name="failed">Failed</string>
+    <string name="teamcity_recap">EL TeamCity Recap</string>
 
     <!-- Transitions -->
     <string name="build_number_transition">build number transition</string>
