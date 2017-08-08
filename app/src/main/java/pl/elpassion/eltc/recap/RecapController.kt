@@ -5,6 +5,7 @@ import io.reactivex.rxkotlin.addTo
 import pl.elpassion.eltc.Build
 import pl.elpassion.eltc.api.TeamCityApi
 import pl.elpassion.eltc.util.SchedulersSupplier
+import pl.elpassion.eltc.util.log
 import java.util.*
 
 class RecapController(private val repository: RecapRepository,
@@ -38,6 +39,7 @@ class RecapController(private val repository: RecapRepository,
     }
 
     private val onFinishedBuilds: (List<Build>) -> Unit = { builds ->
+        log("new builds: ${builds.count()}")
         val finishDate = builds.lastFinishDate
         if (finishDate != null) {
             notifyAboutFailures(builds)

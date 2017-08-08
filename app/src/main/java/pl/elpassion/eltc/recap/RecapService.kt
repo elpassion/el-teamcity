@@ -6,6 +6,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import pl.elpassion.eltc.DI
 import pl.elpassion.eltc.util.SchedulersSupplier
+import pl.elpassion.eltc.util.log
 
 class RecapService : JobService() {
 
@@ -25,11 +26,13 @@ class RecapService : JobService() {
     override fun onStartJob(parameters: JobParameters?): Boolean {
         this.parameters = parameters
         controller.onStart()
+        log("Recap job started")
         return true
     }
 
     override fun onStopJob(parameters: JobParameters?): Boolean {
         controller.onStop()
+        log("Recap job interrupted")
         return true
     }
 }
