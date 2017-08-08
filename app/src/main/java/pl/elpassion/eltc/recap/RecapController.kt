@@ -4,11 +4,13 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import pl.elpassion.eltc.Build
 import pl.elpassion.eltc.api.TeamCityApi
+import pl.elpassion.eltc.login.LoginRepository
 import pl.elpassion.eltc.util.SchedulersSupplier
 import pl.elpassion.eltc.util.log
 import java.util.*
 
-class RecapController(private val repository: RecapRepository,
+class RecapController(private val loginRepository: LoginRepository,
+                      private val recapRepository: RecapRepository,
                       private val api: TeamCityApi,
                       private val notifier: RecapNotifier,
                       private val onFinish: () -> Unit,
@@ -17,17 +19,27 @@ class RecapController(private val repository: RecapRepository,
     private val compositeDisposable = CompositeDisposable()
 
     fun onStart() {
-        val lastFinishDate = repository.lastFinishDate
+        val lastFinishDate = recapRepository.lastFinishDate
         if (lastFinishDate == null) {
-            repository.lastFinishDate = Date()
+            recapRepository.lastFinishDate = Date()
             onFinish()
         } else {
-            getFinishedBuilds(lastFinishDate)
+            tryToFetchData(lastFinishDate)
         }
     }
 
     fun onStop() {
         compositeDisposable.clear()
+    }
+
+    private fun tryToFetchData(lastFinishDate: Date) {
+        val address = loginRepository.authData?.address
+        if (address != null) {
+            api.setAddress(address)
+            getFinishedBuilds(lastFinishDate)
+        } else {
+            onFinish()
+        }
     }
 
     private fun getFinishedBuilds(lastFinishDate: Date) {
@@ -43,7 +55,7 @@ class RecapController(private val repository: RecapRepository,
         val finishDate = builds.lastFinishDate
         if (finishDate != null) {
             notifyAboutFailures(builds)
-            repository.lastFinishDate = finishDate
+            recapRepository.lastFinishDate = finishDate
         }
         onFinish()
     }

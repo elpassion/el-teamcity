@@ -14,7 +14,8 @@ class RecapService : JobService() {
 
     private val controller by lazy {
         RecapController(
-                repository = DI.Recap.provideRepository(),
+                loginRepository = DI.provideLoginRepository(),
+                recapRepository = DI.Recap.provideRepository(),
                 api = DI.provideTeamCityApi(),
                 notifier = DI.Recap.provideNotifier(),
                 onFinish = { jobFinished(parameters, true) },
