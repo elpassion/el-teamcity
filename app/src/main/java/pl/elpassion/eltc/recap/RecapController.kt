@@ -7,11 +7,11 @@ import pl.elpassion.eltc.api.TeamCityApi
 import pl.elpassion.eltc.util.SchedulersSupplier
 import java.util.*
 
-class RecapModel(private val repository: RecapRepository,
-                 private val api: TeamCityApi,
-                 private val notifier: RecapNotifier,
-                 private val onFinish: () -> Unit,
-                 private val schedulers: SchedulersSupplier) {
+class RecapController(private val repository: RecapRepository,
+                      private val api: TeamCityApi,
+                      private val notifier: RecapNotifier,
+                      private val onFinish: () -> Unit,
+                      private val schedulers: SchedulersSupplier) {
 
     private val compositeDisposable = CompositeDisposable()
 

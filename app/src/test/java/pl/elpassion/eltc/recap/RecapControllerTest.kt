@@ -15,7 +15,7 @@ import pl.elpassion.eltc.createBuild
 import pl.elpassion.eltc.util.SchedulersSupplier
 import java.util.*
 
-class RecapModelTest {
+class RecapControllerTest {
 
     private val repository = mock<RecapRepository>()
     private val api = mock<TeamCityApi>()
@@ -31,14 +31,14 @@ class RecapModelTest {
     @Test
     fun `Set last finish date to initial date on first start`() {
         whenever(repository.lastFinishDate).thenReturn(null)
-        createModel().onStart()
+        createController().onStart()
         verify(repository).lastFinishDate = any()
     }
 
     @Test
     fun `Do not set last finish date to new date on subsequent start`() {
         whenever(repository.lastFinishDate).thenReturn(Date())
-        createModel().onStart()
+        createController().onStart()
         verify(repository, never()).lastFinishDate = anyOrNull()
     }
 
@@ -50,14 +50,14 @@ class RecapModelTest {
             set(Calendar.DAY_OF_MONTH, 1)
         }
         whenever(repository.lastFinishDate).thenReturn(calendar.time)
-        createModel().onStart()
+        createController().onStart()
         verify(api).getFinishedBuilds(calendar.time)
     }
 
     @Test
     fun `Do not call api to get finished builds on first start`() {
         whenever(repository.lastFinishDate).thenReturn(null)
-        createModel().onStart()
+        createController().onStart()
         verify(api, never()).getFinishedBuilds(any())
     }
 
@@ -66,7 +66,7 @@ class RecapModelTest {
         val lastFinishDate = Date(1502103373000)
         val newFinishDate = Date(1502103410000)
         whenever(repository.lastFinishDate).thenReturn(lastFinishDate)
-        createModel().onStart()
+        createController().onStart()
         apiSubject.onSuccess(listOf(createBuild(finishDate = newFinishDate)))
         verify(repository).lastFinishDate = newFinishDate
     }
@@ -76,7 +76,7 @@ class RecapModelTest {
         val lastFinishDate = Date(1502103373000)
         val newFinishDates = listOf(Date(1502103410000), Date(1502103410002), Date(1502103410001))
         whenever(repository.lastFinishDate).thenReturn(lastFinishDate)
-        createModel().onStart()
+        createController().onStart()
         apiSubject.onSuccess(listOf(
                 createBuild(finishDate = newFinishDates[0]),
                 createBuild(finishDate = newFinishDates[1]),
@@ -88,7 +88,7 @@ class RecapModelTest {
     fun `Do not update last finish date on api error`() {
         val lastFinishDate = Date(1502103373000)
         whenever(repository.lastFinishDate).thenReturn(lastFinishDate)
-        createModel().onStart()
+        createController().onStart()
         apiSubject.onError(RuntimeException())
         verify(repository, never()).lastFinishDate = anyOrNull()
     }
@@ -97,7 +97,7 @@ class RecapModelTest {
     fun `Do not update last finish date on empty result`() {
         val lastFinishDate = Date(1502103373000)
         whenever(repository.lastFinishDate).thenReturn(lastFinishDate)
-        createModel().onStart()
+        createController().onStart()
         apiSubject.onSuccess(listOf(createBuild(finishDate = null)))
         verify(repository, never()).lastFinishDate = anyOrNull()
     }
@@ -107,7 +107,7 @@ class RecapModelTest {
         val successfulBuild = createBuild(finishDate = Date(1502103410000), status = "SUCCESS")
         val failedBuild = createBuild(finishDate = Date(1502103410001), status = "FAILURE")
         whenever(repository.lastFinishDate).thenReturn(Date(1502103373000))
-        createModel().onStart()
+        createController().onStart()
         apiSubject.onSuccess(listOf(successfulBuild, failedBuild))
         verify(notifier).showFailureNotification(listOf(failedBuild))
     }
@@ -115,7 +115,7 @@ class RecapModelTest {
     @Test
     fun `Do not show notification when no failures on api result`() {
         whenever(repository.lastFinishDate).thenReturn(Date(1502103373000))
-        createModel().onStart()
+        createController().onStart()
         apiSubject.onSuccess(listOf(
                 createBuild(finishDate = Date(1502103410000), status = "SUCCESS")))
         verify(notifier, never()).showFailureNotification(any())
@@ -124,7 +124,7 @@ class RecapModelTest {
     @Test
     fun `Invoke finish on first start`() {
         whenever(repository.lastFinishDate).thenReturn(null)
-        createModel().onStart()
+        createController().onStart()
         verify(onFinish).invoke()
     }
 
@@ -132,7 +132,7 @@ class RecapModelTest {
     fun `Do not invoke finish on subsequent start before result from api`() {
         val lastFinishDate = Date(1502103373000)
         whenever(repository.lastFinishDate).thenReturn(lastFinishDate)
-        createModel().onStart()
+        createController().onStart()
         verify(onFinish, never()).invoke()
     }
 
@@ -140,7 +140,7 @@ class RecapModelTest {
     fun `Invoke finish on api error`() {
         val lastFinishDate = Date(1502103373000)
         whenever(repository.lastFinishDate).thenReturn(lastFinishDate)
-        createModel().onStart()
+        createController().onStart()
         apiSubject.onError(RuntimeException())
         verify(onFinish).invoke()
     }
@@ -148,7 +148,7 @@ class RecapModelTest {
     @Test
     fun `Invoke finish on successful api result`() {
         whenever(repository.lastFinishDate).thenReturn(Date(1502103373000))
-        createModel().onStart()
+        createController().onStart()
         apiSubject.onSuccess(listOf(createBuild(finishDate = Date(1502103410000))))
         verify(onFinish).invoke()
     }
@@ -157,7 +157,7 @@ class RecapModelTest {
     fun `Subscribe on given scheduler`() {
         val subscribeOn = TestScheduler()
         whenever(repository.lastFinishDate).thenReturn(Date(1502103373000))
-        createModel(subscribeOnScheduler = subscribeOn).onStart()
+        createController(subscribeOnScheduler = subscribeOn).onStart()
         apiSubject.onSuccess(emptyList())
         verify(onFinish, never()).invoke()
         subscribeOn.triggerActions()
@@ -168,7 +168,7 @@ class RecapModelTest {
     fun `Observe on given scheduler`() {
         val observeOn = TestScheduler()
         whenever(repository.lastFinishDate).thenReturn(Date(1502103373000))
-        createModel(observeOnScheduler = observeOn).onStart()
+        createController(observeOnScheduler = observeOn).onStart()
         apiSubject.onSuccess(emptyList())
         verify(onFinish, never()).invoke()
         observeOn.triggerActions()
@@ -178,7 +178,7 @@ class RecapModelTest {
     @Test
     fun `Clear disposable on stop`() {
         whenever(repository.lastFinishDate).thenReturn(Date(1502103373000))
-        createModel().run {
+        createController().run {
             onStart()
             onStop()
         }
@@ -186,8 +186,8 @@ class RecapModelTest {
         verify(onFinish, never()).invoke()
     }
 
-    private fun createModel(subscribeOnScheduler: Scheduler = trampoline(),
-                            observeOnScheduler: Scheduler = trampoline()) =
-            RecapModel(repository, api, notifier, onFinish,
+    private fun createController(subscribeOnScheduler: Scheduler = trampoline(),
+                                 observeOnScheduler: Scheduler = trampoline()) =
+            RecapController(repository, api, notifier, onFinish,
                     SchedulersSupplier(subscribeOnScheduler, observeOnScheduler))
 }
