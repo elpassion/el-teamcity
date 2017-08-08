@@ -26,5 +26,9 @@
         <activity
             android:name=".details.DetailsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+
+        <service
+            android:name=".recap.RecapService"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
     </application>
 </manifest>
