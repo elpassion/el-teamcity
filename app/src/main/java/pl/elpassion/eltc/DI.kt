@@ -29,6 +29,6 @@ object DI {
 
         var provideRepository: () -> RecapRepository = { RecapRepositoryImpl(provideApplication()) }
 
-        var provideNotifier: () -> RecapNotifier = { RecapNotifierImpl() }
+        var provideNotifier: () -> RecapNotifier = { RecapNotifierImpl(provideApplication()) }
     }
 }
