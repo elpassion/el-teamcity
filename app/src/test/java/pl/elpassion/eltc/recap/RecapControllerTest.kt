@@ -52,6 +52,13 @@ class RecapControllerTest {
     }
 
     @Test
+    fun `Set server address on start if auth data available`() {
+        whenever(recapRepository.lastFinishDate).thenReturn(Date(1502103373000))
+        createController().onStart()
+        verify(api).setAddress(ADDRESS)
+    }
+
+    @Test
     fun `Call api to get finished builds after last finish date`() {
         val calendar = Calendar.getInstance().apply {
             set(Calendar.YEAR, 2017)
