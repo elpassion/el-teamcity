@@ -4,13 +4,19 @@ import android.app.Application
 import android.preference.PreferenceManager
 import com.elpassion.android.commons.sharedpreferences.createSharedPrefs
 import com.elpassion.sharedpreferences.moshiadapter.moshiConverterAdapter
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.Rfc3339DateJsonAdapter
 import java.util.*
 
 class RecapRepositoryImpl(private val application: Application) : RecapRepository {
 
+    private val moshi = Moshi.Builder()
+            .add(Date::class.java, Rfc3339DateJsonAdapter().nullSafe())
+            .build()
+
     private val repository = createSharedPrefs<Date?>({
         PreferenceManager.getDefaultSharedPreferences(application)
-    }, moshiConverterAdapter())
+    }, moshiConverterAdapter(moshi = moshi))
 
     override var lastFinishDate: Date?
         get() = repository.read(LAST_FINISHED_DATE_KEY)
