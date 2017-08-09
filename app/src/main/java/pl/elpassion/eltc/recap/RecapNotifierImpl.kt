@@ -13,23 +13,29 @@ import pl.elpassion.eltc.builds.BuildsActivity
 
 class RecapNotifierImpl(private val application: Application) : RecapNotifier {
 
+    private val notificationManager
+        get() = application.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
     override fun showFailureNotification(failedBuilds: List<Build>) {
         notify("${failedBuilds.count()} new builds failed.")
     }
 
     private fun notify(message: String) {
-        val resultIntent = PendingIntent.getActivity(application,
-                0, Intent(application, BuildsActivity::class.java), 0)
-        val notification = NotificationCompat.Builder(application)
-                .setSmallIcon(R.drawable.ic_failure_recap)
-                .setColor(ContextCompat.getColor(application, R.color.failure))
-                .setContentTitle(application.getString(R.string.teamcity_recap))
-                .setContentText(message)
-                .setContentIntent(resultIntent)
-                .setAutoCancel(true)
-                .build()
-        val notificationManager = application
-                .getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val resultIntent = getResultIntent()
+        val notification = application.createNotification(message, resultIntent)
         notificationManager.notify(1, notification)
     }
+
+    private fun getResultIntent() = PendingIntent.getActivity(
+            application, 0, Intent(application, BuildsActivity::class.java), 0)
+
+    private fun Context.createNotification(message: String, resultIntent: PendingIntent?) =
+            NotificationCompat.Builder(this)
+                    .setSmallIcon(R.drawable.ic_failure_recap)
+                    .setColor(ContextCompat.getColor(this, R.color.failure))
+                    .setContentTitle(getString(R.string.teamcity_recap))
+                    .setContentText(message)
+                    .setContentIntent(resultIntent)
+                    .setAutoCancel(true)
+                    .build()
 }
