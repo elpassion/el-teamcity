@@ -1,6 +1,7 @@
 package pl.elpassion.eltc.recap
 
 import android.app.Application
+import android.app.Notification
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
@@ -38,5 +39,6 @@ class RecapNotifierImpl(private val application: Application) : RecapNotifier {
                     .setContentText(text)
                     .setContentIntent(intent)
                     .setAutoCancel(true)
+                    .setCategory(Notification.CATEGORY_STATUS)
                     .build()
 }
