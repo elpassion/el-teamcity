@@ -40,5 +40,10 @@ class RecapNotifierImpl(private val application: Application) : RecapNotifier {
                     .setContentIntent(intent)
                     .setAutoCancel(true)
                     .setCategory(Notification.CATEGORY_STATUS)
+                    .setGroup(FAILURES_GROUP_KEY)
                     .build()
+
+    companion object {
+        const val FAILURES_GROUP_KEY = "failures_group_key"
+    }
 }
