@@ -19,6 +19,9 @@ class RecapNotifierImpl(private val application: Application) : RecapNotifier {
 
     override fun showFailureNotifications(failedBuilds: List<Build>) {
         failedBuilds.forEach { notify(it) }
+        if (failedBuilds.count() > 1) {
+            notificationManager.notify(0, application.createGroupSummary())
+        }
     }
 
     private fun notify(build: Build) {
@@ -41,6 +44,15 @@ class RecapNotifierImpl(private val application: Application) : RecapNotifier {
                     .setAutoCancel(true)
                     .setCategory(Notification.CATEGORY_STATUS)
                     .setGroup(FAILURES_GROUP_KEY)
+                    .build()
+
+    private fun Application.createGroupSummary() =
+            NotificationCompat.Builder(this, RECAP_CHANNEL_ID)
+                    .setSmallIcon(R.drawable.ic_failure_recap)
+                    .setColor(ContextCompat.getColor(this, R.color.failure))
+                    .setCategory(Notification.CATEGORY_STATUS)
+                    .setGroup(FAILURES_GROUP_KEY)
+                    .setGroupSummary(true)
                     .build()
 
     companion object {
