@@ -1,7 +1,10 @@
 package pl.elpassion.eltc
 
+import android.annotation.SuppressLint
+import io.mironov.smuggler.AutoParcelable
 import java.util.*
 
+@SuppressLint("ParcelCreator")
 data class Build(
         val id: Int,
         val number: String?,
@@ -14,13 +17,14 @@ data class Build(
         val startDate: Date?,
         val finishDate: Date?,
         val buildType: BuildType
-)
+) : AutoParcelable
 
+@SuppressLint("ParcelCreator")
 data class BuildType(
         val id: String,
         val name: String,
         val projectName: String
-)
+) : AutoParcelable
 
 data class Change(
         val id: String,

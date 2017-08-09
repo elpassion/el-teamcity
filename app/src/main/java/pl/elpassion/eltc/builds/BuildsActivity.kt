@@ -36,7 +36,15 @@ class BuildsActivity : BaseActivity() {
         swipeToRefreshBuildsList.setOnRefreshListener {
             model.perform(RefreshList)
         }
+        checkExtras(intent.extras)
         scheduleRecapService()
+    }
+
+    private fun checkExtras(bundle: Bundle?) {
+        val build = bundle?.getParcelable<Build>(BUILD_KEY)
+        if (build != null) {
+            model.perform(SelectBuild(build))
+        }
     }
 
     override fun showState(state: AppState?) {
@@ -173,5 +181,9 @@ class BuildsActivity : BaseActivity() {
         }, {
             model.perform(RefreshList)
         }).show(fragmentManager, "select_projects")
+    }
+
+    companion object {
+        const val BUILD_KEY = "build_key"
     }
 }

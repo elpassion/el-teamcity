@@ -27,12 +27,18 @@ class RecapNotifierImpl(private val application: Application) : RecapNotifier {
     private fun notify(build: Build) {
         val title = "Build #${build.number} in ${build.buildType.projectName} failed"
         val text = build.statusText
-        val notification = application.createNotification(title, text, getResultIntent())
+        val notification = application.createNotification(title, text, getResultIntent(build))
         notificationManager.notify(build.id, notification)
     }
 
-    private fun getResultIntent() = PendingIntent.getActivity(
-            application, 0, Intent(application, BuildsActivity::class.java), 0)
+    private fun getResultIntent(build: Build): PendingIntent? {
+        val intent = Intent(application, BuildsActivity::class.java).apply {
+            putExtra(BuildsActivity.BUILD_KEY, build)
+            flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+        }
+        val flags = PendingIntent.FLAG_UPDATE_CURRENT
+        return PendingIntent.getActivity(application, 0, intent, flags)
+    }
 
     private fun Context.createNotification(title: String, text: String?, intent: PendingIntent?) =
             NotificationCompat.Builder(this, RECAP_CHANNEL_ID)

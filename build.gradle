@@ -19,6 +19,7 @@ buildscript {
     ext.rx_lifecycle_version = '2.1.0'
     ext.material_progressbar_version = '1.4.1'
     ext.multidex_version = '1.0.2'
+    ext.smuggler_version = '0.12.14'
     repositories {
         google()
         jcenter()
@@ -26,6 +27,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:3.0.0-alpha9'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "io.mironov.smuggler:smuggler-plugin:$smuggler_version"
     }
 }
 
