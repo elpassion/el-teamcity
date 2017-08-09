@@ -126,22 +126,22 @@ class RecapControllerTest {
     }
 
     @Test
-    fun `Show notification with failed builds on api result`() {
+    fun `Show notifications with failed builds on api result`() {
         val successfulBuild = createBuild(finishDate = Date(1502103410000), status = "SUCCESS")
         val failedBuild = createBuild(finishDate = Date(1502103410001), status = "FAILURE")
         whenever(recapRepository.lastFinishDate).thenReturn(Date(1502103373000))
         createController().onStart()
         apiSubject.onSuccess(listOf(successfulBuild, failedBuild))
-        verify(notifier).showFailureNotification(listOf(failedBuild))
+        verify(notifier).showFailureNotifications(listOf(failedBuild))
     }
 
     @Test
-    fun `Do not show notification when no failures on api result`() {
+    fun `Do not show notifications when no failures on api result`() {
         whenever(recapRepository.lastFinishDate).thenReturn(Date(1502103373000))
         createController().onStart()
         apiSubject.onSuccess(listOf(
                 createBuild(finishDate = Date(1502103410000), status = "SUCCESS")))
-        verify(notifier, never()).showFailureNotification(any())
+        verify(notifier, never()).showFailureNotifications(any())
     }
 
     @Test

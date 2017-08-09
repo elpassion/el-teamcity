@@ -16,12 +16,13 @@ class RecapNotifierImpl(private val application: Application) : RecapNotifier {
     private val notificationManager
         get() = application.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-    override fun showFailureNotification(failedBuilds: List<Build>) {
-        notify("${failedBuilds.count()} new builds failed.")
+    override fun showFailureNotifications(failedBuilds: List<Build>) {
+        failedBuilds.forEach { notify(it) }
     }
 
-    private fun notify(message: String) {
+    private fun notify(build: Build) {
         val resultIntent = getResultIntent()
+        val message = "Build #${build.number} failed."
         val notification = application.createNotification(message, resultIntent)
         notificationManager.notify(1, notification)
     }

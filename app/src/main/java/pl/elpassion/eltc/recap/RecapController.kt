@@ -70,7 +70,7 @@ class RecapController(private val loginRepository: LoginRepository,
     private fun notifyAboutFailures(builds: List<Build>) {
         val failedBuilds = builds.filter { it.status == "FAILURE" }
         if (failedBuilds.isNotEmpty()) {
-            notifier.showFailureNotification(failedBuilds)
+            notifier.showFailureNotifications(failedBuilds)
         }
     }
 }
