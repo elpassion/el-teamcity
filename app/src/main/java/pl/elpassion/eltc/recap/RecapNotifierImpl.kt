@@ -24,7 +24,7 @@ class RecapNotifierImpl(private val application: Application) : RecapNotifier {
         val resultIntent = getResultIntent()
         val message = "Build #${build.number} failed."
         val notification = application.createNotification(message, resultIntent)
-        notificationManager.notify(1, notification)
+        notificationManager.notify(build.id, notification)
     }
 
     private fun getResultIntent() = PendingIntent.getActivity(
