@@ -32,7 +32,7 @@ class RecapNotifierImpl(private val application: Application) : RecapNotifier {
             application, 0, Intent(application, BuildsActivity::class.java), 0)
 
     private fun Context.createNotification(title: String, text: String?, intent: PendingIntent?) =
-            NotificationCompat.Builder(this)
+            NotificationCompat.Builder(this, RECAP_CHANNEL_ID)
                     .setSmallIcon(R.drawable.ic_failure_recap)
                     .setColor(ContextCompat.getColor(this, R.color.failure))
                     .setContentTitle(title)
@@ -44,6 +44,7 @@ class RecapNotifierImpl(private val application: Application) : RecapNotifier {
                     .build()
 
     companion object {
+        const val RECAP_CHANNEL_ID = "recap_channel_id"
         const val FAILURES_GROUP_KEY = "failures_group_key"
     }
 }
