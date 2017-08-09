@@ -21,22 +21,22 @@ class RecapNotifierImpl(private val application: Application) : RecapNotifier {
     }
 
     private fun notify(build: Build) {
-        val resultIntent = getResultIntent()
-        val message = "Build #${build.number} failed."
-        val notification = application.createNotification(message, resultIntent)
+        val title = "Build #${build.number} failed"
+        val text = build.statusText
+        val notification = application.createNotification(title, text, getResultIntent())
         notificationManager.notify(build.id, notification)
     }
 
     private fun getResultIntent() = PendingIntent.getActivity(
             application, 0, Intent(application, BuildsActivity::class.java), 0)
 
-    private fun Context.createNotification(message: String, resultIntent: PendingIntent?) =
+    private fun Context.createNotification(title: String, text: String?, intent: PendingIntent?) =
             NotificationCompat.Builder(this)
                     .setSmallIcon(R.drawable.ic_failure_recap)
                     .setColor(ContextCompat.getColor(this, R.color.failure))
-                    .setContentTitle(getString(R.string.teamcity_recap))
-                    .setContentText(message)
-                    .setContentIntent(resultIntent)
+                    .setContentTitle(title)
+                    .setContentText(text)
+                    .setContentIntent(intent)
                     .setAutoCancel(true)
                     .build()
 }
