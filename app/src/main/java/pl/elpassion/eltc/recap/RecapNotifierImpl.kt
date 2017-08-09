@@ -25,7 +25,7 @@ class RecapNotifierImpl(private val application: Application) : RecapNotifier {
     }
 
     private fun notify(build: Build) {
-        val title = "Build #${build.number} failed"
+        val title = "Build #${build.number} in ${build.buildType.projectName} failed"
         val text = build.statusText
         val notification = application.createNotification(title, text, getResultIntent())
         notificationManager.notify(build.id, notification)
