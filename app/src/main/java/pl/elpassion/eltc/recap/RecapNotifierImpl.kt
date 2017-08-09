@@ -26,6 +26,7 @@ class RecapNotifierImpl(private val application: Application) : RecapNotifier {
                 .setContentTitle(application.getString(R.string.teamcity_recap))
                 .setContentText(message)
                 .setContentIntent(resultIntent)
+                .setAutoCancel(true)
                 .build()
         val notificationManager = application
                 .getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
