@@ -17,6 +17,7 @@ import pl.elpassion.eltc.builds.BuildsActivity
 import pl.elpassion.eltc.details.DetailsActivity
 import pl.elpassion.eltc.login.LoginActivity
 import pl.elpassion.eltc.recap.RecapService
+import java.util.concurrent.TimeUnit
 import android.util.Pair as TPair
 
 fun Activity.openLoginScreen() = open(LoginActivity::class.java)
@@ -52,7 +53,7 @@ fun AppCompatActivity.showBackArrowInToolbar() = supportActionBar?.setDisplayHom
 
 fun Activity.scheduleRecapService() {
     val jobInfo = JobInfo.Builder(1, ComponentName(packageName, RecapService::class.java.name))
-            .setPeriodic(5000 * 60)
+            .setPeriodic(TimeUnit.MINUTES.toMillis(15))
             .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
             .build()
     getJobScheduler().schedule(jobInfo)
