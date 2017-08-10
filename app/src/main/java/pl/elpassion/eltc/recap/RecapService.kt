@@ -18,7 +18,7 @@ class RecapService : JobService() {
                 recapRepository = DI.Recap.provideRepository(),
                 api = DI.provideTeamCityApi(),
                 notifier = DI.Recap.provideNotifier(),
-                onFinish = { jobFinished(parameters, true) },
+                onFinish = { jobFinished(parameters, false) },
                 schedulers = SchedulersSupplier(
                         backgroundScheduler = Schedulers.io(),
                         uiScheduler = AndroidSchedulers.mainThread()))
