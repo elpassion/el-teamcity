@@ -2,7 +2,6 @@ package pl.elpassion.eltc.recap
 
 import android.app.Application
 import android.app.Notification
-import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -11,11 +10,11 @@ import android.support.v4.content.ContextCompat
 import pl.elpassion.eltc.Build
 import pl.elpassion.eltc.R
 import pl.elpassion.eltc.builds.BuildsActivity
+import pl.elpassion.eltc.util.notificationManager
 
 class RecapNotifierImpl(private val application: Application) : RecapNotifier {
 
-    private val notificationManager
-        get() = application.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    private val notificationManager get() = application.notificationManager
 
     override fun showFailureNotifications(failedBuilds: List<Build>) {
         failedBuilds.forEach { notify(it) }
