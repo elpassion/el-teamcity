@@ -18,6 +18,7 @@ import kotlinx.android.synthetic.main.build_item.view.*
 import kotlinx.android.synthetic.main.builds_activity.*
 import org.ocpsoft.prettytime.PrettyTime
 import pl.elpassion.eltc.*
+import pl.elpassion.eltc.util.notificationManager
 import java.util.*
 import android.util.Pair as TPair
 
@@ -37,6 +38,7 @@ class BuildsActivity : BaseActivity() {
             model.perform(RefreshList)
         }
         checkExtras(intent.extras)
+        notificationManager.cancelAll()
         scheduleRecapService()
     }
 
