@@ -32,19 +32,19 @@ class BuildsActivityTest : BaseActivityTest() {
 
     @Test
     fun Display_state_of_finished_build() {
-        states.onNext(BuildsState(listOf(createBuild(state = "finished")), emptyList()))
+        states.onNext(BuildsState(listOf(createBuild(state = State.FINISHED)), emptyList()))
         onTextStartingWith("Build finished").isDisplayed()
     }
 
     @Test
     fun Display_state_of_queued_build() {
-        states.onNext(BuildsState(listOf(createBuild(state = "queued")), emptyList()))
+        states.onNext(BuildsState(listOf(createBuild(state = State.QUEUED)), emptyList()))
         onTextStartingWith("Build queued").isDisplayed()
     }
 
     @Test
     fun Display_state_of_running_build() {
-        states.onNext(BuildsState(listOf(createBuild(state = "running")), emptyList()))
+        states.onNext(BuildsState(listOf(createBuild(state = State.RUNNING)), emptyList()))
         onTextStartingWith("Build started").isDisplayed()
     }
 
@@ -64,7 +64,7 @@ class BuildsActivityTest : BaseActivityTest() {
 
     @Test
     fun Display_progress_status_of_started_build() {
-        states.onNext(BuildsState(listOf(createBuild(state = "running")), emptyList()))
+        states.onNext(BuildsState(listOf(createBuild(state = State.RUNNING)), emptyList()))
         onId(R.id.buildStatusBg).isNotDisplayed()
         onId(R.id.buildStatusIcon).isNotDisplayed()
         onId(R.id.buildProgressBar).isDisplayed()
@@ -72,14 +72,14 @@ class BuildsActivityTest : BaseActivityTest() {
 
     @Test
     fun Display_status_of_queued_build() {
-        states.onNext(BuildsState(listOf(createBuild(state = "queued")), emptyList()))
+        states.onNext(BuildsState(listOf(createBuild(state = State.QUEUED)), emptyList()))
         onImage(R.drawable.build_queued_bg).isDisplayed()
         onImage(R.drawable.ic_queued).isDisplayed()
     }
 
     @Test
     fun Do_not_display_build_name_for_queued_builds() {
-        states.onNext(BuildsState(listOf(createBuild(state = "queued")), emptyList()))
+        states.onNext(BuildsState(listOf(createBuild(state = State.QUEUED)), emptyList()))
         onId(R.id.buildName).isNotDisplayed()
     }
 
@@ -169,7 +169,7 @@ class BuildsActivityTest : BaseActivityTest() {
 
     @Test
     fun Do_not_select_queued_build_on_click() {
-        val selectedBuild = createBuild(state = "queued")
+        val selectedBuild = createBuild(state = State.QUEUED)
         states.onNext(BuildsState(listOf(selectedBuild), emptyList()))
         onTextStartingWith("Build queued").click()
         verify(model, never()).perform(argThat { this is SelectBuild })

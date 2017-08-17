@@ -67,3 +67,9 @@ object Status {
     const val SUCCESS = "SUCCESS"
     const val FAILURE = "FAILURE"
 }
+
+object State {
+    const val QUEUED = "queued"
+    const val RUNNING = "running"
+    const val FINISHED = "finished"
+}

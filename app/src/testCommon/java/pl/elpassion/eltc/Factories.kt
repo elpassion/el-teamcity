@@ -5,7 +5,7 @@ import java.util.*
 
 fun createBuild(id: Int = 1,
                 number: String = "7",
-                state: String = "finished",
+                state: String = State.FINISHED,
                 status: String = Status.SUCCESS,
                 projectName: String = "Teamcity Android Client",
                 statusText: String = "Tests passed: 1",

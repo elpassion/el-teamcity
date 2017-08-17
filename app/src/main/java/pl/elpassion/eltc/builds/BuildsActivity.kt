@@ -84,7 +84,7 @@ class BuildsActivity : BaseActivity() {
         buildDetails.text = getBuildDetails(item)
         bindBuildStatus(buildStatusBg, buildStatusIcon, buildProgressBar, item)
         setOnClickListener {
-            if (item.state != "queued") {
+            if (item.state != State.QUEUED) {
                 options = newTransitionAnimation(buildNumber, buildName, projectName, buildDetails)
                 model.perform(SelectBuild(item))
             }
@@ -111,7 +111,7 @@ class BuildsActivity : BaseActivity() {
     }
 
     private fun bindBuildName(view: TextView, item: Build) {
-        if (item.state == "queued") {
+        if (item.state == State.QUEUED) {
             view.hide()
         } else {
             view.text = item.statusText
@@ -120,7 +120,7 @@ class BuildsActivity : BaseActivity() {
     }
 
     private fun bindBuildStatus(bg: ImageView, icon: ImageView, loader: ProgressBar, item: Build) {
-        if (item.state == "running") {
+        if (item.state == State.RUNNING) {
             bg.hide()
             icon.hide()
             loader.progress = 0
@@ -135,20 +135,20 @@ class BuildsActivity : BaseActivity() {
     }
 
     private fun getBuildDetails(item: Build) = when (item.state) {
-        "queued" -> "Build queued ${prettyTime.format(item.queuedDate)}"
-        "running" -> "Build started ${prettyTime.format(item.startDate)}"
-        "finished" -> "Build finished ${prettyTime.format(item.finishDate)}"
+        State.QUEUED -> "Build queued ${prettyTime.format(item.queuedDate)}"
+        State.RUNNING -> "Build started ${prettyTime.format(item.startDate)}"
+        State.FINISHED -> "Build finished ${prettyTime.format(item.finishDate)}"
         else -> null
     }
 
     private fun getBuildStatusBgResId(item: Build) = when {
-        item.state == "queued" -> R.drawable.build_queued_bg
+        item.state == State.QUEUED -> R.drawable.build_queued_bg
         item.status == Status.SUCCESS -> R.drawable.build_success_bg
         else -> R.drawable.build_failure_bg
     }
 
     private fun getBuildStatusIconResId(item: Build): Int = when {
-        item.state == "queued" -> R.drawable.ic_queued
+        item.state == State.QUEUED -> R.drawable.ic_queued
         item.status == Status.SUCCESS -> R.drawable.ic_success
         else -> R.drawable.ic_failure
     }
