@@ -1,7 +1,6 @@
 package pl.elpassion.eltc
 
 import io.reactivex.Observable
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.Singles
 import io.reactivex.subjects.BehaviorSubject
 import pl.elpassion.eltc.api.*
@@ -9,7 +8,6 @@ import pl.elpassion.eltc.builds.BuildsRepository
 import pl.elpassion.eltc.builds.SelectableProject
 import pl.elpassion.eltc.login.AuthData
 import pl.elpassion.eltc.login.LoginRepository
-import java.util.concurrent.TimeUnit
 
 class TeamCityModelImpl(private val api: TeamCityApi,
                         private val loginRepository: LoginRepository,
@@ -20,16 +18,11 @@ class TeamCityModelImpl(private val api: TeamCityApi,
 
     private fun goTo(state: AppState) = stateSubject.onNext(state)
 
-    private val refreshInterval = Observable.interval(3, TimeUnit.SECONDS)
-
-    private val refreshDisposable = CompositeDisposable()
-
     override fun perform(action: UserAction) = when (action) {
         is StartApp -> startApp()
         is SubmitCredentials -> submitCredentials(action)
         is AcceptLoginError -> goTo(LoginState())
         is RefreshList -> loadBuilds()
-        is AutoRefresh -> performAutoRefresh(action.isEnabled)
         is SelectProjects -> selectProjects()
         is SubmitProjects -> submitProjects(action.projects)
         is SelectBuild -> loadDetails(action.build)
@@ -96,13 +89,6 @@ class TeamCityModelImpl(private val api: TeamCityApi,
     private fun isAnyProjectSelected() = buildsRepository.selectedProjects.isNotEmpty()
 
     private fun getSelectedProjectsIds() = buildsRepository.selectedProjects.map { it.id }
-
-    private fun performAutoRefresh(isEnabled: Boolean) {
-        refreshDisposable.clear()
-        if (isEnabled) {
-            refreshInterval.subscribe { perform(RefreshList) }.let { refreshDisposable.add(it) }
-        }
-    }
 
     private fun selectProjects() {
         state.firstElement().subscribe {

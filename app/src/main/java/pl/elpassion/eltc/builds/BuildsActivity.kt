@@ -164,11 +164,6 @@ class BuildsActivity : BaseActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.select_projects -> model.perform(SelectProjects)
-            R.id.auto_refresh -> {
-                val checked = !item.isChecked
-                item.isChecked = checked
-                model.perform(AutoRefresh(checked))
-            }
             R.id.logout -> model.perform(Logout)
             else -> super.onOptionsItemSelected(item)
         }

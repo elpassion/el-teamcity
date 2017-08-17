@@ -15,10 +15,6 @@ data class SubmitCredentials(
         val credentials: String
 ): UserAction()
 
-data class AutoRefresh(
-        val isEnabled: Boolean
-): UserAction()
-
 data class SubmitProjects(
         val projects: List<Project>
 ): UserAction()
