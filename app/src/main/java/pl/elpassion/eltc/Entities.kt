@@ -43,9 +43,9 @@ data class TestDetails(
         val href: String
 ) : Comparable<TestDetails> {
 
-    val isIgnored get() = status == "UNKNOWN"
-    val isPassed get() = status == "SUCCESS"
-    val isFailed get() = status == "FAILURE"
+    val isIgnored get() = status == Status.UNKNOWN
+    val isPassed get() = status == Status.SUCCESS
+    val isFailed get() = status == Status.FAILURE
 
     private val order get() = TestOrder.valueOf(status).order
 
@@ -61,3 +61,9 @@ data class Project(
         val name: String,
         val href: String
 )
+
+object Status {
+    const val UNKNOWN = "UNKNOWN"
+    const val SUCCESS = "SUCCESS"
+    const val FAILURE = "FAILURE"
+}

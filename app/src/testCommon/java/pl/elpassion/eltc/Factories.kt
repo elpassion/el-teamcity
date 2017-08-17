@@ -6,7 +6,7 @@ import java.util.*
 fun createBuild(id: Int = 1,
                 number: String = "7",
                 state: String = "finished",
-                status: String = "SUCCESS",
+                status: String = Status.SUCCESS,
                 projectName: String = "Teamcity Android Client",
                 statusText: String = "Tests passed: 1",
                 startDate: Date = Date(),
@@ -41,7 +41,7 @@ fun createChange(comment: String = "Comment",
         comment = comment)
 
 fun createTestDetails(name: String = "Test name",
-                      status: String = "SUCCESS") = TestDetails(
+                      status: String = Status.SUCCESS) = TestDetails(
         id = "1",
         name = name,
         status = status,

@@ -262,8 +262,8 @@ class TeamCityModelTest {
     @Test
     fun `Display ignored tests before passed tests`() {
         val build = createBuild(id = 7)
-        val passedTest = createTestDetails(status = "SUCCESS")
-        val ignoredTest = createTestDetails(status = "UNKNOWN")
+        val passedTest = createTestDetails(status = Status.SUCCESS)
+        val ignoredTest = createTestDetails(status = Status.UNKNOWN)
         whenever(api.getChanges(build.id)).thenJust(emptyList())
         whenever(api.getTests(build.id)).thenJust(listOf(passedTest, ignoredTest))
         model.perform(SelectBuild(build))
@@ -273,8 +273,8 @@ class TeamCityModelTest {
     @Test
     fun `Display failed tests before ignored tests`() {
         val build = createBuild(id = 7)
-        val ignoredTest = createTestDetails(status = "UNKNOWN")
-        val failedTest = createTestDetails(status = "FAILURE")
+        val ignoredTest = createTestDetails(status = Status.UNKNOWN)
+        val failedTest = createTestDetails(status = Status.FAILURE)
         whenever(api.getChanges(build.id)).thenJust(emptyList())
         whenever(api.getTests(build.id)).thenJust(listOf(ignoredTest, failedTest))
         model.perform(SelectBuild(build))

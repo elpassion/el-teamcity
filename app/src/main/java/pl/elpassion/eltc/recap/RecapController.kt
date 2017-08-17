@@ -3,6 +3,7 @@ package pl.elpassion.eltc.recap
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import pl.elpassion.eltc.Build
+import pl.elpassion.eltc.Status
 import pl.elpassion.eltc.api.TeamCityApi
 import pl.elpassion.eltc.login.LoginRepository
 import pl.elpassion.eltc.util.SchedulersSupplier
@@ -68,7 +69,7 @@ class RecapController(private val loginRepository: LoginRepository,
     private val List<Build>.finishDates get() = map { it.finishDate }.filterNotNull()
 
     private fun notifyAboutFailures(builds: List<Build>) {
-        val failedBuilds = builds.filter { it.status == "FAILURE" }
+        val failedBuilds = builds.filter { it.status == Status.FAILURE }
         if (failedBuilds.isNotEmpty()) {
             notifier.showFailureNotifications(failedBuilds)
         }

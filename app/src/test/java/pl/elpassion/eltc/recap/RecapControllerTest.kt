@@ -10,6 +10,7 @@ import io.reactivex.subjects.SingleSubject
 import org.junit.Before
 import org.junit.Test
 import pl.elpassion.eltc.Build
+import pl.elpassion.eltc.Status
 import pl.elpassion.eltc.api.TeamCityApi
 import pl.elpassion.eltc.createBuild
 import pl.elpassion.eltc.login.AuthData
@@ -127,8 +128,8 @@ class RecapControllerTest {
 
     @Test
     fun `Show notifications with failed builds on api result`() {
-        val successfulBuild = createBuild(finishDate = Date(1502103410000), status = "SUCCESS")
-        val failedBuild = createBuild(finishDate = Date(1502103410001), status = "FAILURE")
+        val successfulBuild = createBuild(finishDate = Date(1502103410000), status = Status.SUCCESS)
+        val failedBuild = createBuild(finishDate = Date(1502103410001), status = Status.FAILURE)
         whenever(recapRepository.lastFinishDate).thenReturn(Date(1502103373000))
         createController().onStart()
         apiSubject.onSuccess(listOf(successfulBuild, failedBuild))
@@ -140,7 +141,7 @@ class RecapControllerTest {
         whenever(recapRepository.lastFinishDate).thenReturn(Date(1502103373000))
         createController().onStart()
         apiSubject.onSuccess(listOf(
-                createBuild(finishDate = Date(1502103410000), status = "SUCCESS")))
+                createBuild(finishDate = Date(1502103410000), status = Status.SUCCESS)))
         verify(notifier, never()).showFailureNotifications(any())
     }
 

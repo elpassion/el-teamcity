@@ -4,6 +4,7 @@ import android.view.View
 import com.elpassion.android.commons.recycler.basic.ViewHolderBinder
 import kotlinx.android.synthetic.main.test_item.view.*
 import pl.elpassion.eltc.R
+import pl.elpassion.eltc.Status
 import pl.elpassion.eltc.TestDetails
 import pl.elpassion.eltc.details.TestNameExtractor
 
@@ -18,14 +19,14 @@ class TestDetailsViewHolder(itemView: View) : ViewHolderBinder<Any>(itemView) {
     }
 
     private fun getTestStatusBgResId(test: TestDetails) = when (test.status) {
-        "SUCCESS" -> R.drawable.test_success_bg
-        "FAILURE" -> R.drawable.test_failure_bg
+        Status.SUCCESS -> R.drawable.test_success_bg
+        Status.FAILURE -> R.drawable.test_failure_bg
         else -> R.drawable.test_ignored_bg
     }
 
     private fun getTestStatusIconResId(test: TestDetails) = when (test.status) {
-        "SUCCESS" -> R.drawable.ic_success
-        "FAILURE" -> R.drawable.ic_failure
+        Status.SUCCESS -> R.drawable.ic_success
+        Status.FAILURE -> R.drawable.ic_failure
         else -> R.drawable.ic_ignored
     }
 }

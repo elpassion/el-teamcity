@@ -191,21 +191,21 @@ class DetailsActivityTest : BaseActivityTest() {
 
     @Test
     fun Display_success_status_of_passed_test() {
-        states.onNext(newDetailsState(tests = listOf(createTestDetails(status = "SUCCESS"))))
+        states.onNext(newDetailsState(tests = listOf(createTestDetails(status = Status.SUCCESS))))
         onImage(R.drawable.test_success_bg).isDisplayed()
         onImage(R.drawable.ic_success).isDisplayed()
     }
 
     @Test
     fun Display_failure_status_of_failed_test() {
-        states.onNext(newDetailsState(tests = listOf(createTestDetails(status = "FAILURE"))))
+        states.onNext(newDetailsState(tests = listOf(createTestDetails(status = Status.FAILURE))))
         onImage(R.drawable.test_failure_bg).isDisplayed()
         onImage(R.drawable.ic_failure).isDisplayed()
     }
 
     @Test
     fun Display_ignored_status_of_ignored_test() {
-        states.onNext(newDetailsState(tests = listOf(createTestDetails(status = "UNKNOWN"))))
+        states.onNext(newDetailsState(tests = listOf(createTestDetails(status = Status.UNKNOWN))))
         onText(R.string.ignored).click()
         onImage(R.drawable.test_ignored_bg).isDisplayed()
         onImage(R.drawable.ic_ignored).isDisplayed()
@@ -213,53 +213,53 @@ class DetailsActivityTest : BaseActivityTest() {
 
     @Test
     fun Display_ignored_tests_header_if_ignored_tests_available() {
-        states.onNext(newDetailsState(tests = listOf(createTestDetails(status = "UNKNOWN"))))
+        states.onNext(newDetailsState(tests = listOf(createTestDetails(status = Status.UNKNOWN))))
         onText(R.string.ignored).isDisplayed()
     }
 
     @Test
     fun Do_not_display_ignored_tests_header_when_no_ignored_tests() {
-        states.onNext(newDetailsState(tests = listOf(createTestDetails(status = "SUCCESS"))))
+        states.onNext(newDetailsState(tests = listOf(createTestDetails(status = Status.SUCCESS))))
         onText(R.string.ignored).doesNotExist()
     }
 
     @Test
     fun Display_passed_tests_header_if_passed_tests_available() {
-        states.onNext(newDetailsState(tests = listOf(createTestDetails(status = "SUCCESS"))))
+        states.onNext(newDetailsState(tests = listOf(createTestDetails(status = Status.SUCCESS))))
         onText(R.string.passed).isDisplayed()
     }
 
     @Test
     fun Do_not_display_passed_tests_header_when_no_passed_tests() {
-        states.onNext(newDetailsState(tests = listOf(createTestDetails(status = "FAILURE"))))
+        states.onNext(newDetailsState(tests = listOf(createTestDetails(status = Status.FAILURE))))
         onText(R.string.passed).doesNotExist()
     }
 
     @Test
     fun Display_failed_tests_header_if_failed_tests_available() {
-        states.onNext(newDetailsState(tests = listOf(createTestDetails(status = "FAILURE"))))
+        states.onNext(newDetailsState(tests = listOf(createTestDetails(status = Status.FAILURE))))
         onText(R.string.failed).isDisplayed()
     }
 
     @Test
     fun Do_not_display_failed_tests_header_when_no_failed_tests() {
-        states.onNext(newDetailsState(tests = listOf(createTestDetails(status = "SUCCESS"))))
+        states.onNext(newDetailsState(tests = listOf(createTestDetails(status = Status.SUCCESS))))
         onText(R.string.failed).doesNotExist()
     }
 
     @Test
     fun Collapse_ignored_tests_on_details_loaded() {
         states.onNext(newDetailsState(tests = listOf(
-                createTestDetails(name = "Ignored test", status = "UNKNOWN"))))
+                createTestDetails(name = "Ignored test", status = Status.UNKNOWN))))
         onText("Ignored test").doesNotExist()
     }
 
     @Test
     fun Display_tests_count_in_section() {
         states.onNext(newDetailsState(tests = listOf(
-                createTestDetails(name = "Test1", status = "SUCCESS"),
-                createTestDetails(name = "Test2", status = "SUCCESS"),
-                createTestDetails(name = "Test3", status = "SUCCESS"))))
+                createTestDetails(name = "Test1", status = Status.SUCCESS),
+                createTestDetails(name = "Test2", status = Status.SUCCESS),
+                createTestDetails(name = "Test3", status = Status.SUCCESS))))
         onText("3").isDisplayed()
     }
 

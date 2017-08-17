@@ -143,13 +143,13 @@ class BuildsActivity : BaseActivity() {
 
     private fun getBuildStatusBgResId(item: Build) = when {
         item.state == "queued" -> R.drawable.build_queued_bg
-        item.status == "SUCCESS" -> R.drawable.build_success_bg
+        item.status == Status.SUCCESS -> R.drawable.build_success_bg
         else -> R.drawable.build_failure_bg
     }
 
     private fun getBuildStatusIconResId(item: Build): Int = when {
         item.state == "queued" -> R.drawable.ic_queued
-        item.status == "SUCCESS" -> R.drawable.ic_success
+        item.status == Status.SUCCESS -> R.drawable.ic_success
         else -> R.drawable.ic_failure
     }
 
