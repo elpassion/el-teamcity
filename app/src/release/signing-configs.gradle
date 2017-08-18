@@ -1,0 +1,10 @@
+android {
+    signingConfigs {
+        release {
+            storeFile file("src/release/release-keystore.jks")
+            storePassword "encrypted"
+            keyAlias "encrypted"
+            keyPassword "encrypted"
+        }
+    }
+}
