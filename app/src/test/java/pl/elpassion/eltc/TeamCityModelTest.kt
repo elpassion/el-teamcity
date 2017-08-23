@@ -97,12 +97,6 @@ class TeamCityModelTest {
     }
 
     @Test
-    fun `Set server address on login`() {
-        model.perform(SubmitCredentials(TEAMCITY_ADDRESS, CREDENTIALS))
-        verify(api).setAddress(TEAMCITY_ADDRESS)
-    }
-
-    @Test
     fun `Set api credentials on login`() {
         model.perform(SubmitCredentials(TEAMCITY_ADDRESS, CREDENTIALS))
         verify(api).credentials = "Basic $CREDENTIALS"
@@ -134,13 +128,6 @@ class TeamCityModelTest {
         whenever(loginRepository.authData).thenReturn(null)
         model.perform(StartApp)
         observer.assertLastValue(LoginState())
-    }
-
-    @Test
-    fun `Set server address if auth data available in repository on app start`() {
-        stubLoginRepositoryToReturnAuthData()
-        model.perform(StartApp)
-        verify(api).setAddress(TEAMCITY_ADDRESS)
     }
 
     @Test

@@ -5,6 +5,7 @@ import pl.elpassion.eltc.Build
 import pl.elpassion.eltc.Change
 import pl.elpassion.eltc.Project
 import pl.elpassion.eltc.TestDetails
+import pl.elpassion.eltc.login.LoginRepository
 import pl.elpassion.eltc.util.zipSingles
 import retrofit2.HttpException
 import retrofit2.http.GET
@@ -18,7 +19,6 @@ import kotlin.properties.Delegates
 
 interface TeamCityApi {
     var credentials: String
-    fun setAddress(url: String)
     fun getBuilds(): Single<List<Build>>
     fun getQueuedBuilds(): Single<List<Build>>
     fun getFinishedBuilds(afterDate: Date): Single<List<Build>>
@@ -29,19 +29,23 @@ interface TeamCityApi {
     fun getProjects(): Single<List<Project>>
 }
 
-object TeamCityApiImpl : TeamCityApi {
+class TeamCityApiImpl(private val loginRepository: LoginRepository) : TeamCityApi {
 
     override var credentials: String by Delegates.notNull()
 
-    private var service by Delegates.notNull<Service>()
-
-    private const val BUILDS_LOCATOR = "branch:default:any,running:any"
-    private const val TESTS_LOCATOR = "count:1000"
-    private const val UNAUTHORIZED_ERROR = 401
-
-    override fun setAddress(url: String) {
-        service = newRetrofit(url).create(Service::class.java)
-    }
+    private var baseUrl: String? = null
+    private var endpoint: Service? = null
+    private val service: Service
+        get() {
+            val url = loginRepository.authData?.address
+            if (url != null) {
+                if (url != baseUrl) {
+                    baseUrl = url
+                    endpoint = newRetrofit(url).create(Service::class.java)
+                }
+                return endpoint!!
+            } else throw IllegalStateException("Server url not available")
+        }
 
     override fun getBuilds(): Single<List<Build>> =
             service.getBuilds(credentials, BUILDS_LOCATOR).mapApiErrors().map(BuildsResponse::build)
@@ -106,6 +110,12 @@ object TeamCityApiImpl : TeamCityApi {
             const val CHANGES_FIELDS = "id,version,username,date,webUrl,comment"
             const val PROJECT_FIELDS = "id,name,href"
         }
+    }
+
+    companion object {
+        private const val BUILDS_LOCATOR = "branch:default:any,running:any"
+        private const val TESTS_LOCATOR = "count:1000"
+        private const val UNAUTHORIZED_ERROR = 401
     }
 }
 

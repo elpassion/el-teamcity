@@ -2,10 +2,14 @@
 
 package pl.elpassion.eltc.api
 
+import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.Single
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test
+import pl.elpassion.eltc.login.AuthData
+import pl.elpassion.eltc.login.LoginRepository
 import java.util.*
 
 @Ignore
@@ -14,12 +18,13 @@ class TeamCityRealApiTest {
     private val ADDRESS = "http://192.168.1.155:8111"
     private val CREDENTIALS = "Basic dXNlcjpwYXNz"
     private val INVALID_CREDENTIALS = "invalid credentials"
-    private val teamCityApi = TeamCityApiImpl
+    private val loginRepository = mock<LoginRepository>()
+    private val teamCityApi = TeamCityApiImpl(loginRepository)
 
     @Before
     fun setup() {
         teamCityApi.credentials = CREDENTIALS
-        teamCityApi.setAddress(ADDRESS)
+        whenever(loginRepository.authData).thenReturn(AuthData(ADDRESS, CREDENTIALS))
     }
 
     @Test

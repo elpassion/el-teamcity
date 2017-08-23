@@ -44,7 +44,6 @@ class TeamCityModelImpl(private val api: TeamCityApi,
     }
 
     private fun setupApi(authData: AuthData) = with(authData) {
-        api.setAddress(address)
         api.credentials = fullCredentials
     }
 
