@@ -1,10 +1,7 @@
 package pl.elpassion.eltc.api
 
 import io.reactivex.Single
-import pl.elpassion.eltc.Build
-import pl.elpassion.eltc.Change
-import pl.elpassion.eltc.Project
-import pl.elpassion.eltc.TestDetails
+import pl.elpassion.eltc.*
 import pl.elpassion.eltc.login.LoginRepository
 import pl.elpassion.eltc.util.zipSingles
 import retrofit2.HttpException
@@ -27,6 +24,7 @@ interface TeamCityApi {
     fun getChanges(buildId: Int): Single<List<Change>>
     fun getTests(buildId: Int): Single<List<TestDetails>>
     fun getProjects(): Single<List<Project>>
+    fun getProblemOccurrences(buildId: Int): Single<List<ProblemOccurrence>>
 }
 
 class TeamCityApiImpl(private val loginRepository: LoginRepository) : TeamCityApi {
@@ -74,6 +72,9 @@ class TeamCityApiImpl(private val loginRepository: LoginRepository) : TeamCityAp
     override fun getProjects(): Single<List<Project>> =
             service.getProjects(credentials).mapApiErrors().map(ProjectsResponse::project)
 
+    override fun getProblemOccurrences(buildId: Int): Single<List<ProblemOccurrence>> =
+            service.getProblemOccurrences(credentials, "build:(id:$buildId)").mapApiErrors().map(ProblemsResponse::problemOccurrence)
+
     private fun <T> Single<T>.mapApiErrors() = onErrorResumeNext {
         Single.error(when {
             it is HttpException && it.code() == UNAUTHORIZED_ERROR -> InvalidCredentialsException
@@ -105,6 +106,9 @@ class TeamCityApiImpl(private val loginRepository: LoginRepository) : TeamCityAp
         @GET("httpAuth/app/rest/projects?fields=project($PROJECT_FIELDS)")
         fun getProjects(@Header("Authorization") credentials: String): Single<ProjectsResponse>
 
+        @GET("httpAuth/app/rest/problemOccurrences")
+        fun getProblemOccurrences(@Header("Authorization") credentials: String, @Query("locator") locator: String): Single<ProblemsResponse>
+
         companion object {
             const val BUILD_FIELDS = "id,number,status,state,branchName,webUrl,statusText,queuedDate,startDate,finishDate,buildType(id,name,projectName)"
             const val CHANGES_FIELDS = "id,version,username,date,webUrl,comment"
@@ -128,3 +132,5 @@ data class ChangesResponse(val change: List<Change>)
 data class TestsResponse(val testOccurrence: List<TestDetails>?)
 
 data class ProjectsResponse(val project: List<Project>)
+
+data class ProblemsResponse(val problemOccurrence: List<ProblemOccurrence>)

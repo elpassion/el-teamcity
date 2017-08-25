@@ -62,6 +62,10 @@ data class Project(
         val href: String
 )
 
+data class ProblemOccurrence(
+        val id: String
+)
+
 object Status {
     const val UNKNOWN = "UNKNOWN"
     const val SUCCESS = "SUCCESS"

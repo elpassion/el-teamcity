@@ -88,6 +88,13 @@ class TeamCityRealApiTest {
                 .getAndPrint()
     }
 
+    @Test
+    fun `Get problem occurrences for failed build`() {
+        teamCityApi
+                .getProblemOccurrences(buildId = 1958)
+                .getAndPrint()
+    }
+
     @Test(expected = InvalidCredentialsException::class)
     fun `Expect proper exception after call to API with invalid credentials`() {
         teamCityApi.credentials = INVALID_CREDENTIALS
