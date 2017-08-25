@@ -7,8 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 
 fun View.snack(message: String, length: Int = Snackbar.LENGTH_LONG) {
-    val snack = Snackbar.make(this, message, length)
-    snack.show()
+    Snackbar.make(this, message, length).show()
 }
 
 val Toolbar.textView: TextView get() = views.find { it is TextView } as TextView
