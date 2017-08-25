@@ -106,13 +106,14 @@ class TeamCityApiImpl(private val loginRepository: LoginRepository) : TeamCityAp
         @GET("httpAuth/app/rest/projects?fields=project($PROJECT_FIELDS)")
         fun getProjects(@Header("Authorization") credentials: String): Single<ProjectsResponse>
 
-        @GET("httpAuth/app/rest/problemOccurrences")
+        @GET("httpAuth/app/rest/problemOccurrences?fields=problemOccurrence($PROBLEM_OCCURRENCE_FIELDS)")
         fun getProblemOccurrences(@Header("Authorization") credentials: String, @Query("locator") locator: String): Single<ProblemsResponse>
 
         companion object {
             const val BUILD_FIELDS = "id,number,status,state,branchName,webUrl,statusText,queuedDate,startDate,finishDate,buildType(id,name,projectName)"
             const val CHANGES_FIELDS = "id,version,username,date,webUrl,comment"
             const val PROJECT_FIELDS = "id,name,href"
+            const val PROBLEM_OCCURRENCE_FIELDS = "id,type,identity,details,href"
         }
     }
 

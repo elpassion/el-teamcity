@@ -66,6 +66,7 @@ data class ProblemOccurrence(
         val id: String,
         val type: String,
         val identity: String,
+        val details: String,
         val href: String
 )
 
