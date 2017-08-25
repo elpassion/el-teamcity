@@ -63,7 +63,10 @@ data class Project(
 )
 
 data class ProblemOccurrence(
-        val id: String
+        val id: String,
+        val type: String,
+        val identity: String,
+        val href: String
 )
 
 object Status {
