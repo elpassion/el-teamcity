@@ -19,11 +19,11 @@ import pl.elpassion.eltc.login.LoginRepository
 
 class TeamCityModelTest {
 
-    val loginRepository = mock<LoginRepository>()
-    val buildsRepository = mock<BuildsRepository>()
-    val api = mock<TeamCityApi>()
-    val model = TeamCityModelImpl(api, loginRepository, buildsRepository)
-    val observer = TestObserver<AppState>()
+    private val loginRepository = mock<LoginRepository>()
+    private val buildsRepository = mock<BuildsRepository>()
+    private val api = mock<TeamCityApi>()
+    private val model = TeamCityModelImpl(api, loginRepository, buildsRepository)
+    private val observer = TestObserver<AppState>()
 
     @Before
     fun setup() {
