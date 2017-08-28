@@ -12,10 +12,7 @@ import kotlinx.android.synthetic.main.details_activity.*
 import pl.elpassion.eltc.*
 import pl.elpassion.eltc.details.util.toTime
 import pl.elpassion.eltc.details.util.toTimeWithoutDate
-import pl.elpassion.eltc.details.viewholder.ChangeViewHolder
-import pl.elpassion.eltc.details.viewholder.SectionViewHolder
-import pl.elpassion.eltc.details.viewholder.TestDetailsViewHolder
-import pl.elpassion.eltc.details.viewholder.TestsSectionViewHolder
+import pl.elpassion.eltc.details.viewholder.*
 import pl.elpassion.eltc.util.textView
 
 class DetailsActivity : BaseActivity() {
@@ -40,6 +37,7 @@ class DetailsActivity : BaseActivity() {
             when (visibleItems[position]) {
                 is DetailsSection -> R.layout.section_item to ::SectionViewHolder
                 is TestsSection -> R.layout.tests_section_item to getTestsSectionViewHolder()
+                is ProblemOccurrence -> R.layout.problem_item to ::ProblemViewHolder
                 is Change -> R.layout.change_item to ::ChangeViewHolder
                 is TestDetails -> R.layout.test_item to ::TestDetailsViewHolder
                 else -> throw IllegalStateException()
@@ -88,7 +86,7 @@ class DetailsActivity : BaseActivity() {
             is DetailsState -> {
                 loader.hide()
                 showBuild(state.build)
-                showDetails(state.changes, state.tests)
+                showDetails(state.changes, state.tests, state.problems)
             }
             is LoadingBuildsState -> openBuildsScreen()
             is WebBrowserState -> openWebBrowser(state.build.webUrl)
@@ -102,9 +100,10 @@ class DetailsActivity : BaseActivity() {
         buildTime.text = build.time
     }
 
-    private fun showDetails(changes: List<Change>, tests: List<TestDetails>) {
+    private fun showDetails(changes: List<Change>, tests: List<TestDetails>, problems: List<ProblemOccurrence>) {
         allItems.run {
             clear()
+            addAll(problems)
             addChanges(changes)
             addTests(tests)
         }

@@ -263,8 +263,16 @@ class DetailsActivityTest : BaseActivityTest() {
         onText("3").isDisplayed()
     }
 
+    @Test
+    fun Display_problem_details_when_build_failed() {
+        states.onNext(newDetailsState(problems = listOf(
+                createProblemOccurrence(details = "Task :app:assembleRelease failed"))))
+        onText("Task :app:assembleRelease failed").isDisplayed()
+    }
+
     private fun newDetailsState(build: Build = createBuild(),
                                 changes: List<Change> = emptyList(),
-                                tests: List<TestDetails> = emptyList()) =
-            DetailsState(build, changes, tests, emptyList())
+                                tests: List<TestDetails> = emptyList(),
+                                problems: List<ProblemOccurrence> = emptyList()) =
+            DetailsState(build, changes, tests, problems)
 }
