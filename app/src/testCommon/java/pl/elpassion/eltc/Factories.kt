@@ -57,9 +57,10 @@ fun createProject(id: String = "Project1", name: String = "Project name") = Proj
         name = name,
         href = "href")
 
-fun createProblemOccurrence(details: String = "Problem details") = ProblemOccurrence(
+fun createProblemOccurrence(type: String = "Problem type",
+                            details: String = "Problem details") = ProblemOccurrence(
         id = "id",
-        type = "someProblem",
+        type = type,
         identity = "1",
         details = details,
         href = "problemHref")

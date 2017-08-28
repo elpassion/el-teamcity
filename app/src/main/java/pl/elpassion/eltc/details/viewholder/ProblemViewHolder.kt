@@ -8,6 +8,7 @@ import pl.elpassion.eltc.ProblemOccurrence
 class ProblemViewHolder(itemView: View) : ViewHolderBinder<Any>(itemView) {
 
     override fun bind(item: Any) = with(item as ProblemOccurrence) {
+        itemView.problemType.text = type
         itemView.problemDetails.text = details
     }
 }

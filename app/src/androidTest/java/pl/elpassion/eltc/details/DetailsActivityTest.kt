@@ -264,6 +264,13 @@ class DetailsActivityTest : BaseActivityTest() {
     }
 
     @Test
+    fun Display_problem_type_when_build_failed() {
+        states.onNext(newDetailsState(problems = listOf(
+                createProblemOccurrence(type = "Problem type 1"))))
+        onText("Problem type 1").isDisplayed()
+    }
+
+    @Test
     fun Display_problem_details_when_build_failed() {
         states.onNext(newDetailsState(problems = listOf(
                 createProblemOccurrence(details = "Task :app:assembleRelease failed"))))

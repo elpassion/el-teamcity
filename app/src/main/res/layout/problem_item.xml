@@ -1,23 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="8dp"
     android:layout_marginEnd="16dp"
     android:layout_marginStart="16dp"
-    android:layout_marginTop="8dp"
-    android:orientation="horizontal">
+    android:layout_marginTop="8dp">
 
-    <TextView
-        android:id="@+id/problemDetails"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
         android:background="@drawable/problem_background"
         android:padding="8dp"
-        android:textColor="@android:color/black"
-        android:textSize="12sp"
-        tools:text="Problem details" />
+        android:orientation="vertical">
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/problemType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:textColor="@android:color/black"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            tools:text="Problem type" />
+
+        <TextView
+            android:id="@+id/problemDetails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:textColor="@android:color/black"
+            android:textSize="12sp"
+            tools:text="Problem details" />
+
+    </LinearLayout>
+
+</FrameLayout>
