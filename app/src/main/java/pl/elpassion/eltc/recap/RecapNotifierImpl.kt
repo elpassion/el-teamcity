@@ -1,8 +1,7 @@
 package pl.elpassion.eltc.recap
 
-import android.app.Application
-import android.app.Notification
-import android.app.PendingIntent
+import android.annotation.TargetApi
+import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.support.v4.app.NotificationCompat
@@ -15,6 +14,17 @@ import pl.elpassion.eltc.util.notificationManager
 class RecapNotifierImpl(private val application: Application) : RecapNotifier {
 
     private val notificationManager get() = application.notificationManager
+
+    @TargetApi(26)
+    override fun createRecapChannel() {
+        val name = application.getString(R.string.recap_channel)
+        val importance = NotificationManager.IMPORTANCE_HIGH
+        val channel = NotificationChannel(RECAP_CHANNEL_ID, name, importance).apply {
+            enableLights(true)
+            enableVibration(true)
+        }
+        notificationManager.createNotificationChannel(channel)
+    }
 
     override fun showFailureNotifications(failedBuilds: List<Build>) {
         failedBuilds.forEach { notify(it) }
