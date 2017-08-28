@@ -115,8 +115,10 @@ class DetailsActivity : BaseActivity() {
     }
 
     private fun MutableList<Any>.addProblems(problems: List<ProblemOccurrence>) {
-        add(DetailsSection(getString(R.string.problems)))
-        addAll(problems)
+        if (problems.isNotEmpty()) {
+            add(DetailsSection(getString(R.string.problems)))
+            addAll(problems)
+        }
     }
 
     private fun MutableList<Any>.addChanges(changes: List<Change>) {
