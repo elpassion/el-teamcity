@@ -6,6 +6,7 @@ sealed class AppState
 
 object InitialState : AppState()
 object LoadingBuildsState : AppState()
+object SettingsState : AppState()
 
 data class LoginState(
         val host: String = "",

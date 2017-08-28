@@ -29,6 +29,7 @@ class TeamCityModelImpl(private val api: TeamCityApi,
         is SelectBuild -> loadDetails(action.build)
         is ReturnToList -> loadBuilds()
         is OpenInWebBrowser -> openWebBrowser()
+        is OpenSettings -> goTo(SettingsState)
         is Logout -> logout()
     }
 

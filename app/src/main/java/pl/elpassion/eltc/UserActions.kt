@@ -9,6 +9,7 @@ object SelectProjects : UserAction()
 object ReturnToList : UserAction()
 object OpenInWebBrowser : UserAction()
 object Logout : UserAction()
+object OpenSettings : UserAction()
 
 data class SubmitCredentials(
         val address: String,

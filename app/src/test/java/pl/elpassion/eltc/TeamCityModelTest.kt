@@ -330,6 +330,12 @@ class TeamCityModelTest {
         observer.assertLastValue(LoginState(error = null))
     }
 
+    @Test
+    fun `Display settings on open settings action`() {
+        model.perform(OpenSettings)
+        observer.assertLastValue(SettingsState)
+    }
+
     private fun stubLoginRepositoryToReturnAuthData() {
         whenever(loginRepository.authData).thenReturn(AuthData(TEAMCITY_ADDRESS, CREDENTIALS))
     }
