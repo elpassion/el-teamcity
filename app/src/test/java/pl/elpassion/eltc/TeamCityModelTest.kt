@@ -32,6 +32,7 @@ class TeamCityModelTest {
         whenever(api.getQueuedBuilds()).thenNever()
         whenever(api.getChanges(any())).thenNever()
         whenever(api.getTests(any())).thenNever()
+        whenever(api.getProblemOccurrences(any())).thenNever()
         model.state.subscribe(observer)
     }
 
@@ -242,8 +243,9 @@ class TeamCityModelTest {
         val tests = listOf(createTestDetails(name = "Test 1 name"))
         whenever(api.getChanges(build.id)).thenJust(changes)
         whenever(api.getTests(build.id)).thenJust(tests)
+        whenever(api.getProblemOccurrences(build.id)).thenJust(emptyList())
         model.perform(SelectBuild(build))
-        observer.assertLastValue(DetailsState(build, changes, tests))
+        observer.assertLastValue(DetailsState(build, changes, tests, emptyList()))
     }
 
     @Test
@@ -253,8 +255,9 @@ class TeamCityModelTest {
         val ignoredTest = createTestDetails(status = Status.UNKNOWN)
         whenever(api.getChanges(build.id)).thenJust(emptyList())
         whenever(api.getTests(build.id)).thenJust(listOf(passedTest, ignoredTest))
+        whenever(api.getProblemOccurrences(build.id)).thenJust(emptyList())
         model.perform(SelectBuild(build))
-        observer.assertLastValue(DetailsState(build, emptyList(), listOf(ignoredTest, passedTest)))
+        observer.assertLastValue(DetailsState(build, emptyList(), listOf(ignoredTest, passedTest), emptyList()))
     }
 
     @Test
@@ -264,8 +267,20 @@ class TeamCityModelTest {
         val failedTest = createTestDetails(status = Status.FAILURE)
         whenever(api.getChanges(build.id)).thenJust(emptyList())
         whenever(api.getTests(build.id)).thenJust(listOf(ignoredTest, failedTest))
+        whenever(api.getProblemOccurrences(build.id)).thenJust(emptyList())
         model.perform(SelectBuild(build))
-        observer.assertLastValue(DetailsState(build, emptyList(), listOf(failedTest, ignoredTest)))
+        observer.assertLastValue(DetailsState(build, emptyList(), listOf(failedTest, ignoredTest), emptyList()))
+    }
+
+    @Test
+    fun `Display problems in failed build details`() {
+        val build = createBuild(id = 8)
+        val problem = createProblemOccurrence(details = "Task :app:build failed")
+        whenever(api.getChanges(build.id)).thenJust(emptyList())
+        whenever(api.getTests(build.id)).thenJust(emptyList())
+        whenever(api.getProblemOccurrences(build.id)).thenJust(listOf(problem))
+        model.perform(SelectBuild(build))
+        observer.assertLastValue(DetailsState(build, emptyList(), emptyList(), listOf(problem)))
     }
 
     @Test

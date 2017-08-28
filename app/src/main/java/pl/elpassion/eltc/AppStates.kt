@@ -36,7 +36,8 @@ data class LoadingDetailsState(
 data class DetailsState(
         override val build: Build,
         val changes: List<Change>,
-        val tests: List<TestDetails>
+        val tests: List<TestDetails>,
+        val problems: List<ProblemOccurrence>
 ) : AppState(), WithBuild
 
 data class WebBrowserState(

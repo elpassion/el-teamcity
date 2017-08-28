@@ -266,5 +266,5 @@ class DetailsActivityTest : BaseActivityTest() {
     private fun newDetailsState(build: Build = createBuild(),
                                 changes: List<Change> = emptyList(),
                                 tests: List<TestDetails> = emptyList()) =
-            DetailsState(build, changes, tests)
+            DetailsState(build, changes, tests, emptyList())
 }

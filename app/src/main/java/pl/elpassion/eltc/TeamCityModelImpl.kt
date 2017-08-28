@@ -111,17 +111,19 @@ class TeamCityModelImpl(private val api: TeamCityApi,
         goTo(LoadingDetailsState(build))
         Singles.zip(
                 api.getChanges(build.id),
-                api.getTests(build.id)) { changes, tests -> changes to tests }
+                api.getTests(build.id),
+                api.getProblemOccurrences(build.id)) { changes, tests, problems -> Triple(changes, tests, problems) }
                 .subscribe(onBuildDetails, onError)
     }
 
-    private val onBuildDetails: (Pair<List<Change>, List<TestDetails>>) -> Unit = { (changes, tests) ->
-        state.firstElement().subscribe {
-            if (it is LoadingDetailsState) {
-                goTo(DetailsState(it.build, changes, tests.sorted()))
+    private val onBuildDetails: (Triple<List<Change>, List<TestDetails>, List<ProblemOccurrence>>) -> Unit =
+            { (changes, tests, problems) ->
+                state.firstElement().subscribe {
+                    if (it is LoadingDetailsState) {
+                        goTo(DetailsState(it.build, changes, tests.sorted(), problems))
+                    }
+                }
             }
-        }
-    }
 
     private fun openWebBrowser() {
         state.firstElement().subscribe {
