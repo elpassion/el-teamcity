@@ -270,6 +270,12 @@ class DetailsActivityTest : BaseActivityTest() {
         onText("Task :app:assembleRelease failed").isDisplayed()
     }
 
+    @Test
+    fun Display_problems_header_if_problems_occur() {
+        states.onNext(newDetailsState(problems = listOf(createProblemOccurrence())))
+        onText(R.string.problems).isDisplayed()
+    }
+
     private fun newDetailsState(build: Build = createBuild(),
                                 changes: List<Change> = emptyList(),
                                 tests: List<TestDetails> = emptyList(),

@@ -103,7 +103,7 @@ class DetailsActivity : BaseActivity() {
     private fun showDetails(changes: List<Change>, tests: List<TestDetails>, problems: List<ProblemOccurrence>) {
         allItems.run {
             clear()
-            addAll(problems)
+            addProblems(problems)
             addChanges(changes)
             addTests(tests)
         }
@@ -112,6 +112,11 @@ class DetailsActivity : BaseActivity() {
             addAll(allItems.filterNot { it is TestDetails && it.isIgnored })
         }
         detailsRecyclerView.adapter.notifyDataSetChanged()
+    }
+
+    private fun MutableList<Any>.addProblems(problems: List<ProblemOccurrence>) {
+        add(DetailsSection(getString(R.string.problems)))
+        addAll(problems)
     }
 
     private fun MutableList<Any>.addChanges(changes: List<Change>) {
