@@ -3,26 +3,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
     android:layout_marginEnd="16dp"
     android:layout_marginStart="16dp"
-    android:minHeight="48dp"
+    android:layout_marginTop="8dp"
     android:orientation="horizontal">
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/problemDetails"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/problemDetails"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:textColor="@color/failure"
-            android:textSize="12sp"
-            tools:text="Problem details" />
-
-    </LinearLayout>
+        android:background="@drawable/problem_background"
+        android:padding="8dp"
+        android:textColor="@android:color/black"
+        android:textSize="12sp"
+        tools:text="Problem details" />
 
 </LinearLayout>

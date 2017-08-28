@@ -9,4 +9,5 @@
     <color name="success">#43A047</color>
     <color name="queued">#00ACC1</color>
     <color name="ignored">#757575</color>
+    <color name="problem">#FFCDD2</color>
 </resources>
