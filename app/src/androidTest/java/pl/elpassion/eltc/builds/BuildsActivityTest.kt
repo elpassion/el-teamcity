@@ -183,6 +183,14 @@ class BuildsActivityTest : BaseActivityTest() {
     }
 
     @Test
+    fun Open_settings_on_action_click() {
+        states.onNext(BuildsState(emptyList(), emptyList()))
+        Espresso.openContextualActionModeOverflowMenu()
+        onText(R.string.settings).click()
+        verify(model).perform(argThat { this is OpenSettings })
+    }
+
+    @Test
     fun Perform_logout_action() {
         states.onNext(BuildsState(emptyList(), emptyList()))
         Espresso.openContextualActionModeOverflowMenu()

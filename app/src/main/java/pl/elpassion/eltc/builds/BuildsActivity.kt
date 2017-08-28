@@ -166,6 +166,7 @@ class BuildsActivity : BaseActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.select_projects -> model.perform(SelectProjects)
+            R.id.open_settings -> model.perform(OpenSettings)
             R.id.logout -> model.perform(Logout)
             else -> super.onOptionsItemSelected(item)
         }
