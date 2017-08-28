@@ -2,10 +2,7 @@
 
 package pl.elpassion.eltc
 
-import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockito_kotlin.*
 import io.reactivex.observers.TestObserver
 import org.junit.Before
 import org.junit.Test
@@ -274,13 +271,22 @@ class TeamCityModelTest {
 
     @Test
     fun `Display problems in failed build details`() {
-        val build = createBuild(id = 8)
+        val build = createBuild(id = 8, status = Status.FAILURE)
         val problem = createProblemOccurrence(details = "Task :app:build failed")
         whenever(api.getChanges(build.id)).thenJust(emptyList())
         whenever(api.getTests(build.id)).thenJust(emptyList())
         whenever(api.getProblemOccurrences(build.id)).thenJust(listOf(problem))
         model.perform(SelectBuild(build))
         observer.assertLastValue(DetailsState(build, emptyList(), emptyList(), listOf(problem)))
+    }
+
+    @Test
+    fun `Do not call api for problem occurrences in not failing build details`() {
+        val build = createBuild(id = 10, status = Status.SUCCESS)
+        whenever(api.getChanges(build.id)).thenJust(emptyList())
+        whenever(api.getTests(build.id)).thenJust(emptyList())
+        model.perform(SelectBuild(build))
+        verify(api, never()).getProblemOccurrences(build.id)
     }
 
     @Test

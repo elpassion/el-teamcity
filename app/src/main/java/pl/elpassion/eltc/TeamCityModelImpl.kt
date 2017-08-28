@@ -1,6 +1,7 @@
 package pl.elpassion.eltc
 
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.rxkotlin.Singles
 import io.reactivex.subjects.BehaviorSubject
 import pl.elpassion.eltc.api.*
@@ -112,9 +113,13 @@ class TeamCityModelImpl(private val api: TeamCityApi,
         Singles.zip(
                 api.getChanges(build.id),
                 api.getTests(build.id),
-                api.getProblemOccurrences(build.id)) { changes, tests, problems -> Triple(changes, tests, problems) }
+                getProblems(build)) { changes, tests, problems -> Triple(changes, tests, problems) }
                 .subscribe(onBuildDetails, onError)
     }
+
+    private fun getProblems(build: Build) =
+            if (build.status == Status.FAILURE) api.getProblemOccurrences(build.id)
+            else Single.just(emptyList())
 
     private val onBuildDetails: (Triple<List<Change>, List<TestDetails>, List<ProblemOccurrence>>) -> Unit =
             { (changes, tests, problems) ->
