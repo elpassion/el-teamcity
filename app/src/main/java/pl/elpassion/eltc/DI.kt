@@ -8,11 +8,16 @@ import pl.elpassion.eltc.recap.RecapNotifier
 import pl.elpassion.eltc.recap.RecapNotifierImpl
 import pl.elpassion.eltc.recap.RecapRepository
 import pl.elpassion.eltc.recap.RecapRepositoryImpl
+import pl.elpassion.eltc.settings.SettingsRepositoryImpl
 
 object DI {
 
     private val model by lazy {
-        TeamCityModelImpl(provideTeamCityApi(), provideLoginRepository(), provideBuildsRepository())
+        TeamCityModelImpl(
+                provideTeamCityApi(),
+                provideLoginRepository(),
+                provideBuildsRepository(),
+                provideSettingsRepository())
     }
 
     var provideTeamCityModel: () -> TeamCityModel = { model }
@@ -22,6 +27,8 @@ object DI {
     var provideLoginRepository = { LoginRepositoryImpl(provideApplication()) }
 
     var provideBuildsRepository = { BuildsRepositoryImpl(provideApplication()) }
+
+    var provideSettingsRepository = { SettingsRepositoryImpl(provideApplication()) }
 
     var provideApplication: () -> Application = { throw UnsupportedOperationException("Application provider not initialized") }
 

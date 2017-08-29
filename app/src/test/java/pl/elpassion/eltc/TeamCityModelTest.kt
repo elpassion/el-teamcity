@@ -13,13 +13,16 @@ import pl.elpassion.eltc.builds.BuildsRepository
 import pl.elpassion.eltc.builds.SelectableProject
 import pl.elpassion.eltc.login.AuthData
 import pl.elpassion.eltc.login.LoginRepository
+import pl.elpassion.eltc.settings.Settings
+import pl.elpassion.eltc.settings.SettingsRepository
 
 class TeamCityModelTest {
 
     private val loginRepository = mock<LoginRepository>()
     private val buildsRepository = mock<BuildsRepository>()
+    private val settingsRepository = mock<SettingsRepository>()
     private val api = mock<TeamCityApi>()
-    private val model = TeamCityModelImpl(api, loginRepository, buildsRepository)
+    private val model = TeamCityModelImpl(api, loginRepository, buildsRepository, settingsRepository)
     private val observer = TestObserver<AppState>()
 
     @Before
@@ -333,7 +336,16 @@ class TeamCityModelTest {
     @Test
     fun `Display settings on open settings action`() {
         model.perform(OpenSettings)
-        observer.assertLastValue(SettingsState)
+        observer.assertLastValue(SettingsState(Settings.DEFAULT))
+    }
+
+    @Test
+    fun `Display settings saved in repository`() {
+        whenever(settingsRepository.settings).thenReturn(Settings(
+                notificationsFrequency = Settings.EVERY_15_MIN))
+        model.perform(OpenSettings)
+        observer.assertLastValue(SettingsState(Settings(
+                notificationsFrequency = Settings.EVERY_15_MIN)))
     }
 
     private fun stubLoginRepositoryToReturnAuthData() {

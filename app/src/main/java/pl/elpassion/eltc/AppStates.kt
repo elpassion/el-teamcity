@@ -1,12 +1,12 @@
 package pl.elpassion.eltc
 
 import pl.elpassion.eltc.builds.SelectableProject
+import pl.elpassion.eltc.settings.Settings
 
 sealed class AppState
 
 object InitialState : AppState()
 object LoadingBuildsState : AppState()
-object SettingsState : AppState()
 
 data class LoginState(
         val host: String = "",
@@ -40,6 +40,10 @@ data class DetailsState(
         val tests: List<TestDetails>,
         val problems: List<ProblemOccurrence>
 ) : AppState(), WithBuild
+
+data class SettingsState(
+        val settings: Settings
+) : AppState()
 
 data class WebBrowserState(
         override val build: Build

@@ -9,10 +9,13 @@ import pl.elpassion.eltc.builds.BuildsRepository
 import pl.elpassion.eltc.builds.SelectableProject
 import pl.elpassion.eltc.login.AuthData
 import pl.elpassion.eltc.login.LoginRepository
+import pl.elpassion.eltc.settings.Settings
+import pl.elpassion.eltc.settings.SettingsRepository
 
 class TeamCityModelImpl(private val api: TeamCityApi,
                         private val loginRepository: LoginRepository,
-                        private val buildsRepository: BuildsRepository) : TeamCityModel {
+                        private val buildsRepository: BuildsRepository,
+                        private val settingsRepository: SettingsRepository) : TeamCityModel {
 
     private val stateSubject = BehaviorSubject.createDefault<AppState>(InitialState)
     override val state: Observable<AppState> = stateSubject
@@ -29,7 +32,7 @@ class TeamCityModelImpl(private val api: TeamCityApi,
         is SelectBuild -> loadDetails(action.build)
         is ReturnToList -> loadBuilds()
         is OpenInWebBrowser -> openWebBrowser()
-        is OpenSettings -> goTo(SettingsState)
+        is OpenSettings -> openSettings()
         is Logout -> logout()
     }
 
@@ -136,6 +139,15 @@ class TeamCityModelImpl(private val api: TeamCityApi,
             if (it is WithBuild) {
                 goTo(WebBrowserState(it.build))
             }
+        }
+    }
+
+    private fun openSettings() {
+        val settings = settingsRepository.settings
+        if (settings != null) {
+            goTo(SettingsState(settings))
+        } else {
+            goTo(SettingsState(Settings.DEFAULT))
         }
     }
 
