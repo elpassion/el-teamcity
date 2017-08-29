@@ -2,19 +2,14 @@ package pl.elpassion.eltc.settings
 
 import android.support.test.espresso.Espresso.pressBackUnconditionally
 import android.support.test.rule.ActivityTestRule
-import com.elpassion.android.commons.espresso.checkIntent
-import com.elpassion.android.commons.espresso.click
-import com.elpassion.android.commons.espresso.isDisplayed
-import com.elpassion.android.commons.espresso.onToolbarBackArrow
+import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.argThat
 import com.nhaarman.mockito_kotlin.verify
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
-import pl.elpassion.eltc.BaseActivityTest
-import pl.elpassion.eltc.LoadingBuildsState
-import pl.elpassion.eltc.ReturnToList
-import pl.elpassion.eltc.SettingsState
+import pl.elpassion.eltc.*
+import pl.elpassion.eltc.R
 import pl.elpassion.eltc.builds.BuildsActivity
 
 class SettingsActivityTest : BaseActivityTest() {
@@ -47,5 +42,10 @@ class SettingsActivityTest : BaseActivityTest() {
         states.onNext(LoadingBuildsState)
         checkIntent(BuildsActivity::class.java)
         assertTrue(activityRule.activity.isFinishing)
+    }
+
+    @Test
+    fun Display_screen_title() {
+        onText(R.string.settings).isDisplayed()
     }
 }
