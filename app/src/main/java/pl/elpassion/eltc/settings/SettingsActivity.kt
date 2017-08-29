@@ -15,7 +15,11 @@ class SettingsActivity : BaseActivity() {
         initModel()
     }
 
-    override fun showState(state: AppState?) = Unit
+    override fun showState(state: AppState?) {
+        when (state) {
+            is LoadingBuildsState -> openBuildsScreen()
+        }
+    }
 
     override fun onBackPressed() {
         model.perform(ReturnToList)
