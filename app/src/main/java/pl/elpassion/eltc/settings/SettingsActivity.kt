@@ -12,7 +12,14 @@ class SettingsActivity : BaseActivity() {
         setContentView(R.layout.settings_activity)
         setSupportActionBar(toolbar)
         showBackArrowInToolbar()
+        showSettingsFragment()
         initModel()
+    }
+
+    private fun showSettingsFragment() {
+        fragmentManager.beginTransaction()
+                .replace(R.id.settings_container, SettingsFragment())
+                .commit()
     }
 
     override fun showState(state: AppState?) {

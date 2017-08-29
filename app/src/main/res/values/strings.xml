@@ -20,6 +20,22 @@
     <string name="problems">Problems</string>
     <string name="recap_channel">Recap channel</string>
     <string name="settings">Settings</string>
+    <string name="notifications_frequency">Notifications frequency</string>
+    <string-array name="notifications_frequency_entries">
+        <item>Every 15 minutes</item>
+        <item>Every 30 minutes</item>
+        <item>Every 1 hour</item>
+        <item>Every 2 hours</item>
+        <item>Every 5 hours</item>
+    </string-array>
+    <string-array name="notifications_frequency_values">
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>120</item>
+        <item>300</item>
+    </string-array>
+    <string name="notifications_frequency_default">15</string>
 
     <!-- Transitions -->
     <string name="build_number_transition">build number transition</string>

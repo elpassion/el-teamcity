@@ -48,4 +48,9 @@ class SettingsActivityTest : BaseActivityTest() {
     fun Display_screen_title() {
         onText(R.string.settings).isDisplayed()
     }
+
+    @Test
+    fun Display_notifications_frequency_preference() {
+        onText(R.string.notifications_frequency).isDisplayed()
+    }
 }

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <ListPreference
+        android:defaultValue="@string/notifications_frequency_default"
+        android:entries="@array/notifications_frequency_entries"
+        android:entryValues="@array/notifications_frequency_values"
+        android:key="notifications_frequency"
+        android:title="@string/notifications_frequency"
+        tools:summary="Every 15 minutes" />
+</PreferenceScreen>
