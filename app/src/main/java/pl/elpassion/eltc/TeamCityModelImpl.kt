@@ -154,6 +154,7 @@ class TeamCityModelImpl(private val api: TeamCityApi,
 
     private fun submitSettings(settings: Settings) {
         settingsRepository.settings = settings
+        goTo(LoadingBuildsState)
     }
 
     private fun logout() {
