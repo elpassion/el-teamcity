@@ -1,5 +1,6 @@
 package pl.elpassion.eltc.settings
 
+import android.support.test.espresso.Espresso.pressBackUnconditionally
 import android.support.test.rule.ActivityTestRule
 import com.elpassion.android.commons.espresso.click
 import com.elpassion.android.commons.espresso.isDisplayed
@@ -21,6 +22,13 @@ class SettingsActivityTest : BaseActivityTest() {
     @Test
     fun Display_back_arrow_in_toolbar() {
         onToolbarBackArrow().isDisplayed()
+    }
+
+    @Test
+    fun Return_to_list_on_back_pressed() {
+        states.onNext(SettingsState(Settings.DEFAULT))
+        pressBackUnconditionally()
+        verify(model).perform(argThat { this is ReturnToList })
     }
 
     @Test

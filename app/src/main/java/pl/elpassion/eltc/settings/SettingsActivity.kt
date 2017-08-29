@@ -17,6 +17,10 @@ class SettingsActivity : BaseActivity() {
 
     override fun showState(state: AppState?) = Unit
 
+    override fun onBackPressed() {
+        model.perform(ReturnToList)
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> model.perform(ReturnToList)
