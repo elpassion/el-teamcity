@@ -33,6 +33,7 @@ class TeamCityModelImpl(private val api: TeamCityApi,
         is ReturnToList -> loadBuilds()
         is OpenInWebBrowser -> openWebBrowser()
         is OpenSettings -> openSettings()
+        is SubmitSettings -> submitSettings(action.settings)
         is Logout -> logout()
     }
 
@@ -149,6 +150,10 @@ class TeamCityModelImpl(private val api: TeamCityApi,
         } else {
             goTo(SettingsState(Settings.DEFAULT))
         }
+    }
+
+    private fun submitSettings(settings: Settings) {
+        settingsRepository.settings = settings
     }
 
     private fun logout() {

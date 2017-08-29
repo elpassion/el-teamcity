@@ -1,5 +1,7 @@
 package pl.elpassion.eltc
 
+import pl.elpassion.eltc.settings.Settings
+
 sealed class UserAction
 
 object StartApp : UserAction()
@@ -23,3 +25,7 @@ data class SubmitProjects(
 data class SelectBuild(
         val build: Build
 ): UserAction()
+
+data class SubmitSettings(
+        val settings: Settings
+) : UserAction()
