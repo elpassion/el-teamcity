@@ -1,11 +1,9 @@
 package pl.elpassion.eltc.settings
 
 import android.os.Bundle
+import android.view.MenuItem
 import kotlinx.android.synthetic.main.settings_activity.*
-import pl.elpassion.eltc.AppState
-import pl.elpassion.eltc.BaseActivity
-import pl.elpassion.eltc.R
-import pl.elpassion.eltc.showBackArrowInToolbar
+import pl.elpassion.eltc.*
 
 class SettingsActivity : BaseActivity() {
 
@@ -18,4 +16,12 @@ class SettingsActivity : BaseActivity() {
     }
 
     override fun showState(state: AppState?) = Unit
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> model.perform(ReturnToList)
+            else -> super.onOptionsItemSelected(item)
+        }
+        return true
+    }
 }
