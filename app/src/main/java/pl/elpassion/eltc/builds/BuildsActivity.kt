@@ -65,6 +65,7 @@ class BuildsActivity : BaseActivity() {
             is SelectProjectsDialogState -> {
                 showSelectProjectsDialog(state.projects)
             }
+            is SettingsState -> openSettingsScreen()
         }
     }
 

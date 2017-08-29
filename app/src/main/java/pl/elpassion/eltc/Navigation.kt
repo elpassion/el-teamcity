@@ -17,12 +17,15 @@ import pl.elpassion.eltc.builds.BuildsActivity
 import pl.elpassion.eltc.details.DetailsActivity
 import pl.elpassion.eltc.login.LoginActivity
 import pl.elpassion.eltc.recap.RecapService
+import pl.elpassion.eltc.settings.SettingsActivity
 import java.util.concurrent.TimeUnit
 import android.util.Pair as TPair
 
 fun Activity.openLoginScreen() = open(LoginActivity::class.java)
 
 fun Activity.openBuildsScreen() = open(BuildsActivity::class.java)
+
+fun Activity.openSettingsScreen() = open(SettingsActivity::class.java)
 
 fun Activity.openDetailsScreen(bundle: Bundle?) = open(DetailsActivity::class.java, bundle)
 

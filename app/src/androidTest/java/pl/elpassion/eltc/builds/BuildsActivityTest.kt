@@ -12,6 +12,7 @@ import org.junit.Test
 import pl.elpassion.eltc.*
 import pl.elpassion.eltc.R
 import pl.elpassion.eltc.details.DetailsActivity
+import pl.elpassion.eltc.settings.SettingsActivity
 
 class BuildsActivityTest : BaseActivityTest() {
 
@@ -188,6 +189,13 @@ class BuildsActivityTest : BaseActivityTest() {
         Espresso.openContextualActionModeOverflowMenu()
         onText(R.string.settings).click()
         verify(model).perform(argThat { this is OpenSettings })
+    }
+
+    @Test
+    fun Display_settings_screen() {
+        states.onNext(SettingsState)
+        checkIntent(SettingsActivity::class.java)
+        assertTrue(activityRule.activity.isFinishing)
     }
 
     @Test
