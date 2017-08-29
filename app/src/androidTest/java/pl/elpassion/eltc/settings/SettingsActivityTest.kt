@@ -53,4 +53,12 @@ class SettingsActivityTest : BaseActivityTest() {
     fun Display_notifications_frequency_preference() {
         onText(R.string.notifications_frequency).isDisplayed()
     }
+
+    @Test
+    fun Update_notifications_frequency_summary_on_preference_changed() {
+        states.onNext(SettingsState(Settings.DEFAULT))
+        onText(R.string.notifications_frequency).click()
+        onText("Every 1 hour").click()
+        onText("Every 1 hour").isDisplayed()
+    }
 }
