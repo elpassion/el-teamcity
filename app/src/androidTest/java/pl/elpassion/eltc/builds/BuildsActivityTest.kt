@@ -12,6 +12,7 @@ import org.junit.Test
 import pl.elpassion.eltc.*
 import pl.elpassion.eltc.R
 import pl.elpassion.eltc.details.DetailsActivity
+import pl.elpassion.eltc.settings.Settings
 import pl.elpassion.eltc.settings.SettingsActivity
 
 class BuildsActivityTest : BaseActivityTest() {
@@ -193,7 +194,7 @@ class BuildsActivityTest : BaseActivityTest() {
 
     @Test
     fun Display_settings_screen() {
-        states.onNext(SettingsState)
+        states.onNext(SettingsState(Settings.DEFAULT))
         checkIntent(SettingsActivity::class.java)
         assertTrue(activityRule.activity.isFinishing)
     }
