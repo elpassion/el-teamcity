@@ -27,7 +27,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".settings.SettingsActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/SettingsTheme" />
 
         <service
             android:name=".recap.RecapService"

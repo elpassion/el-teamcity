@@ -11,6 +11,7 @@ import pl.elpassion.eltc.login.AuthData
 import pl.elpassion.eltc.login.LoginRepository
 import pl.elpassion.eltc.settings.Settings
 import pl.elpassion.eltc.settings.SettingsRepository
+import java.util.concurrent.TimeUnit
 
 class TeamCityModelImpl(private val api: TeamCityApi,
                         private val loginRepository: LoginRepository,
@@ -33,6 +34,7 @@ class TeamCityModelImpl(private val api: TeamCityApi,
         is ReturnToList -> loadBuilds()
         is OpenInWebBrowser -> openWebBrowser()
         is OpenSettings -> openSettings()
+        is RefreshSettings -> refreshSettings()
         is SubmitSettings -> submitSettings(action.settings)
         is Logout -> logout()
     }
@@ -150,6 +152,11 @@ class TeamCityModelImpl(private val api: TeamCityApi,
         } else {
             goTo(SettingsState(Settings.DEFAULT))
         }
+    }
+
+    private fun refreshSettings() {
+        Observable.timer(10, TimeUnit.MILLISECONDS)
+                .subscribe { openSettings() }
     }
 
     private fun submitSettings(settings: Settings) {

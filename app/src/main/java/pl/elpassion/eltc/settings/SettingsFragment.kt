@@ -1,32 +1,42 @@
 package pl.elpassion.eltc.settings
 
-import android.content.SharedPreferences
 import android.os.Bundle
-import android.preference.ListPreference
-import android.preference.PreferenceFragment
-import pl.elpassion.eltc.R
+import android.support.v7.preference.ListPreference
+import pl.elpassion.eltc.*
 
-class SettingsFragment : PreferenceFragment(), SharedPreferences.OnSharedPreferenceChangeListener {
+class SettingsFragment : BasePreferenceFragmentCompat() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    private val notificationsFreqPreference
+        get() = findPreference(NOTIFICATIONS_FREQUENCY_KEY) as ListPreference
+
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.settings)
+        preferenceManager.preferenceDataStore = DI.provideSettingsDataStore()
+        initListeners()
+        initModel()
     }
 
-    override fun onResume() {
-        super.onResume()
-        preferenceScreen.sharedPreferences.registerOnSharedPreferenceChangeListener(this)
+    override fun showState(state: AppState?) {
+        when (state) {
+            is SettingsState -> showSettings(state.settings)
+        }
     }
 
-    override fun onPause() {
-        preferenceScreen.sharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
-        super.onPause()
+    private fun showSettings(settings: Settings) {
+        notificationsFreqPreference.summary = getNotificationsFreqEntry(settings.notificationsFrequency)
     }
 
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
-        if (key == NOTIFICATIONS_FREQUENCY_KEY) {
-            val preference = findPreference(key) as ListPreference
-            preference.summary = preference.entry
+    private fun getNotificationsFreqEntry(value: Int) =
+            getEntry(notificationsFreqPreference, value)
+
+    private fun getEntry(preference: ListPreference, value: Int): CharSequence {
+        val index = preference.entryValues.indexOf(value.toString())
+        return preference.entries[index]
+    }
+
+    private fun initListeners() {
+        notificationsFreqPreference.setOnPreferenceChangeListener { _, _ ->
+            model.perform(RefreshSettings); true
         }
     }
 

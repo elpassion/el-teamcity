@@ -55,10 +55,17 @@ class SettingsActivityTest : BaseActivityTest() {
     }
 
     @Test
-    fun Update_notifications_frequency_summary_on_preference_changed() {
+    fun Display_notifications_frequency_summary() {
+        states.onNext(SettingsState(Settings(
+                notificationsFrequency = Settings.EVERY_15_MIN)))
+        onText("Every 15 minutes").isDisplayed()
+    }
+
+    @Test
+    fun Refresh_settings_on_preference_changed() {
         states.onNext(SettingsState(Settings.DEFAULT))
         onText(R.string.notifications_frequency).click()
         onText("Every 1 hour").click()
-        onText("Every 1 hour").isDisplayed()
+        verify(model).perform(argThat { this is RefreshSettings })
     }
 }

@@ -1,6 +1,7 @@
 package pl.elpassion.eltc
 
 import android.app.Application
+import android.support.v7.preference.PreferenceDataStore
 import pl.elpassion.eltc.api.TeamCityApiImpl
 import pl.elpassion.eltc.builds.BuildsRepositoryImpl
 import pl.elpassion.eltc.login.LoginRepositoryImpl
@@ -29,6 +30,8 @@ object DI {
     var provideBuildsRepository = { BuildsRepositoryImpl(provideApplication()) }
 
     var provideSettingsRepository = { SettingsRepositoryImpl(provideApplication()) }
+
+    var provideSettingsDataStore: () -> PreferenceDataStore = { SettingsRepositoryImpl(provideApplication()) }
 
     var provideApplication: () -> Application = { throw UnsupportedOperationException("Application provider not initialized") }
 

@@ -17,7 +17,7 @@ class SettingsActivity : BaseActivity() {
     }
 
     private fun showSettingsFragment() {
-        fragmentManager.beginTransaction()
+        supportFragmentManager.beginTransaction()
                 .replace(R.id.settings_container, SettingsFragment())
                 .commit()
     }

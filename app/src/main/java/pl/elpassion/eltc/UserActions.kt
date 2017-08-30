@@ -12,6 +12,7 @@ object ReturnToList : UserAction()
 object OpenInWebBrowser : UserAction()
 object Logout : UserAction()
 object OpenSettings : UserAction()
+object RefreshSettings : UserAction()
 
 data class SubmitCredentials(
         val address: String,
