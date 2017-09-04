@@ -330,6 +330,12 @@ class TeamCityModelTest {
     }
 
     @Test
+    fun `Restore default settings on logout`() {
+        model.perform(Logout)
+        verify(settingsRepository).settings = Settings.DEFAULT
+    }
+
+    @Test
     fun `Display login without error on login error accepted`() {
         whenever(api.getBuilds()).thenError(UnknownHostException)
         model.perform(SubmitCredentials(TEAMCITY_ADDRESS, CREDENTIALS))

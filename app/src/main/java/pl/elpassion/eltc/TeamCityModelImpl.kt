@@ -169,6 +169,7 @@ class TeamCityModelImpl(private val api: TeamCityApi,
     private fun clearRepository() {
         loginRepository.authData = null
         buildsRepository.selectedProjects = emptyList()
+        settingsRepository.settings = Settings.DEFAULT
     }
 
     private fun TeamCityApiException.toState() = LoginState(error = when (this) {
