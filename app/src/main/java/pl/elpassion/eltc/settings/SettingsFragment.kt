@@ -21,8 +21,9 @@ class SettingsFragment : BasePreferenceFragmentCompat() {
     }
 
     private fun showSettings(settings: Settings) {
-        notificationsFreqPreference.summary = getNotificationsFreqEntry(settings.notificationsFrequency)
-        notificationsFreqPreference.value = settings.notificationsFrequency.toString()
+        notificationsFreqPreference.summary =
+                getNotificationsFreqEntry(settings.notificationsFrequencyInMinutes)
+        notificationsFreqPreference.value = settings.notificationsFrequencyInMinutes.toString()
     }
 
     private fun getNotificationsFreqEntry(value: Int) =

@@ -21,7 +21,7 @@ class SettingsRepositoryImpl(private val application: Application) : PreferenceD
     override fun getString(key: String?, defValue: String?): String? {
         val value = when (key) {
             NOTIFICATIONS_FREQUENCY_KEY -> {
-                settings?.notificationsFrequency ?: Settings.DEFAULT.notificationsFrequency
+                settings?.notificationsFrequencyInMinutes ?: Settings.DEFAULT.notificationsFrequencyInMinutes
             }
             else -> throw IllegalArgumentException()
         }
@@ -32,7 +32,7 @@ class SettingsRepositoryImpl(private val application: Application) : PreferenceD
         when (key) {
             NOTIFICATIONS_FREQUENCY_KEY -> {
                 if (value != null) {
-                    settings = (settings ?: Settings.DEFAULT).copy(notificationsFrequency = value.toInt())
+                    settings = (settings ?: Settings.DEFAULT).copy(notificationsFrequencyInMinutes = value.toInt())
                 }
             }
         }

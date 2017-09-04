@@ -342,10 +342,10 @@ class TeamCityModelTest {
     @Test
     fun `Display settings saved in repository`() {
         whenever(settingsRepository.settings).thenReturn(Settings(
-                notificationsFrequency = Settings.EVERY_15_MIN))
+                notificationsFrequencyInMinutes = 15))
         model.perform(OpenSettings)
         observer.assertLastValue(SettingsState(Settings(
-                notificationsFrequency = Settings.EVERY_15_MIN)))
+                notificationsFrequencyInMinutes = 15)))
     }
 
     private fun stubLoginRepositoryToReturnAuthData() {
