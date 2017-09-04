@@ -17,9 +17,7 @@ class SettingsFragment : BasePreferenceFragmentCompat() {
     }
 
     override fun showState(state: AppState?) {
-        when (state) {
-            is SettingsState -> showSettings(state.settings)
-        }
+        if (state is SettingsState) showSettings(state.settings)
     }
 
     private fun showSettings(settings: Settings) {
