@@ -28,45 +28,45 @@ class BuildsActivityTest : BaseActivityTest() {
 
     @Test
     fun Display_build_number_if_available() {
-        states.onNext(BuildsState(listOf(createBuild(number = "76")), emptyList()))
+        states.onNext(newBuildsState(builds = listOf(createBuild(number = "76"))))
         onText("#76").isDisplayed()
     }
 
     @Test
     fun Display_state_of_finished_build() {
-        states.onNext(BuildsState(listOf(createBuild(state = State.FINISHED)), emptyList()))
+        states.onNext(newBuildsState(builds = listOf(createBuild(state = State.FINISHED))))
         onTextStartingWith("Build finished").isDisplayed()
     }
 
     @Test
     fun Display_state_of_queued_build() {
-        states.onNext(BuildsState(listOf(createBuild(state = State.QUEUED)), emptyList()))
+        states.onNext(newBuildsState(builds = listOf(createBuild(state = State.QUEUED))))
         onTextStartingWith("Build queued").isDisplayed()
     }
 
     @Test
     fun Display_state_of_running_build() {
-        states.onNext(BuildsState(listOf(createBuild(state = State.RUNNING)), emptyList()))
+        states.onNext(newBuildsState(builds = listOf(createBuild(state = State.RUNNING))))
         onTextStartingWith("Build started").isDisplayed()
     }
 
     @Test
     fun Display_success_status_of_finished_build() {
-        states.onNext(BuildsState(listOf(createBuild(status = Status.SUCCESS)), emptyList()))
+        states.onNext(newBuildsState(builds = listOf(createBuild(status = Status.SUCCESS))))
         onImage(R.drawable.build_success_bg).isDisplayed()
         onImage(R.drawable.ic_success).isDisplayed()
     }
 
     @Test
     fun Display_failure_status_of_finished_build() {
-        states.onNext(BuildsState(listOf(createBuild(status = Status.FAILURE)), emptyList()))
+        states.onNext(newBuildsState(builds = listOf(createBuild(status = Status.FAILURE))))
         onImage(R.drawable.build_failure_bg).isDisplayed()
         onImage(R.drawable.ic_failure).isDisplayed()
     }
 
     @Test
     fun Display_progress_status_of_started_build() {
-        states.onNext(BuildsState(listOf(createBuild(state = State.RUNNING)), emptyList()))
+        states.onNext(newBuildsState(builds = listOf(createBuild(state = State.RUNNING))))
         onId(R.id.buildStatusBg).isNotDisplayed()
         onId(R.id.buildStatusIcon).isNotDisplayed()
         onId(R.id.buildProgressBar).isDisplayed()
@@ -74,21 +74,21 @@ class BuildsActivityTest : BaseActivityTest() {
 
     @Test
     fun Display_status_of_queued_build() {
-        states.onNext(BuildsState(listOf(createBuild(state = State.QUEUED)), emptyList()))
+        states.onNext(newBuildsState(builds = listOf(createBuild(state = State.QUEUED))))
         onImage(R.drawable.build_queued_bg).isDisplayed()
         onImage(R.drawable.ic_queued).isDisplayed()
     }
 
     @Test
     fun Do_not_display_build_name_for_queued_builds() {
-        states.onNext(BuildsState(listOf(createBuild(state = State.QUEUED)), emptyList()))
+        states.onNext(newBuildsState(builds = listOf(createBuild(state = State.QUEUED))))
         onId(R.id.buildName).isNotDisplayed()
     }
 
     @Test
     fun Hide_loader_on_new_data() {
         states.onNext(LoadingBuildsState)
-        states.onNext(BuildsState(listOf(createBuild(number = "76")), emptyList()))
+        states.onNext(newBuildsState(builds = listOf(createBuild(number = "76"))))
         onId(R.id.loader).isNotDisplayed()
     }
 
@@ -162,7 +162,7 @@ class BuildsActivityTest : BaseActivityTest() {
     @Test
     fun Select_build_on_click() {
         val selectedBuild = createBuild(number = "7")
-        states.onNext(BuildsState(listOf(selectedBuild), emptyList()))
+        states.onNext(newBuildsState(builds = listOf(selectedBuild)))
         onText("#7").click()
         verify(model).perform(argThat {
             this is SelectBuild && selectedBuild == selectedBuild
@@ -172,7 +172,7 @@ class BuildsActivityTest : BaseActivityTest() {
     @Test
     fun Do_not_select_queued_build_on_click() {
         val selectedBuild = createBuild(state = State.QUEUED)
-        states.onNext(BuildsState(listOf(selectedBuild), emptyList()))
+        states.onNext(newBuildsState(builds = listOf(selectedBuild)))
         onTextStartingWith("Build queued").click()
         verify(model, never()).perform(argThat { this is SelectBuild })
     }
@@ -186,7 +186,7 @@ class BuildsActivityTest : BaseActivityTest() {
 
     @Test
     fun Open_settings_on_action_click() {
-        states.onNext(BuildsState(emptyList(), emptyList()))
+        states.onNext(newBuildsState())
         Espresso.openContextualActionModeOverflowMenu()
         onText(R.string.settings).click()
         verify(model).perform(argThat { this is OpenSettings })
@@ -201,9 +201,13 @@ class BuildsActivityTest : BaseActivityTest() {
 
     @Test
     fun Perform_logout_action() {
-        states.onNext(BuildsState(emptyList(), emptyList()))
+        states.onNext(newBuildsState())
         Espresso.openContextualActionModeOverflowMenu()
         onText(R.string.logout).click()
         verify(model).perform(argThat { this is Logout })
     }
+
+    private fun newBuildsState(builds: List<Build> = emptyList(),
+                               projects: List<Project> = emptyList()) =
+            BuildsState(builds, projects, Settings.DEFAULT.notificationsFrequencyInMinutes)
 }
