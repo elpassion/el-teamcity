@@ -62,6 +62,14 @@ class SettingsActivityTest : BaseActivityTest() {
     }
 
     @Test
+    fun Check_current_value_in_notifications_frequency_dialog() {
+        states.onNext(SettingsState(Settings(
+                notificationsFrequency = Settings.EVERY_30_MIN)))
+        onText("Every 30 minutes").click()
+        onText("Every 30 minutes").isChecked()
+    }
+
+    @Test
     fun Refresh_settings_on_preference_changed() {
         states.onNext(SettingsState(Settings.DEFAULT))
         onText(R.string.notifications_frequency).click()
