@@ -23,9 +23,7 @@ class SettingsActivity : BaseActivity() {
     }
 
     override fun showState(state: AppState?) {
-        when (state) {
-            is LoadingBuildsState -> openBuildsScreen()
-        }
+        if (state is LoadingBuildsState) openBuildsScreen()
     }
 
     override fun onBackPressed() {
