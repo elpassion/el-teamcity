@@ -348,18 +348,6 @@ class TeamCityModelTest {
                 notificationsFrequency = Settings.EVERY_15_MIN)))
     }
 
-    @Test
-    fun `Save settings in repository`() {
-        model.perform(SubmitSettings(Settings(Settings.EVERY_30_MIN)))
-        verify(settingsRepository).settings = Settings(Settings.EVERY_30_MIN)
-    }
-
-    @Test
-    fun `Load builds on settings changed`() {
-        model.perform(SubmitSettings(Settings.DEFAULT))
-        observer.assertLastValue(LoadingBuildsState)
-    }
-
     private fun stubLoginRepositoryToReturnAuthData() {
         whenever(loginRepository.authData).thenReturn(AuthData(TEAMCITY_ADDRESS, CREDENTIALS))
     }

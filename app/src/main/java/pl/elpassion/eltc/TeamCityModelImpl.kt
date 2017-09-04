@@ -35,7 +35,6 @@ class TeamCityModelImpl(private val api: TeamCityApi,
         is OpenInWebBrowser -> openWebBrowser()
         is OpenSettings -> openSettings()
         is RefreshSettings -> refreshSettings()
-        is SubmitSettings -> submitSettings(action.settings)
         is Logout -> logout()
     }
 
@@ -157,11 +156,6 @@ class TeamCityModelImpl(private val api: TeamCityApi,
     private fun refreshSettings() {
         Observable.timer(10, TimeUnit.MILLISECONDS)
                 .subscribe { openSettings() }
-    }
-
-    private fun submitSettings(settings: Settings) {
-        settingsRepository.settings = settings
-        goTo(LoadingBuildsState)
     }
 
     private fun logout() {
