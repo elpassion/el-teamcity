@@ -1,6 +1,7 @@
 package pl.elpassion.eltc
 
 import pl.elpassion.eltc.builds.SelectableProject
+import pl.elpassion.eltc.settings.Settings
 import java.util.*
 
 fun createBuild(id: Int = 1,
@@ -64,3 +65,7 @@ fun createProblemOccurrence(type: String = "Problem type",
         identity = "1",
         details = details,
         href = "problemHref")
+
+fun newBuildsState(builds: List<Build> = emptyList(),
+                   projects: List<Project> = emptyList()) =
+        BuildsState(builds, projects, Settings.DEFAULT.notificationsFrequencyInMinutes)

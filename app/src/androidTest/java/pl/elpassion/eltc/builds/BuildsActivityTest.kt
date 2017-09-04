@@ -206,8 +206,4 @@ class BuildsActivityTest : BaseActivityTest() {
         onText(R.string.logout).click()
         verify(model).perform(argThat { this is Logout })
     }
-
-    private fun newBuildsState(builds: List<Build> = emptyList(),
-                               projects: List<Project> = emptyList()) =
-            BuildsState(builds, projects, Settings.DEFAULT.notificationsFrequencyInMinutes)
 }
