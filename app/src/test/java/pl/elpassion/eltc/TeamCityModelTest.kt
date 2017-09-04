@@ -33,6 +33,7 @@ class TeamCityModelTest {
         whenever(api.getChanges(any())).thenNever()
         whenever(api.getTests(any())).thenNever()
         whenever(api.getProblemOccurrences(any())).thenNever()
+        whenever(settingsRepository.settings).thenReturn(Settings.DEFAULT)
         model.state.subscribe(observer)
     }
 
@@ -73,7 +74,8 @@ class TeamCityModelTest {
         whenever(api.getQueuedBuilds()).thenJust(emptyList())
         whenever(api.getProjects()).thenJust(projectList)
         model.perform(SubmitCredentials(TEAMCITY_ADDRESS, CREDENTIALS))
-        observer.assertLastValue(BuildsState(buildList, projectList))
+        observer.assertLastValue(BuildsState(buildList, projectList,
+                Settings.DEFAULT.notificationsFrequencyInMinutes))
     }
 
     @Test
@@ -88,7 +90,8 @@ class TeamCityModelTest {
         whenever(api.getBuilds()).thenJust(startedBuilds)
         whenever(api.getProjects()).thenJust(emptyList())
         model.perform(SubmitCredentials(TEAMCITY_ADDRESS, CREDENTIALS))
-        observer.assertLastValue(BuildsState(queuedBuilds + startedBuilds, emptyList()))
+        observer.assertLastValue(BuildsState(queuedBuilds + startedBuilds, emptyList(),
+                Settings.DEFAULT.notificationsFrequencyInMinutes))
     }
 
     @Test
@@ -215,7 +218,8 @@ class TeamCityModelTest {
         model.perform(StartApp)
         model.perform(SelectProjects)
         model.perform(SubmitProjects(selectedProjects))
-        observer.assertLastValue(BuildsState(listOf(allBuilds[0], allBuilds[1]), allProjects))
+        observer.assertLastValue(BuildsState(listOf(allBuilds[0], allBuilds[1]), allProjects,
+                Settings.DEFAULT.notificationsFrequencyInMinutes))
     }
 
     @Test
@@ -346,6 +350,18 @@ class TeamCityModelTest {
         model.perform(OpenSettings)
         observer.assertLastValue(SettingsState(Settings(
                 notificationsFrequencyInMinutes = 15)))
+    }
+
+    @Test
+    fun `Update recap duration on return to list`() {
+        whenever(settingsRepository.settings).thenReturn(Settings(
+                notificationsFrequencyInMinutes = 60))
+        whenever(api.getBuilds()).thenJust(emptyList())
+        whenever(api.getQueuedBuilds()).thenJust(emptyList())
+        whenever(api.getProjects()).thenJust(emptyList())
+        stubLoginRepositoryToReturnAuthData()
+        model.perform(ReturnToList)
+        observer.assertLastValue(BuildsState(emptyList(), emptyList(), recapDurationInMinutes = 60))
     }
 
     private fun stubLoginRepositoryToReturnAuthData() {

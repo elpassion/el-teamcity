@@ -71,8 +71,11 @@ class TeamCityModelImpl(private val api: TeamCityApi,
 
     private val onBuildsAndProjects: (Pair<List<Build>, List<Project>>) -> Unit =
             { (builds, projects) ->
-                goTo(BuildsState(builds, projects))
+                goTo(BuildsState(builds, projects, getRecapDurationInMinutes()))
             }
+
+    private fun getRecapDurationInMinutes() =
+            (settingsRepository.settings ?: Settings.DEFAULT).notificationsFrequencyInMinutes
 
     private val onError: (Throwable) -> Unit = { error ->
         clearRepository()

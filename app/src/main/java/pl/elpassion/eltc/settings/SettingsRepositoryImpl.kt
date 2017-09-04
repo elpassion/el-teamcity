@@ -20,9 +20,7 @@ class SettingsRepositoryImpl(private val application: Application) : PreferenceD
 
     override fun getString(key: String?, defValue: String?): String? {
         val value = when (key) {
-            NOTIFICATIONS_FREQUENCY_KEY -> {
-                settings?.notificationsFrequencyInMinutes ?: Settings.DEFAULT.notificationsFrequencyInMinutes
-            }
+            NOTIFICATIONS_FREQUENCY_KEY -> (settings ?: Settings.DEFAULT).notificationsFrequencyInMinutes
             else -> throw IllegalArgumentException()
         }
         return value.toString()

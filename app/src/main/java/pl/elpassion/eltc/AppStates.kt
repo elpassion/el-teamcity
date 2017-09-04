@@ -23,7 +23,8 @@ data class LoginState(
 
 data class BuildsState(
         val builds: List<Build>,
-        val projects: List<Project>
+        val projects: List<Project>,
+        val recapDurationInMinutes: Int
 ) : AppState()
 
 data class SelectProjectsDialogState(

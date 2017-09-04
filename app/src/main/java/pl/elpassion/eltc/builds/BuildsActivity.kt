@@ -39,7 +39,6 @@ class BuildsActivity : BaseActivity() {
         }
         checkExtras(intent.extras)
         notificationManager.cancelAll()
-        scheduleRecapService()
     }
 
     private fun checkExtras(bundle: Bundle?) {
@@ -60,6 +59,7 @@ class BuildsActivity : BaseActivity() {
                 loader.hide()
                 swipeToRefreshBuildsList.isRefreshing = false
                 showBuilds(state.builds)
+                scheduleRecapService(state.recapDurationInMinutes)
             }
             is LoadingDetailsState -> openDetailsScreen(options?.toBundle())
             is SelectProjectsDialogState -> {
