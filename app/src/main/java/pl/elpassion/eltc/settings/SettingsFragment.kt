@@ -25,10 +25,11 @@ class SettingsFragment : BasePreferenceFragmentCompat() {
     }
 
     private fun showSettings(settings: Settings) {
+        notificationsPreference.isChecked = settings.areNotificationsEnabled
+        notificationsFreqPreference.isEnabled = settings.areNotificationsEnabled
         notificationsFreqPreference.summary =
                 getNotificationsFreqEntry(settings.notificationsFrequencyInMinutes)
         notificationsFreqPreference.value = settings.notificationsFrequencyInMinutes.toString()
-        notificationsPreference.isChecked = settings.areNotificationsEnabled
     }
 
     private fun getNotificationsFreqEntry(value: Int) =
@@ -40,6 +41,9 @@ class SettingsFragment : BasePreferenceFragmentCompat() {
     }
 
     private fun initListeners() {
+        notificationsPreference.setOnPreferenceChangeListener { _, _ ->
+            model.perform(RefreshSettings); true
+        }
         notificationsFreqPreference.setOnPreferenceChangeListener { _, _ ->
             model.perform(RefreshSettings); true
         }
