@@ -352,15 +352,17 @@ class TeamCityModelTest {
     @Test
     fun `Display settings saved in repository`() {
         whenever(settingsRepository.settings).thenReturn(Settings(
+                areNotificationsEnabled = true,
                 notificationsFrequencyInMinutes = 15))
         model.perform(OpenSettings)
         observer.assertLastValue(SettingsState(Settings(
+                areNotificationsEnabled = true,
                 notificationsFrequencyInMinutes = 15)))
     }
 
     @Test
     fun `Update recap duration on return to list`() {
-        whenever(settingsRepository.settings).thenReturn(Settings(
+        whenever(settingsRepository.settings).thenReturn(Settings.DEFAULT.copy(
                 notificationsFrequencyInMinutes = 60))
         whenever(api.getBuilds()).thenJust(emptyList())
         whenever(api.getQueuedBuilds()).thenJust(emptyList())
