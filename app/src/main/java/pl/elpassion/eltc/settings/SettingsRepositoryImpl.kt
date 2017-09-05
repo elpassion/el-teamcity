@@ -20,6 +20,17 @@ class SettingsRepositoryImpl(private val application: Application) : PreferenceD
             repository.write(SETTINGS_KEY, value)
         }
 
+    override fun getBoolean(key: String?, defValue: Boolean): Boolean = when (key) {
+        NOTIFICATIONS_KEY -> currentSettings.areNotificationsEnabled
+        else -> throw IllegalArgumentException()
+    }
+
+    override fun putBoolean(key: String?, value: Boolean) {
+        if (key == NOTIFICATIONS_KEY) {
+            settings = currentSettings.copy(areNotificationsEnabled = value)
+        }
+    }
+
     override fun getString(key: String?, defValue: String?): String? {
         val value = when (key) {
             NOTIFICATIONS_FREQUENCY_KEY -> currentSettings.notificationsFrequencyInMinutes
@@ -29,17 +40,14 @@ class SettingsRepositoryImpl(private val application: Application) : PreferenceD
     }
 
     override fun putString(key: String?, value: String?) {
-        when (key) {
-            NOTIFICATIONS_FREQUENCY_KEY -> {
-                if (value != null) {
-                    settings = currentSettings.copy(notificationsFrequencyInMinutes = value.toInt())
-                }
-            }
+        if (key == NOTIFICATIONS_FREQUENCY_KEY && value != null) {
+            settings = currentSettings.copy(notificationsFrequencyInMinutes = value.toInt())
         }
     }
 
     companion object {
         private const val SETTINGS_KEY = "settings"
+        private const val NOTIFICATIONS_KEY = "notifications"
         private const val NOTIFICATIONS_FREQUENCY_KEY = "notifications_frequency"
     }
 }
