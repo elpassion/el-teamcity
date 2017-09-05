@@ -12,6 +12,8 @@ class SettingsRepositoryImpl(private val application: Application) : PreferenceD
         PreferenceManager.getDefaultSharedPreferences(application)
     }, moshiConverterAdapter())
 
+    private val currentSettings get() = settings ?: Settings.DEFAULT
+
     override var settings: Settings?
         get() = repository.read(SETTINGS_KEY)
         set(value) {
@@ -20,7 +22,7 @@ class SettingsRepositoryImpl(private val application: Application) : PreferenceD
 
     override fun getString(key: String?, defValue: String?): String? {
         val value = when (key) {
-            NOTIFICATIONS_FREQUENCY_KEY -> (settings ?: Settings.DEFAULT).notificationsFrequencyInMinutes
+            NOTIFICATIONS_FREQUENCY_KEY -> currentSettings.notificationsFrequencyInMinutes
             else -> throw IllegalArgumentException()
         }
         return value.toString()
@@ -30,7 +32,7 @@ class SettingsRepositoryImpl(private val application: Application) : PreferenceD
         when (key) {
             NOTIFICATIONS_FREQUENCY_KEY -> {
                 if (value != null) {
-                    settings = (settings ?: Settings.DEFAULT).copy(notificationsFrequencyInMinutes = value.toInt())
+                    settings = currentSettings.copy(notificationsFrequencyInMinutes = value.toInt())
                 }
             }
         }
