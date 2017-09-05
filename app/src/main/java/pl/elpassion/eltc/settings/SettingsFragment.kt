@@ -1,6 +1,7 @@
 package pl.elpassion.eltc.settings
 
 import android.os.Bundle
+import android.support.v14.preference.SwitchPreference
 import android.support.v7.preference.ListPreference
 import pl.elpassion.eltc.*
 
@@ -8,6 +9,9 @@ class SettingsFragment : BasePreferenceFragmentCompat() {
 
     private val notificationsFreqPreference
         get() = findPreference(NOTIFICATIONS_FREQUENCY_KEY) as ListPreference
+
+    private val notificationsPreference
+        get() = findPreference(NOTIFICATIONS_KEY) as SwitchPreference
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.settings)
@@ -24,6 +28,7 @@ class SettingsFragment : BasePreferenceFragmentCompat() {
         notificationsFreqPreference.summary =
                 getNotificationsFreqEntry(settings.notificationsFrequencyInMinutes)
         notificationsFreqPreference.value = settings.notificationsFrequencyInMinutes.toString()
+        notificationsPreference.isChecked = settings.areNotificationsEnabled
     }
 
     private fun getNotificationsFreqEntry(value: Int) =
@@ -41,6 +46,7 @@ class SettingsFragment : BasePreferenceFragmentCompat() {
     }
 
     companion object {
+        const val NOTIFICATIONS_KEY = "notifications"
         const val NOTIFICATIONS_FREQUENCY_KEY = "notifications_frequency"
     }
 }

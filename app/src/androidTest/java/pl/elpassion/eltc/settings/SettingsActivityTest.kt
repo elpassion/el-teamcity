@@ -1,10 +1,14 @@
 package pl.elpassion.eltc.settings
 
+import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.Espresso.pressBackUnconditionally
+import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.test.rule.ActivityTestRule
+import android.widget.Switch
 import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.argThat
 import com.nhaarman.mockito_kotlin.verify
+import org.hamcrest.CoreMatchers.allOf
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
@@ -52,6 +56,16 @@ class SettingsActivityTest : BaseActivityTest() {
     @Test
     fun Display_notifications_preference() {
         onText(R.string.notifications).isDisplayed()
+    }
+
+    @Test
+    fun Display_current_value_of_notifications_preference() {
+        states.onNext(SettingsState(Settings.DEFAULT.copy(
+                areNotificationsEnabled = false)))
+        onView(allOf(
+                withParent(withParent(hasDescendant(withText(R.string.notifications)))),
+                isAssignableFrom(Switch::class.java)))
+                .isNotChecked()
     }
 
     @Test
