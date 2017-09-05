@@ -7,11 +7,11 @@ import pl.elpassion.eltc.*
 
 class SettingsFragment : BasePreferenceFragmentCompat() {
 
-    private val notificationsFreqPreference
-        get() = findPreference(NOTIFICATIONS_FREQUENCY_KEY) as ListPreference
-
     private val notificationsPreference
         get() = findPreference(NOTIFICATIONS_KEY) as SwitchPreference
+
+    private val notificationsFreqPreference
+        get() = findPreference(NOTIFICATIONS_FREQUENCY_KEY) as ListPreference
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.settings)
