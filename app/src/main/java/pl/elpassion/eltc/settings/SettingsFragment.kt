@@ -52,6 +52,9 @@ class SettingsFragment : BasePreferenceFragmentCompat() {
         notificationsPreference.setOnPreferenceChangeListener { _, _ ->
             model.perform(RefreshSettings); true
         }
+        notificationsFilteringPreference.setOnPreferenceChangeListener { _, _ ->
+            model.perform(RefreshSettings); true
+        }
         notificationsFreqPreference.setOnPreferenceChangeListener { _, _ ->
             model.perform(RefreshSettings); true
         }

@@ -69,11 +69,6 @@ class SettingsActivityTest : BaseActivityTest() {
     }
 
     @Test
-    fun Display_notifications_filtering_preference() {
-        onText(R.string.notifications_filtering).isDisplayed()
-    }
-
-    @Test
     fun Disable_notifications_preferences_on_notifications_disabled() {
         states.onNext(SettingsState(Settings.DEFAULT.copy(
                 areNotificationsEnabled = false)))
@@ -82,10 +77,22 @@ class SettingsActivityTest : BaseActivityTest() {
     }
 
     @Test
-    fun Display_current_value_of_filtering_preference() {
+    fun Display_notifications_filtering_preference() {
+        onText(R.string.notifications_filtering).isDisplayed()
+    }
+
+    @Test
+    fun Display_current_value_of_notifications_filtering_preference() {
         states.onNext(SettingsState(Settings.DEFAULT.copy(
                 areNotificationsFilteredToSelectedProjects = true)))
         onSwitchPreference(R.string.notifications_filtering).isChecked()
+    }
+
+    @Test
+    fun Refresh_settings_on_notifications_filtering_preference_changed() {
+        states.onNext(SettingsState(Settings.DEFAULT))
+        onSwitchPreference(R.string.notifications_filtering).click()
+        verify(model).perform(argThat { this is RefreshSettings })
     }
 
     @Test
