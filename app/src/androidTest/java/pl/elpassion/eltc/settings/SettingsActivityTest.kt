@@ -74,6 +74,13 @@ class SettingsActivityTest : BaseActivityTest() {
     }
 
     @Test
+    fun Display_current_value_of_filtering_preference() {
+        states.onNext(SettingsState(Settings.DEFAULT.copy(
+                areNotificationsFilteredToSelectedProjects = true)))
+        onSwitchPreference(R.string.notifications_filtering).isChecked()
+    }
+
+    @Test
     fun Display_notifications_frequency_preference() {
         onText(R.string.notifications_frequency).isDisplayed()
     }

@@ -22,12 +22,15 @@ class SettingsRepositoryImpl(private val application: Application) : PreferenceD
 
     override fun getBoolean(key: String?, defValue: Boolean): Boolean = when (key) {
         NOTIFICATIONS_KEY -> currentSettings.areNotificationsEnabled
+        NOTIFICATIONS_FILTERING_KEY -> currentSettings.areNotificationsFilteredToSelectedProjects
         else -> throw IllegalArgumentException()
     }
 
     override fun putBoolean(key: String?, value: Boolean) {
-        if (key == NOTIFICATIONS_KEY) {
-            settings = currentSettings.copy(areNotificationsEnabled = value)
+        settings = when (key) {
+            NOTIFICATIONS_KEY -> currentSettings.copy(areNotificationsEnabled = value)
+            NOTIFICATIONS_FILTERING_KEY -> currentSettings.copy(areNotificationsFilteredToSelectedProjects = value)
+            else -> throw IllegalArgumentException()
         }
     }
 
@@ -48,6 +51,7 @@ class SettingsRepositoryImpl(private val application: Application) : PreferenceD
     companion object {
         private const val SETTINGS_KEY = "settings"
         private const val NOTIFICATIONS_KEY = "notifications"
+        private const val NOTIFICATIONS_FILTERING_KEY = "notifications_filtering"
         private const val NOTIFICATIONS_FREQUENCY_KEY = "notifications_frequency"
     }
 }

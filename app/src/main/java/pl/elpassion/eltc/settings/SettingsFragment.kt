@@ -10,6 +10,9 @@ class SettingsFragment : BasePreferenceFragmentCompat() {
     private val notificationsPreference
         get() = findPreference(NOTIFICATIONS_KEY) as SwitchPreference
 
+    private val notificationsFilteringPreference
+        get() = findPreference(NOTIFICATIONS_FILTERING_KEY) as SwitchPreference
+
     private val notificationsFreqPreference
         get() = findPreference(NOTIFICATIONS_FREQUENCY_KEY) as ListPreference
 
@@ -26,6 +29,7 @@ class SettingsFragment : BasePreferenceFragmentCompat() {
 
     private fun showSettings(settings: Settings) {
         notificationsPreference.isChecked = settings.areNotificationsEnabled
+        notificationsFilteringPreference.isChecked = settings.areNotificationsFilteredToSelectedProjects
         notificationsFreqPreference.isEnabled = settings.areNotificationsEnabled
         notificationsFreqPreference.summary =
                 getNotificationsFreqEntry(settings.notificationsFrequencyInMinutes)
@@ -51,6 +55,7 @@ class SettingsFragment : BasePreferenceFragmentCompat() {
 
     companion object {
         const val NOTIFICATIONS_KEY = "notifications"
+        const val NOTIFICATIONS_FILTERING_KEY = "notifications_filtering"
         const val NOTIFICATIONS_FREQUENCY_KEY = "notifications_frequency"
     }
 }
