@@ -27,14 +27,17 @@ class SettingsFragment : BasePreferenceFragmentCompat() {
         if (state is SettingsState) showSettings(state.settings)
     }
 
-    private fun showSettings(settings: Settings) {
-        notificationsPreference.isChecked = settings.areNotificationsEnabled
-        notificationsFilteringPreference.isEnabled = settings.areNotificationsEnabled
-        notificationsFilteringPreference.isChecked = settings.areNotificationsFilteredToSelectedProjects
-        notificationsFreqPreference.isEnabled = settings.areNotificationsEnabled
-        notificationsFreqPreference.summary =
-                getNotificationsFreqEntry(settings.notificationsFrequencyInMinutes)
-        notificationsFreqPreference.value = settings.notificationsFrequencyInMinutes.toString()
+    private fun showSettings(settings: Settings) = with(settings) {
+        notificationsPreference.isChecked = areNotificationsEnabled
+        notificationsFilteringPreference.run {
+            isEnabled = areNotificationsEnabled
+            isChecked = areNotificationsFilteredToSelectedProjects
+        }
+        notificationsFreqPreference.run {
+            isEnabled = areNotificationsEnabled
+            summary = getNotificationsFreqEntry(notificationsFrequencyInMinutes)
+            value = notificationsFrequencyInMinutes.toString()
+        }
     }
 
     private fun getNotificationsFreqEntry(value: Int) =
