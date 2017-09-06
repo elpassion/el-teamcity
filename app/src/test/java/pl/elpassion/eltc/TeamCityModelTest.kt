@@ -75,7 +75,7 @@ class TeamCityModelTest {
         whenever(api.getProjects()).thenJust(projectList)
         model.perform(SubmitCredentials(TEAMCITY_ADDRESS, CREDENTIALS))
         observer.assertLastValue(BuildsState(buildList, projectList,
-                Settings.DEFAULT.notificationsFrequencyInMinutes))
+                BuildsState.RecapSettings.DEFAULT))
     }
 
     @Test
@@ -91,7 +91,7 @@ class TeamCityModelTest {
         whenever(api.getProjects()).thenJust(emptyList())
         model.perform(SubmitCredentials(TEAMCITY_ADDRESS, CREDENTIALS))
         observer.assertLastValue(BuildsState(queuedBuilds + startedBuilds, emptyList(),
-                Settings.DEFAULT.notificationsFrequencyInMinutes))
+                BuildsState.RecapSettings.DEFAULT))
     }
 
     @Test
@@ -219,7 +219,7 @@ class TeamCityModelTest {
         model.perform(SelectProjects)
         model.perform(SubmitProjects(selectedProjects))
         observer.assertLastValue(BuildsState(listOf(allBuilds[0], allBuilds[1]), allProjects,
-                Settings.DEFAULT.notificationsFrequencyInMinutes))
+                BuildsState.RecapSettings.DEFAULT))
     }
 
     @Test
@@ -369,7 +369,23 @@ class TeamCityModelTest {
         whenever(api.getProjects()).thenJust(emptyList())
         stubLoginRepositoryToReturnAuthData()
         model.perform(ReturnToList)
-        observer.assertLastValue(BuildsState(emptyList(), emptyList(), recapDurationInMinutes = 60))
+        observer.assertLastValue(BuildsState(emptyList(), emptyList(), BuildsState.RecapSettings(
+                isEnabled = true,
+                recapDurationInMinutes = 60)))
+    }
+
+    @Test
+    fun `Disable recap on notifications disabled`() {
+        whenever(settingsRepository.settings).thenReturn(Settings.DEFAULT.copy(
+                areNotificationsEnabled = false))
+        whenever(api.getBuilds()).thenJust(emptyList())
+        whenever(api.getQueuedBuilds()).thenJust(emptyList())
+        whenever(api.getProjects()).thenJust(emptyList())
+        stubLoginRepositoryToReturnAuthData()
+        model.perform(ReturnToList)
+        observer.assertLastValue(BuildsState(emptyList(), emptyList(), BuildsState.RecapSettings(
+                isEnabled = false,
+                recapDurationInMinutes = Settings.DEFAULT.notificationsFrequencyInMinutes)))
     }
 
     private fun stubLoginRepositoryToReturnAuthData() {

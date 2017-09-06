@@ -24,8 +24,19 @@ data class LoginState(
 data class BuildsState(
         val builds: List<Build>,
         val projects: List<Project>,
-        val recapDurationInMinutes: Int
-) : AppState()
+        val recapState: RecapSettings
+) : AppState() {
+    data class RecapSettings(
+            val isEnabled: Boolean,
+            val recapDurationInMinutes: Int
+    ) {
+        companion object {
+            val DEFAULT = RecapSettings(
+                    isEnabled = Settings.DEFAULT.areNotificationsEnabled,
+                    recapDurationInMinutes = Settings.DEFAULT.notificationsFrequencyInMinutes)
+        }
+    }
+}
 
 data class SelectProjectsDialogState(
         val projects: List<SelectableProject>

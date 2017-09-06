@@ -59,7 +59,7 @@ class BuildsActivity : BaseActivity() {
                 loader.hide()
                 swipeToRefreshBuildsList.isRefreshing = false
                 showBuilds(state.builds)
-                scheduleRecapService(state.recapDurationInMinutes)
+                scheduleRecapService(state.recapState.recapDurationInMinutes)
             }
             is LoadingDetailsState -> openDetailsScreen(options?.toBundle())
             is SelectProjectsDialogState -> {
