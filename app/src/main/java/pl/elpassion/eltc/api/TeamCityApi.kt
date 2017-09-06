@@ -19,6 +19,7 @@ interface TeamCityApi {
     fun getBuilds(): Single<List<Build>>
     fun getQueuedBuilds(): Single<List<Build>>
     fun getFinishedBuilds(afterDate: Date): Single<List<Build>>
+    fun getFinishedBuildsForProjects(afterDate: Date, projectIds: List<String>): Single<List<Build>>
     fun getBuildsForProjects(projectIds: List<String>): Single<List<Build>>
     fun getBuild(id: Int): Single<Build>
     fun getChanges(buildId: Int): Single<List<Change>>
@@ -54,8 +55,14 @@ class TeamCityApiImpl(private val loginRepository: LoginRepository) : TeamCityAp
     override fun getFinishedBuilds(afterDate: Date): Single<List<Build>> =
             service.getFinishedBuilds(credentials, "finishDate:(date:${afterDate.format()},condition:after)").mapApiErrors().map(BuildsResponse::build)
 
+    override fun getFinishedBuildsForProjects(afterDate: Date, projectIds: List<String>): Single<List<Build>> =
+            zipSingles(projectIds.map { getFinishedBuildsForProject(afterDate, it) }, sortDescBy = { it.queuedDate })
+
     override fun getBuildsForProjects(projectIds: List<String>): Single<List<Build>> =
             zipSingles(projectIds.map { getBuildsForProject(it) }, sortDescBy = { it.queuedDate })
+
+    private fun getFinishedBuildsForProject(afterDate: Date, projectId: String) =
+            service.getBuilds(credentials, "project:(id:$projectId),$BUILDS_LOCATOR,finishDate:(date:${afterDate.format()},condition:after)").mapApiErrors().map(BuildsResponse::build)
 
     private fun getBuildsForProject(projectId: String) =
             service.getBuilds(credentials, "project:(id:$projectId),$BUILDS_LOCATOR").mapApiErrors().map(BuildsResponse::build)

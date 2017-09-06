@@ -36,6 +36,7 @@ class RecapControllerTest {
         logger = testLogger
         whenever(loginRepository.authData).thenReturn(AuthData(ADDRESS, CREDENTIALS))
         whenever(api.getFinishedBuilds(any())).thenReturn(apiSubject)
+        whenever(api.getFinishedBuildsForProjects(any(), any())).thenReturn(apiSubject)
     }
 
     @Test
@@ -76,6 +77,19 @@ class RecapControllerTest {
         whenever(recapRepository.lastFinishDate).thenReturn(null)
         createController().onStart()
         verify(api, never()).getFinishedBuilds(any())
+    }
+
+    @Test
+    fun `Call api to get finished builds only for selected projects when preferred`() {
+        val projectsIds = listOf("Project1", "Project1")
+        val calendar = Calendar.getInstance().apply {
+            set(Calendar.YEAR, 2017)
+            set(Calendar.MONTH, Calendar.AUGUST)
+            set(Calendar.DAY_OF_MONTH, 1)
+        }
+        whenever(recapRepository.lastFinishDate).thenReturn(calendar.time)
+        createController(projectsIds = projectsIds).onStart()
+        verify(api).getFinishedBuildsForProjects(calendar.time, projectsIds)
     }
 
     @Test
@@ -211,8 +225,9 @@ class RecapControllerTest {
         verify(onFinish, never()).invoke()
     }
 
-    private fun createController(subscribeOnScheduler: Scheduler = trampoline(),
+    private fun createController(projectsIds: List<String>? = null,
+                                 subscribeOnScheduler: Scheduler = trampoline(),
                                  observeOnScheduler: Scheduler = trampoline()) =
-            RecapController(loginRepository, recapRepository, null, api, notifier, onFinish,
+            RecapController(loginRepository, recapRepository, projectsIds, api, notifier, onFinish,
                     SchedulersSupplier(subscribeOnScheduler, observeOnScheduler))
 }

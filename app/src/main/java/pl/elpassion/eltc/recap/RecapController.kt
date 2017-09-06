@@ -45,12 +45,19 @@ class RecapController(private val loginRepository: LoginRepository,
     }
 
     private fun getFinishedBuilds(lastFinishDate: Date) {
-        api.getFinishedBuilds(lastFinishDate)
+        getCallForFinishedBuilds(lastFinishDate, projectsIds)
                 .subscribeOn(schedulers.backgroundScheduler)
                 .observeOn(schedulers.uiScheduler)
                 .subscribe(onFinishedBuilds, onError)
                 .addTo(compositeDisposable)
     }
+
+    private fun getCallForFinishedBuilds(lastFinishDate: Date, projectsIds: List<String>?) =
+            if (projectsIds != null) {
+                api.getFinishedBuildsForProjects(lastFinishDate, projectsIds)
+            } else {
+                api.getFinishedBuilds(lastFinishDate)
+            }
 
     private val onFinishedBuilds: (List<Build>) -> Unit = { builds ->
         log("new builds: ${builds.count()}")
