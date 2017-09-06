@@ -371,7 +371,7 @@ class TeamCityModelTest {
         model.perform(ReturnToList)
         observer.assertLastValue(BuildsState(emptyList(), emptyList(), BuildsState.RecapSettings(
                 isEnabled = true,
-                recapDurationInMinutes = 60)))
+                durationInMinutes = 60)))
     }
 
     @Test
@@ -385,7 +385,7 @@ class TeamCityModelTest {
         model.perform(ReturnToList)
         observer.assertLastValue(BuildsState(emptyList(), emptyList(), BuildsState.RecapSettings(
                 isEnabled = false,
-                recapDurationInMinutes = Settings.DEFAULT.notificationsFrequencyInMinutes)))
+                durationInMinutes = Settings.DEFAULT.notificationsFrequencyInMinutes)))
     }
 
     private fun stubLoginRepositoryToReturnAuthData() {

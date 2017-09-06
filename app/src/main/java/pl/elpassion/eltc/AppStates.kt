@@ -28,12 +28,12 @@ data class BuildsState(
 ) : AppState() {
     data class RecapSettings(
             val isEnabled: Boolean,
-            val recapDurationInMinutes: Int
+            val durationInMinutes: Int
     ) {
         companion object {
             val DEFAULT = RecapSettings(
                     isEnabled = Settings.DEFAULT.areNotificationsEnabled,
-                    recapDurationInMinutes = Settings.DEFAULT.notificationsFrequencyInMinutes)
+                    durationInMinutes = Settings.DEFAULT.notificationsFrequencyInMinutes)
         }
     }
 }

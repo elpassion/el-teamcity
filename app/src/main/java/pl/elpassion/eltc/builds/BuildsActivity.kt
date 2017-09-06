@@ -161,7 +161,7 @@ class BuildsActivity : BaseActivity() {
 
     private fun handleRecapService(recapSettings: BuildsState.RecapSettings) {
         if (recapSettings.isEnabled) {
-            scheduleRecapService(recapSettings.recapDurationInMinutes)
+            scheduleRecapService(recapSettings.durationInMinutes)
         } else {
             cancelRecapService()
         }
