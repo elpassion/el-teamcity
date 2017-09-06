@@ -5,6 +5,10 @@
         android:defaultValue="true"
         android:key="notifications"
         android:title="@string/notifications" />
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="notifications_filtering"
+        android:title="@string/notifications_filtering" />
     <ListPreference
         android:defaultValue="@string/notifications_frequency_default"
         android:entries="@array/notifications_frequency_entries"

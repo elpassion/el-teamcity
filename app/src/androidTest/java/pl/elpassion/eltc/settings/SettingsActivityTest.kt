@@ -62,6 +62,11 @@ class SettingsActivityTest : BaseActivityTest() {
     }
 
     @Test
+    fun Display_notifications_filtering_preference() {
+        onText(R.string.notifications_filtering).isDisplayed()
+    }
+
+    @Test
     fun Disable_notifications_preferences_on_notifications_disabled() {
         states.onNext(SettingsState(Settings.DEFAULT.copy(
                 areNotificationsEnabled = false)))
