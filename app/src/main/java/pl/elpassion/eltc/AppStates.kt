@@ -24,7 +24,7 @@ data class LoginState(
 data class BuildsState(
         val builds: List<Build>,
         val projects: List<Project>,
-        val recapState: RecapSettings
+        val recapSettings: RecapSettings
 ) : AppState() {
     data class RecapSettings(
             val isEnabled: Boolean,

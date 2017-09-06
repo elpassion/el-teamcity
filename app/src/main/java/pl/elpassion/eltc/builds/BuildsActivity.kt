@@ -59,7 +59,7 @@ class BuildsActivity : BaseActivity() {
                 loader.hide()
                 swipeToRefreshBuildsList.isRefreshing = false
                 showBuilds(state.builds)
-                scheduleRecapService(state.recapState.recapDurationInMinutes)
+                handleRecapService(state.recapSettings)
             }
             is LoadingDetailsState -> openDetailsScreen(options?.toBundle())
             is SelectProjectsDialogState -> {
@@ -157,6 +157,14 @@ class BuildsActivity : BaseActivity() {
     private fun showBuilds(builds: List<Build>) {
         this.builds.run { clear(); addAll(builds) }
         buildsRecyclerView.adapter.notifyDataSetChanged()
+    }
+
+    private fun handleRecapService(recapSettings: BuildsState.RecapSettings) {
+        if (recapSettings.isEnabled) {
+            scheduleRecapService(recapSettings.recapDurationInMinutes)
+        } else {
+            cancelRecapService()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
