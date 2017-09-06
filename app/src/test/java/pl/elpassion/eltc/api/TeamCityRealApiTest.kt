@@ -54,6 +54,20 @@ class TeamCityRealApiTest {
     }
 
     @Test
+    fun `Get finished builds of the specified project after call to real TeamCity API`() {
+        val calendar = Calendar.getInstance().apply {
+            set(Calendar.YEAR, 2017)
+            set(Calendar.MONTH, Calendar.AUGUST)
+            set(Calendar.DAY_OF_MONTH, 1)
+        }
+        teamCityApi
+                .getFinishedBuildsForProjects(
+                        projectIds = listOf("TeamcityAndroidClient"),
+                        afterDate = calendar.time)
+                .getAndPrint()
+    }
+
+    @Test
     fun `Get builds of the specified project after call to real TeamCity API`() {
         teamCityApi
                 .getBuildsForProjects(projectIds = listOf("TeamcityAndroidClient"))
