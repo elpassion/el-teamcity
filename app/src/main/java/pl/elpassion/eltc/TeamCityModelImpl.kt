@@ -71,11 +71,14 @@ class TeamCityModelImpl(private val api: TeamCityApi,
 
     private val onBuildsAndProjects: (Pair<List<Build>, List<Project>>) -> Unit =
             { (builds, projects) ->
-                goTo(BuildsState(builds, projects, getRecapSettings()))
+                goTo(BuildsState(builds, projects, getRecapSettings(projects)))
             }
 
-    private fun getRecapSettings() = with(settingsRepository.settings ?: Settings.DEFAULT) {
-        BuildsState.RecapSettings(areNotificationsEnabled, notificationsFrequencyInMinutes)
+    private fun getRecapSettings(selectedProjects: List<Project>): BuildsState.RecapSettings {
+        return with(settingsRepository.settings ?: Settings.DEFAULT) {
+            val projects = if (areNotificationsFilteredToSelectedProjects) selectedProjects else null
+            BuildsState.RecapSettings(areNotificationsEnabled, notificationsFrequencyInMinutes, projects)
+        }
     }
 
     private val onError: (Throwable) -> Unit = { error ->

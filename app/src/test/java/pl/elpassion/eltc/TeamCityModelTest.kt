@@ -353,10 +353,12 @@ class TeamCityModelTest {
     fun `Display settings saved in repository`() {
         whenever(settingsRepository.settings).thenReturn(Settings(
                 areNotificationsEnabled = true,
+                areNotificationsFilteredToSelectedProjects = false,
                 notificationsFrequencyInMinutes = 15))
         model.perform(OpenSettings)
         observer.assertLastValue(SettingsState(Settings(
                 areNotificationsEnabled = true,
+                areNotificationsFilteredToSelectedProjects = false,
                 notificationsFrequencyInMinutes = 15)))
     }
 
@@ -371,7 +373,8 @@ class TeamCityModelTest {
         model.perform(ReturnToList)
         observer.assertLastValue(BuildsState(emptyList(), emptyList(), BuildsState.RecapSettings(
                 isEnabled = true,
-                durationInMinutes = 60)))
+                durationInMinutes = 60,
+                filteredProjects = null)))
     }
 
     @Test
@@ -385,7 +388,24 @@ class TeamCityModelTest {
         model.perform(ReturnToList)
         observer.assertLastValue(BuildsState(emptyList(), emptyList(), BuildsState.RecapSettings(
                 isEnabled = false,
-                durationInMinutes = Settings.DEFAULT.notificationsFrequencyInMinutes)))
+                durationInMinutes = Settings.DEFAULT.notificationsFrequencyInMinutes,
+                filteredProjects = null)))
+    }
+
+    @Test
+    fun `Notify only about selected projects`() {
+        whenever(settingsRepository.settings).thenReturn(Settings.DEFAULT.copy(
+                areNotificationsFilteredToSelectedProjects = true))
+        val projects = listOf(createProject())
+        whenever(api.getBuilds()).thenJust(emptyList())
+        whenever(api.getQueuedBuilds()).thenJust(emptyList())
+        whenever(api.getProjects()).thenJust(projects)
+        stubLoginRepositoryToReturnAuthData()
+        model.perform(ReturnToList)
+        observer.assertLastValue(BuildsState(emptyList(), projects, BuildsState.RecapSettings(
+                isEnabled = true,
+                durationInMinutes = Settings.DEFAULT.notificationsFrequencyInMinutes,
+                filteredProjects = projects)))
     }
 
     private fun stubLoginRepositoryToReturnAuthData() {
