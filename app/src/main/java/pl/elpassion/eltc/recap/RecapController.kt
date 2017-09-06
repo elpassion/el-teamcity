@@ -12,6 +12,7 @@ import java.util.*
 
 class RecapController(private val loginRepository: LoginRepository,
                       private val recapRepository: RecapRepository,
+                      private val projectsIds: List<String>?,
                       private val api: TeamCityApi,
                       private val notifier: RecapNotifier,
                       private val onFinish: () -> Unit,

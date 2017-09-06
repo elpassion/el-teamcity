@@ -12,10 +12,13 @@ class RecapService : JobService() {
 
     private var parameters: JobParameters? = null
 
+    private val projectsIds by lazy { parameters?.extras?.getStringArray(PROJECTS_IDS)?.toList() }
+
     private val controller by lazy {
         RecapController(
                 loginRepository = DI.provideLoginRepository(),
                 recapRepository = DI.Recap.provideRepository(),
+                projectsIds = projectsIds,
                 api = DI.provideTeamCityApi(),
                 notifier = DI.Recap.provideNotifier(),
                 onFinish = { jobFinished(parameters, false) },
@@ -35,5 +38,9 @@ class RecapService : JobService() {
         controller.onStop()
         log("Recap job interrupted")
         return true
+    }
+
+    companion object {
+        const val PROJECTS_IDS = "projects_ids"
     }
 }

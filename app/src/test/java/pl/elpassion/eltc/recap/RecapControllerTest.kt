@@ -213,6 +213,6 @@ class RecapControllerTest {
 
     private fun createController(subscribeOnScheduler: Scheduler = trampoline(),
                                  observeOnScheduler: Scheduler = trampoline()) =
-            RecapController(loginRepository, recapRepository, api, notifier, onFinish,
+            RecapController(loginRepository, recapRepository, null, api, notifier, onFinish,
                     SchedulersSupplier(subscribeOnScheduler, observeOnScheduler))
 }

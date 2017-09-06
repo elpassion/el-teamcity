@@ -54,11 +54,15 @@ fun Activity.newTransitionAnimation(vararg views: View): ActivityOptions {
 
 fun AppCompatActivity.showBackArrowInToolbar() = supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-fun Activity.scheduleRecapService(durationInMinutes: Int) {
+fun Activity.scheduleRecapService(durationInMinutes: Int, filteredProjects: List<Project>?) {
     val jobInfo = JobInfo.Builder(1, ComponentName(packageName, RecapService::class.java.name))
             .setPeriodic(TimeUnit.MINUTES.toMillis(durationInMinutes.toLong()))
             .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
             .build()
+    if (filteredProjects != null) {
+        val projectsIds = filteredProjects.map { it.id }.toTypedArray()
+        jobInfo.extras.putStringArray(RecapService.PROJECTS_IDS, projectsIds)
+    }
     getJobScheduler().schedule(jobInfo)
 }
 
