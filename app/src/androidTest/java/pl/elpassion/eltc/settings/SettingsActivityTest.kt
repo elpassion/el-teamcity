@@ -62,6 +62,13 @@ class SettingsActivityTest : BaseActivityTest() {
     }
 
     @Test
+    fun Refresh_settings_on_notifications_preference_changed() {
+        states.onNext(SettingsState(Settings.DEFAULT))
+        onSwitchPreference(R.string.notifications).click()
+        verify(model).perform(argThat { this is RefreshSettings })
+    }
+
+    @Test
     fun Display_notifications_filtering_preference() {
         onText(R.string.notifications_filtering).isDisplayed()
     }
@@ -102,7 +109,7 @@ class SettingsActivityTest : BaseActivityTest() {
     }
 
     @Test
-    fun Refresh_settings_on_preference_changed() {
+    fun Refresh_settings_on_notifications_frequency_preference_changed() {
         states.onNext(SettingsState(Settings.DEFAULT))
         onText(R.string.notifications_frequency).click()
         onText("Every 1 hour").click()
