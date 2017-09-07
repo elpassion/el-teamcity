@@ -29,12 +29,8 @@ class SettingsFragment : BasePreferenceFragmentCompat() {
 
     private fun showSettings(settings: Settings) = with(settings) {
         notificationsPreference.isChecked = areNotificationsEnabled
-        notificationsFilteringPreference.run {
-            isEnabled = areNotificationsEnabled
-            isChecked = areNotificationsFilteredToSelectedProjects
-        }
+        notificationsFilteringPreference.isChecked = areNotificationsFilteredToSelectedProjects
         notificationsFreqPreference.run {
-            isEnabled = areNotificationsEnabled
             summary = getNotificationsFreqEntry(notificationsFrequencyInMinutes)
             value = notificationsFrequencyInMinutes.toString()
         }

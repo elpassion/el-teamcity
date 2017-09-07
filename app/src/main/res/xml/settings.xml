@@ -8,12 +8,14 @@
     <SwitchPreference
         android:defaultValue="false"
         android:key="notifications_filtering"
+        android:dependency="notifications"
         android:title="@string/notifications_filtering" />
     <ListPreference
         android:defaultValue="@string/notifications_frequency_default"
         android:entries="@array/notifications_frequency_entries"
         android:entryValues="@array/notifications_frequency_values"
         android:key="notifications_frequency"
+        android:dependency="notifications"
         android:title="@string/notifications_frequency"
         tools:summary="Every 15 minutes" />
 </PreferenceScreen>
