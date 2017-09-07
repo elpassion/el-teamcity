@@ -58,6 +58,7 @@ fun Activity.scheduleRecapService(durationInMinutes: Int, filteredProjects: List
     val jobInfo = JobInfo.Builder(1, ComponentName(packageName, RecapService::class.java.name))
             .setPeriodic(TimeUnit.MINUTES.toMillis(durationInMinutes.toLong()))
             .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+            .setPersisted(true)
             .build()
     if (filteredProjects != null) {
         val projectsIds = filteredProjects.map { it.id }.toTypedArray()
