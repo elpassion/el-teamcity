@@ -6,16 +6,13 @@ import pl.elpassion.eltc.login.LoginRepository
 import pl.elpassion.eltc.util.zipSingles
 import retrofit2.HttpException
 import retrofit2.http.GET
-import retrofit2.http.Header
 import retrofit2.http.Path
 import retrofit2.http.Query
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.properties.Delegates
 
 interface TeamCityApi {
-    var credentials: String
     fun getBuilds(): Single<List<Build>>
     fun getQueuedBuilds(): Single<List<Build>>
     fun getFinishedBuilds(afterDate: Date): Single<List<Build>>
@@ -30,30 +27,30 @@ interface TeamCityApi {
 
 class TeamCityApiImpl(private val loginRepository: LoginRepository) : TeamCityApi {
 
-    override var credentials: String by Delegates.notNull()
-
     private var baseUrl: String? = null
     private var endpoint: Service? = null
     private val service: Service
         get() {
-            val url = loginRepository.authData?.address
-            if (url != null) {
-                if (url != baseUrl) {
-                    baseUrl = url
-                    endpoint = newRetrofit(url).create(Service::class.java)
+            val authData = loginRepository.authData
+            if (authData != null) {
+                if (authData.address != baseUrl) {
+                    baseUrl = authData.address
+                    endpoint = with(authData) {
+                        newRetrofit(address, fullCredentials).create(Service::class.java)
+                    }
                 }
                 return endpoint!!
             } else throw IllegalStateException("Server url not available")
         }
 
     override fun getBuilds(): Single<List<Build>> =
-            service.getBuilds(credentials, BUILDS_LOCATOR).mapApiErrors().map(BuildsResponse::build)
+            service.getBuilds(BUILDS_LOCATOR).mapApiErrors().map(BuildsResponse::build)
 
     override fun getQueuedBuilds(): Single<List<Build>> =
-            service.getQueuedBuilds(credentials).mapApiErrors().map(BuildsResponse::build)
+            service.getQueuedBuilds().mapApiErrors().map(BuildsResponse::build)
 
     override fun getFinishedBuilds(afterDate: Date): Single<List<Build>> =
-            service.getFinishedBuilds(credentials, "finishDate:(date:${afterDate.format()},condition:after)").mapApiErrors().map(BuildsResponse::build)
+            service.getFinishedBuilds("finishDate:(date:${afterDate.format()},condition:after)").mapApiErrors().map(BuildsResponse::build)
 
     override fun getFinishedBuildsForProjects(afterDate: Date, projectIds: List<String>): Single<List<Build>> =
             zipSingles(projectIds.map { getFinishedBuildsForProject(afterDate, it) }, sortDescBy = { it.queuedDate })
@@ -62,25 +59,25 @@ class TeamCityApiImpl(private val loginRepository: LoginRepository) : TeamCityAp
             zipSingles(projectIds.map { getBuildsForProject(it) }, sortDescBy = { it.queuedDate })
 
     private fun getFinishedBuildsForProject(afterDate: Date, projectId: String) =
-            service.getBuilds(credentials, "project:(id:$projectId),$BUILDS_LOCATOR,finishDate:(date:${afterDate.format()},condition:after)").mapApiErrors().map(BuildsResponse::build)
+            service.getBuilds("project:(id:$projectId),$BUILDS_LOCATOR,finishDate:(date:${afterDate.format()},condition:after)").mapApiErrors().map(BuildsResponse::build)
 
     private fun getBuildsForProject(projectId: String) =
-            service.getBuilds(credentials, "project:(id:$projectId),$BUILDS_LOCATOR").mapApiErrors().map(BuildsResponse::build)
+            service.getBuilds("project:(id:$projectId),$BUILDS_LOCATOR").mapApiErrors().map(BuildsResponse::build)
 
     override fun getBuild(id: Int): Single<Build> =
-            service.getBuild(credentials, id).mapApiErrors()
+            service.getBuild(id).mapApiErrors()
 
     override fun getChanges(buildId: Int): Single<List<Change>> =
-            service.getChanges(credentials, "build:(id:$buildId)").mapApiErrors().map(ChangesResponse::change)
+            service.getChanges("build:(id:$buildId)").mapApiErrors().map(ChangesResponse::change)
 
     override fun getTests(buildId: Int): Single<List<TestDetails>> =
-            service.getTests(credentials, "build:(id:$buildId),$TESTS_LOCATOR").mapApiErrors().map { it.testOccurrence ?: emptyList() }
+            service.getTests("build:(id:$buildId),$TESTS_LOCATOR").mapApiErrors().map { it.testOccurrence ?: emptyList() }
 
     override fun getProjects(): Single<List<Project>> =
-            service.getProjects(credentials).mapApiErrors().map(ProjectsResponse::project)
+            service.getProjects().mapApiErrors().map(ProjectsResponse::project)
 
     override fun getProblemOccurrences(buildId: Int): Single<List<ProblemOccurrence>> =
-            service.getProblemOccurrences(credentials, "build:(id:$buildId)").mapApiErrors().map(ProblemsResponse::problemOccurrence)
+            service.getProblemOccurrences("build:(id:$buildId)").mapApiErrors().map(ProblemsResponse::problemOccurrence)
 
     private fun <T> Single<T>.mapApiErrors() = onErrorResumeNext {
         Single.error(when {
@@ -93,28 +90,28 @@ class TeamCityApiImpl(private val loginRepository: LoginRepository) : TeamCityAp
     private interface Service {
 
         @GET("httpAuth/app/rest/builds?fields=build($BUILD_FIELDS)")
-        fun getBuilds(@Header("Authorization") credentials: String, @Query("locator") locator: String): Single<BuildsResponse>
+        fun getBuilds(@Query("locator") locator: String): Single<BuildsResponse>
 
         @GET("httpAuth/app/rest/buildQueue?fields=build($BUILD_FIELDS)")
-        fun getQueuedBuilds(@Header("Authorization") credentials: String): Single<BuildsResponse>
+        fun getQueuedBuilds(): Single<BuildsResponse>
 
         @GET("httpAuth/app/rest/builds?fields=build($BUILD_FIELDS)")
-        fun getFinishedBuilds(@Header("Authorization") credentials: String, @Query("locator") locator: String): Single<BuildsResponse>
+        fun getFinishedBuilds(@Query("locator") locator: String): Single<BuildsResponse>
 
         @GET("httpAuth/app/rest/builds/id:{id}?fields=$BUILD_FIELDS")
-        fun getBuild(@Header("Authorization") credentials: String, @Path("id") id: Int): Single<Build>
+        fun getBuild(@Path("id") id: Int): Single<Build>
 
         @GET("httpAuth/app/rest/changes?fields=change($CHANGES_FIELDS)")
-        fun getChanges(@Header("Authorization") credentials: String, @Query("locator") locator: String): Single<ChangesResponse>
+        fun getChanges(@Query("locator") locator: String): Single<ChangesResponse>
 
         @GET("httpAuth/app/rest/testOccurrences")
-        fun getTests(@Header("Authorization") credentials: String, @Query("locator") locator: String): Single<TestsResponse>
+        fun getTests(@Query("locator") locator: String): Single<TestsResponse>
 
         @GET("httpAuth/app/rest/projects?fields=project($PROJECT_FIELDS)")
-        fun getProjects(@Header("Authorization") credentials: String): Single<ProjectsResponse>
+        fun getProjects(): Single<ProjectsResponse>
 
         @GET("httpAuth/app/rest/problemOccurrences?fields=problemOccurrence($PROBLEM_OCCURRENCE_FIELDS)")
-        fun getProblemOccurrences(@Header("Authorization") credentials: String, @Query("locator") locator: String): Single<ProblemsResponse>
+        fun getProblemOccurrences(@Query("locator") locator: String): Single<ProblemsResponse>
 
         companion object {
             const val BUILD_FIELDS = "id,number,status,state,branchName,webUrl,statusText,queuedDate,startDate,finishDate,buildType(id,name,projectName)"

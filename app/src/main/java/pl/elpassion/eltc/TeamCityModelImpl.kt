@@ -39,19 +39,13 @@ class TeamCityModelImpl(private val api: TeamCityApi,
     }
 
     private fun startApp() {
-        loginRepository.authData?.let { setupApi(it) }
         loadBuilds()
     }
 
     private fun submitCredentials(action: SubmitCredentials) = with(action) {
         val authData = AuthData(address, credentials)
-        setupApi(authData)
         loginRepository.authData = authData
         getBuildsAndProjects()
-    }
-
-    private fun setupApi(authData: AuthData) = with(authData) {
-        api.credentials = fullCredentials
     }
 
     private fun loadBuilds() {

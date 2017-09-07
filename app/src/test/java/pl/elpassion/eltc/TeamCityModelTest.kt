@@ -101,12 +101,6 @@ class TeamCityModelTest {
     }
 
     @Test
-    fun `Set api credentials on login`() {
-        model.perform(SubmitCredentials(TEAMCITY_ADDRESS, CREDENTIALS))
-        verify(api).credentials = "Basic $CREDENTIALS"
-    }
-
-    @Test
     fun `Clear credentials in repository on login error`() {
         whenever(api.getBuilds()).thenError(UnknownHostException)
         model.perform(SubmitCredentials(TEAMCITY_ADDRESS, CREDENTIALS))
@@ -132,13 +126,6 @@ class TeamCityModelTest {
         whenever(loginRepository.authData).thenReturn(null)
         model.perform(StartApp)
         observer.assertLastValue(LoginState())
-    }
-
-    @Test
-    fun `Set api credentials if auth data available in repository on app start`() {
-        stubLoginRepositoryToReturnAuthData()
-        model.perform(StartApp)
-        verify(api).credentials = "Basic $CREDENTIALS"
     }
 
     @Test

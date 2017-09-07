@@ -16,14 +16,13 @@ import java.util.*
 class TeamCityRealApiTest {
 
     private val ADDRESS = "http://192.168.1.155:8111"
-    private val CREDENTIALS = "Basic dXNlcjpwYXNz"
+    private val CREDENTIALS = "dXNlcjpwYXNz"
     private val INVALID_CREDENTIALS = "invalid credentials"
     private val loginRepository = mock<LoginRepository>()
     private val teamCityApi = TeamCityApiImpl(loginRepository)
 
     @Before
     fun setup() {
-        teamCityApi.credentials = CREDENTIALS
         whenever(loginRepository.authData).thenReturn(AuthData(ADDRESS, CREDENTIALS))
     }
 
@@ -111,7 +110,7 @@ class TeamCityRealApiTest {
 
     @Test(expected = InvalidCredentialsException::class)
     fun `Expect proper exception after call to API with invalid credentials`() {
-        teamCityApi.credentials = INVALID_CREDENTIALS
+        whenever(loginRepository.authData).thenReturn(AuthData(ADDRESS, INVALID_CREDENTIALS))
         teamCityApi
                 .getBuilds()
                 .getAndPrint()
