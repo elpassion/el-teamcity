@@ -23,8 +23,8 @@ class RecapService : JobService() {
                 notifier = DI.Recap.provideNotifier(),
                 onFinish = { jobFinished(parameters, false) },
                 schedulers = SchedulersSupplier(
-                        backgroundScheduler = Schedulers.io(),
-                        uiScheduler = AndroidSchedulers.mainThread()))
+                        subscribeOn = Schedulers.io(),
+                        observeOn = AndroidSchedulers.mainThread()))
     }
 
     override fun onStartJob(parameters: JobParameters?): Boolean {

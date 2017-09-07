@@ -4,6 +4,7 @@ package pl.elpassion.eltc
 
 import com.nhaarman.mockito_kotlin.*
 import io.reactivex.observers.TestObserver
+import io.reactivex.schedulers.Schedulers
 import org.junit.Before
 import org.junit.Test
 import pl.elpassion.eltc.api.InvalidCredentialsException
@@ -15,6 +16,7 @@ import pl.elpassion.eltc.login.AuthData
 import pl.elpassion.eltc.login.LoginRepository
 import pl.elpassion.eltc.settings.Settings
 import pl.elpassion.eltc.settings.SettingsRepository
+import pl.elpassion.eltc.util.SchedulersSupplier
 
 class TeamCityModelTest {
 
@@ -22,7 +24,8 @@ class TeamCityModelTest {
     private val buildsRepository = mock<BuildsRepository>()
     private val settingsRepository = mock<SettingsRepository>()
     private val api = mock<TeamCityApi>()
-    private val model = TeamCityModelImpl(api, loginRepository, buildsRepository, settingsRepository)
+    private val model = TeamCityModelImpl(api, loginRepository, buildsRepository, settingsRepository,
+            SchedulersSupplier(Schedulers.trampoline(), Schedulers.trampoline()))
     private val observer = TestObserver<AppState>()
 
     @Before

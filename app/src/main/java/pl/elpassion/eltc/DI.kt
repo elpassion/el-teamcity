@@ -2,6 +2,8 @@ package pl.elpassion.eltc
 
 import android.app.Application
 import android.support.v7.preference.PreferenceDataStore
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import pl.elpassion.eltc.api.TeamCityApiImpl
 import pl.elpassion.eltc.builds.BuildsRepositoryImpl
 import pl.elpassion.eltc.login.LoginRepositoryImpl
@@ -10,6 +12,7 @@ import pl.elpassion.eltc.recap.RecapNotifierImpl
 import pl.elpassion.eltc.recap.RecapRepository
 import pl.elpassion.eltc.recap.RecapRepositoryImpl
 import pl.elpassion.eltc.settings.SettingsRepositoryImpl
+import pl.elpassion.eltc.util.SchedulersSupplier
 
 object DI {
 
@@ -18,7 +21,10 @@ object DI {
                 provideTeamCityApi(),
                 provideLoginRepository(),
                 provideBuildsRepository(),
-                provideSettingsRepository())
+                provideSettingsRepository(),
+                SchedulersSupplier(
+                        subscribeOn = Schedulers.io(),
+                        observeOn = AndroidSchedulers.mainThread()))
     }
 
     var provideTeamCityModel: () -> TeamCityModel = { model }

@@ -11,12 +11,14 @@ import pl.elpassion.eltc.login.AuthData
 import pl.elpassion.eltc.login.LoginRepository
 import pl.elpassion.eltc.settings.Settings
 import pl.elpassion.eltc.settings.SettingsRepository
+import pl.elpassion.eltc.util.SchedulersSupplier
 import java.util.concurrent.TimeUnit
 
 class TeamCityModelImpl(private val api: TeamCityApi,
                         private val loginRepository: LoginRepository,
                         private val buildsRepository: BuildsRepository,
-                        private val settingsRepository: SettingsRepository) : TeamCityModel {
+                        private val settingsRepository: SettingsRepository,
+                        private val schedulers: SchedulersSupplier) : TeamCityModel {
 
     private val stateSubject = BehaviorSubject.createDefault<AppState>(InitialState)
     override val state: Observable<AppState> = stateSubject
@@ -60,6 +62,8 @@ class TeamCityModelImpl(private val api: TeamCityApi,
     private fun getBuildsAndProjects() {
         goTo(LoadingBuildsState)
         Singles.zip(getAllBuilds(), api.getProjects())
+                .subscribeOn(schedulers.subscribeOn)
+                .observeOn(schedulers.observeOn)
                 .subscribe(onBuildsAndProjects, onError)
     }
 
@@ -121,6 +125,8 @@ class TeamCityModelImpl(private val api: TeamCityApi,
                 api.getChanges(build.id),
                 api.getTests(build.id),
                 getProblems(build)) { changes, tests, problems -> Triple(changes, tests, problems) }
+                .subscribeOn(schedulers.subscribeOn)
+                .observeOn(schedulers.observeOn)
                 .subscribe(onBuildDetails, onError)
     }
 

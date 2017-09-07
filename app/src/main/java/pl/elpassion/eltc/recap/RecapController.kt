@@ -45,8 +45,8 @@ class RecapController(private val loginRepository: LoginRepository,
 
     private fun getFinishedBuilds(lastFinishDate: Date) {
         getCallForFinishedBuilds(lastFinishDate, projectsIds)
-                .subscribeOn(schedulers.backgroundScheduler)
-                .observeOn(schedulers.uiScheduler)
+                .subscribeOn(schedulers.subscribeOn)
+                .observeOn(schedulers.observeOn)
                 .subscribe(onFinishedBuilds, onError)
                 .addTo(compositeDisposable)
     }
