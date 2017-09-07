@@ -1,21 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <SwitchPreference
-        android:defaultValue="true"
-        android:key="notifications"
-        android:title="@string/notifications" />
-    <SwitchPreference
-        android:defaultValue="false"
-        android:key="notifications_filtering"
-        android:dependency="notifications"
-        android:title="@string/notifications_filtering" />
-    <ListPreference
-        android:defaultValue="@string/notifications_frequency_default"
-        android:entries="@array/notifications_frequency_entries"
-        android:entryValues="@array/notifications_frequency_values"
-        android:key="notifications_frequency"
-        android:dependency="notifications"
-        android:title="@string/notifications_frequency"
-        tools:summary="Every 15 minutes" />
+    <PreferenceCategory
+        android:key="failed_builds"
+        android:title="@string/failed_builds">
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="notifications"
+            android:title="@string/notifications" />
+        <SwitchPreference
+            android:defaultValue="false"
+            android:dependency="notifications"
+            android:key="notifications_filtering"
+            android:title="@string/notifications_filtering" />
+        <ListPreference
+            android:defaultValue="@string/notifications_frequency_default"
+            android:dependency="notifications"
+            android:entries="@array/notifications_frequency_entries"
+            android:entryValues="@array/notifications_frequency_values"
+            android:key="notifications_frequency"
+            android:title="@string/notifications_frequency"
+            tools:summary="Every 15 minutes" />
+    </PreferenceCategory>
 </PreferenceScreen>

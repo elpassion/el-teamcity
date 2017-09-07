@@ -44,4 +44,5 @@
     <string name="build_name_transition">build name transition</string>
     <string name="project_name_transition">project name transition</string>
     <string name="build_details_transition">build details transition</string>
+    <string name="failed_builds">Failed builds</string>
 </resources>

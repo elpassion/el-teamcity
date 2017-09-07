@@ -50,6 +50,11 @@ class SettingsActivityTest : BaseActivityTest() {
     }
 
     @Test
+    fun Display_failed_builds_category() {
+        onText(R.string.failed_builds).isDisplayed()
+    }
+
+    @Test
     fun Display_notifications_preference() {
         onText(R.string.notifications).isDisplayed()
     }
