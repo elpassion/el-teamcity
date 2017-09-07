@@ -1,5 +1,6 @@
 package pl.elpassion.eltc
 
+import com.trello.rxlifecycle2.components.preference.RxPreferenceFragmentCompat
 import com.trello.rxlifecycle2.kotlin.bindToLifecycle
 import io.reactivex.android.schedulers.AndroidSchedulers
 import pl.elpassion.eltc.util.log

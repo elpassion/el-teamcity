@@ -48,6 +48,7 @@ dependencies {
     implementation group: 'com.squareup.moshi', name: 'moshi-kotlin', version: moshi_version
     implementation group: 'com.squareup.moshi', name: 'moshi-adapters', version: moshi_version
     implementation group: 'com.trello.rxlifecycle2', name: 'rxlifecycle-components', version: rx_lifecycle_version
+    implementation group: 'com.trello.rxlifecycle2', name: 'rxlifecycle-components-preference', version: rx_lifecycle_version
     implementation group: 'com.trello.rxlifecycle2', name: 'rxlifecycle-kotlin', version: rx_lifecycle_version
     implementation group: 'com.elpassion.android.commons', name: 'recycler', version: android_commons_version
     implementation group: 'com.elpassion.android.commons', name: 'shared-preferences', version: android_commons_version
