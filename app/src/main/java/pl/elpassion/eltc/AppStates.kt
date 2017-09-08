@@ -45,24 +45,17 @@ data class SelectProjectsDialogState(
 ) : AppState()
 
 data class LoadingDetailsState(
-        override val build: Build
-) : AppState(), WithBuild
+        val build: Build
+) : AppState()
 
 data class DetailsState(
-        override val build: Build,
+        val build: Build,
         val changes: List<Change>,
         val tests: List<TestDetails>,
-        val problems: List<ProblemOccurrence>
-) : AppState(), WithBuild
+        val problems: List<ProblemOccurrence>,
+        val isWebBrowserVisible: Boolean = false
+) : AppState()
 
 data class SettingsState(
         val settings: Settings
 ) : AppState()
-
-data class WebBrowserState(
-        override val build: Build
-) : AppState(), WithBuild
-
-interface WithBuild {
-    val build: Build
-}

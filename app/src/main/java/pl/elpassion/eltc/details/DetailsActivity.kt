@@ -87,9 +87,11 @@ class DetailsActivity : BaseActivity() {
                 loader.hide()
                 showBuild(state.build)
                 showDetails(state.changes, state.tests, state.problems)
+                if (state.isWebBrowserVisible) {
+                    openWebBrowser(state.build.webUrl)
+                }
             }
             is LoadingBuildsState -> openBuildsScreen()
-            is WebBrowserState -> openWebBrowser(state.build.webUrl)
         }
     }
 

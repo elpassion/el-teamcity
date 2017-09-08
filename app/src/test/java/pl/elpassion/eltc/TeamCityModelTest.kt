@@ -289,9 +289,12 @@ class TeamCityModelTest {
     @Test
     fun `Display url in web browser on open in web browser action`() {
         val build = createBuild(webUrl = "http://teamcity/buildUrl")
+        whenever(api.getChanges(build.id)).thenJust(emptyList())
+        whenever(api.getTests(build.id)).thenJust(emptyList())
         model.perform(SelectBuild(build))
         model.perform(OpenInWebBrowser)
-        observer.assertLastValue(WebBrowserState(build))
+        observer.assertLastValue(DetailsState(build, emptyList(), emptyList(), emptyList(),
+                isWebBrowserVisible = true))
     }
 
     @Test
