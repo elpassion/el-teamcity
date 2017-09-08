@@ -115,7 +115,7 @@ class DetailsActivityTest : BaseActivityTest() {
         val build = createBuild(webUrl = "http://teamcity/buildUrl")
         val intent = allOf(hasAction(Intent.ACTION_VIEW), hasData(Uri.parse(build.webUrl)))
         intending(intent).respondWith(Instrumentation.ActivityResult(0, null))
-        states.onNext(WebBrowserState(build))
+        states.onNext(newDetailsState(build = build, isWebBrowserVisible = true))
         intended(intent)
     }
 
@@ -292,6 +292,7 @@ class DetailsActivityTest : BaseActivityTest() {
     private fun newDetailsState(build: Build = createBuild(),
                                 changes: List<Change> = emptyList(),
                                 tests: List<TestDetails> = emptyList(),
-                                problems: List<ProblemOccurrence> = emptyList()) =
-            DetailsState(build, changes, tests, problems)
+                                problems: List<ProblemOccurrence> = emptyList(),
+                                isWebBrowserVisible: Boolean = false) =
+            DetailsState(build, changes, tests, problems, isWebBrowserVisible)
 }
