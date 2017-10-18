@@ -401,6 +401,11 @@ class TeamCityModelTest {
                 filteredProjects = projects)))
     }
 
+    @Test
+    fun `Failing test`() {
+        assert(false)
+    }
+
     private fun stubLoginRepositoryToReturnAuthData() {
         whenever(loginRepository.authData).thenReturn(AuthData(TEAMCITY_ADDRESS, CREDENTIALS))
     }
